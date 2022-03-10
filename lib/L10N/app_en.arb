@@ -1,0 +1,358 @@
+{
+    "title" : "Dal",
+    "@title" : {
+        "description" : "App Title"
+    },
+    "enterNumber" : "Enter Your Number",
+    "@enterNumber":{
+        "description" : "User Number When Login"
+    },
+    "logIn": "Login",
+    "@logIn":{
+        "description" : "Login Button"
+    },
+    "signup" :"Signup",
+    "@signup":{
+        "description" : "Signup Button"
+    },
+    "guest": "Login As Guest",
+    "@guest":{
+        "description" : "Guest Login Button"
+    },
+    "personlNumber" : "Personal Number",
+    "@personalNumber" : {
+        "description" : "Enter User Number When Login"
+    },
+    "validNumber" : "Enter Valid Number",
+    "@validNumber" : {
+        "description" : "When Enter Wrong Number"
+    },
+    "logedin": "You Are Now Registered In The App",
+    "@logedin" : {
+        "description" : "When User Logedin In To App"
+    },
+    "loginRefused": "Unable To Login",
+    "@loginRefused":{
+        "description": "When Login Process Refused"
+    },
+    "rate": "Post Rating ",
+    "@review": {
+        "description": "when user want To add review and rate to post"
+    },
+    "rateReview": "Your Rating and Feedback",
+    "@rateReview": {
+        "description": "when user want To add review and rate to post in Popup Window"
+    },
+    "newRate": "New Rate :",
+    "@newRate":{
+        "description": "When user add new Rate"
+    },
+    "cancel" : "Cancle",
+    "@cancel" : {
+        "description" : "Cancel buttoun in review and rating"
+    },
+    "send" : "Send",
+    "@send" :{
+        "description":"Send button in review and rating"
+    },
+    "reviewAdded": "Review Has Been Added",
+    "@reviewAdded":{
+        "description":"when user add review"
+    },
+    "reviewRefused": "Review Could Not Be Added",
+    "@reviewRefused": {
+        "description":"when review is refused"
+    },
+    "postFavorite": "Has Been Added To Favorite",
+    "@postFavorite":{
+       "description":  "When User add Post to Favorite :: Click Hert Button"
+    },  
+    "removePost": "Has Been Removed From Favorite",
+    "@removePost":{
+        "description":"When User remove Post From Favorite :: Click Heart Buttom"
+    },
+    "favoriteRefused": "Something Went Wrong",
+    "@favoriteRefused":{
+        "description":"When Error Occurred While Saving The Post"
+    },
+    "unregistered":"You Must Be Registered In The Application",
+    "@unregistered":{
+        "description":"When Guest User Want To Add Post to Favorite"
+    },
+    "follow": "Follow",
+    "@follow":{
+        "description":"When Customer want to follow Seller"
+    },
+    "unfollow":"Unfollow",
+    "@unfollow":{
+        "description":"When Customer User Unfollow Seller User"
+    },
+    "back":"Back",
+    "@back":{
+        "description":"back Button"
+    },
+    "sellerContactInfo":"Seller Contact Information",
+    "@sellerContactInfo":{
+        "description":"Post Body"
+    },
+    "notAllowedSeeSellerInfo": "You Must Be Logged In To See The Seller Contact Information",
+    "@notAllowedSeeSellerInfo" :{
+        "description":"When Gest User Want to see seller contact Info"
+    },
+    "homePage":"Home",
+    "@homePage":{
+        "description": "Home Page Tab"
+    },
+    "favoritePage" : "Favorite",
+    "@favoritePage":{
+        "description": "Favorite Page Tab"
+    },
+    "categoryPage" : "Category",
+    "@categoryPage" : {
+        "description": "Category Page Tab"
+    },
+    "profilePage":"Profile",
+    "@profilePage":{
+        "description":"Profile page Tab"
+    },
+    "homePageScreen":"Home Page",
+    "@homePageScreen":{
+        "description":"Go to Home PAge From Drawer"
+    },
+    "logout":"logout",
+    "@logout":{
+        "description":"logout"
+    },
+    "setting":"App Settings",
+    "@setting":{
+        "description":"setting Screen from Drawer"
+    },
+    "city":"City",
+    "@city":{
+        "description": "City Filter Element"
+    },
+    "category": "Category",
+    "@category":{
+        "description":"Category Filter Element"
+    },
+    "deleteAccount": "Delete My Account",
+    "@deleteAccount":{
+        "description":"Buttoun to Delete User Acccount"
+    },
+    "edit":"Edit",
+    "@edit":{
+        "description":"when user want to edit his profile"
+    },
+    "accountInfo" : "Account Information",
+    "@accountInfo" : {
+        "description" : "user profile Account Info"
+    },
+    "name": "Name",
+    "@name" :{
+        "description" : "User Name"
+    },
+    "phoneNumber" : "Phone Number",
+    "@phomeNumber" : {
+        "description" : "user phone number"
+    },
+    "gender" : "Gender",
+    "@gender" : {
+        "description" : "User gender"
+    },
+    "male":"Male",
+    "@male" :{
+        "description": "User Gender is male"
+    },
+    "female" :"Female",
+    "@female":{
+        "description" : "User Gender is female"
+    },
+    "accountType" : "Account Type",
+    "@accountType" : {
+        "description" : "User Account Type"
+    },
+    "customer" : "Customer",
+    "@customer" :{
+        "description" : "User Type is Customer"
+    },
+    "seller" : "Seller",
+    "@seller" : {
+        "description" : "User Type is Seller"
+    },
+    "editProfile": "Edit Profile Information",
+    "@editprofile" : {
+        "edscription": "Screen title"
+    },
+    "enterName": "Enter Your Name",
+    "@enterName":{
+        "description": "When User Want to input his Name"
+    },
+    "shortName":"The Name Is Too Short",
+    "@shortName":{
+        "description":"When user input short name"
+    },
+    "enterPhoneNumber":"Enter Your Phone Number",
+    "@enterPhoneNumber" :{
+        "description": "when user want to input his phone number"
+    },
+    "wrongNumber":"The Number Is Incorrect",
+    "@wrongNumber":{
+        "description": "when user input wrong number"
+    },
+    "canChooseImage": "You Can Choose Your Photo From Here",
+    "@canChooseImage":{
+        "description": "title when user eant to choose his photo"
+    },
+    "addPhoto": "Add Photo",
+    "@addPhoto":{
+        "description": "when user want add his photo"
+    },
+    "saveEdit":"Save Edits",
+    "@saveEdit":{
+        "description":"When User want to save Edit"
+    },
+    "editSuccessfully":"The Information Has Been Successfully modified",
+    "@editSuccessfully" : {
+        "description": "whn response of edit profile screen is true"
+    },
+    "editError":"The Information Could Not Be modified",
+    "@editError":{
+        "description":"When response of edit profile screen is fasle"
+    },
+    "contactInfo":"Contact Information",
+    "@contactInfo":{
+        "description":"Contacct Information Of Seller"
+    },
+    "introTitle":"Simple steps separate you from seeing the latest home-made products or displaying your personal products, all through the Dal application.",
+    "@introTitle":{
+        "description": "title of introduction Screen"
+    },
+    "letStart": "Let's Get Started",
+    "@letSatrt": {
+        "description": "get start in app"
+    },
+    "createAccount" : "Create A New Account",
+    "@createAccount":{
+        "description": "Screen Title when user want to signup"
+    },
+    "signedUpSuccessfully":"Account Successfully Created",
+    "@signedUpSuccessfully":{
+        "description": "When response of create account screen is true "
+    },
+    "signedUpError":"Unable To Create Account",
+    "@signedUpError":{
+        "description":"When response of create account screen is fasle "
+    },
+    "posts":"Posts",
+    "@posts":{
+        "description":"Button To see Seller Posts"
+    },
+    "pendingPosts": "Pending Posts",
+    "@pendingPosts":{
+        "description": "Button to see seller pending Posts"
+    },
+    "addProduct": "Add Product",
+    "@addProduct":{
+        "description": "Button to add new Product"
+    },
+    "biography": "Biography",
+    "@biography":{
+        "description":"seller biography"
+    },
+    "longBio": "Biography Should Be Brief",
+    "@longBio":{
+        "description" : "When User add too long Bio"
+    },
+    "addNewProduct": "Add New Product",
+    "@addNewProduct":{
+        "description": "Title of Add new Post Screen"
+    },
+    "enterProductName": "Enter The Product Name",
+    "@enterProductname" :{
+        "description" : "when user want to add Name of Product"
+    },
+    "enterProductDetails":"Enter Product Details",
+    "@enterProductDetails": {
+        "description" : "when User want to add product details"
+    },
+    "details":"Details",
+    "@details":{
+        "description": "new Product details"
+    },
+    "shortText":"The Text Is Too Short",
+    "@shortText":{
+        "shortText":"The text is too short"
+    },
+    "enterProductPrice":"Enter Product Price",
+    "@enterProductPrice":{
+        "description" : "when User want to add Product Price"
+    },
+    "price":"Price",
+    "@price" :{
+        "description":"Product Price"
+    },
+    "chooseProductCategory":"Choose Product Categories",
+    "@chooseProductCategory":{
+        "description" : "When user want to add Product Category"
+    },
+    "chooseProductCities":"Choose Cities Where Your Product Is Served",
+    "@chooseProductCities":{
+        "description":"what is the cities where the Ptoduct is served"
+    },
+    "canAddProductImages": "You Can Choose Your Product Images From Here",
+    "@canAddProductImages": {
+        "description":"title to choos product images"
+    },
+    "add": "add",
+    "@add": {
+        "description": "To add new Product"
+    },
+    "language": "Language",
+    "@language" :{
+        "description":"App Lang"
+    },
+    "dalPhrase" : "Dal Electronic Mall",
+    "@dalPhrase" : {
+        "description" : "Phrase Under Logo"
+    },
+    "theme": "App Theme",
+    "@theme":{
+        "description": "App Theme"
+    },
+    "error": "Something Went Wrong",
+    "@error":{
+        "description": "error in load Data"
+    },
+    "empty":"There Are No Products",
+    "@empty":{
+        "description": "When return Empty Posts List"
+    },
+    "emptyPostsSearch":"There Are No Items With This Name",
+    "@emptyPostsSearch":{
+        "description": "When search return Empty List"
+    },
+    "saveCategory": "Category Saved",
+    "@saveCategory":{
+        "description": "When User Add Category to Saved Category"
+    },
+    "removeCategory": "Category Removed",
+    "@removeCategory":{
+        "description": "When User Remove Category From Saved Category"
+    }
+
+    
+    
+    
+
+
+
+
+
+
+
+
+
+
+    
+
+}

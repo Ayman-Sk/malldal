@@ -1,0 +1,81 @@
+import 'package:dal/business_logic_layer/user_provider.dart';
+import 'package:dal/network/end_points.dart';
+import 'package:dal/network/local_host.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+
+class CustomerApis {
+  Dio _dio = Dio();
+
+  // Future<void> refreshToken() async {
+  //   final response = await _dio.post(
+  //     EndPoints.refreshToken,
+  //     options: Options(
+  //       headers: {
+  //         'Authorization': 'Bearer' + CachHelper.getData(key: 'token'),
+  //         'Content-Type': 'application/json',
+  //         'Accept': 'application/json',
+  //       },
+  //     ),
+  //   );
+  //   CachHelper.saveData(key: 'token', value: response.data['token']);
+  // }
+
+  Future<bool> addSellerTofollowedUserOfCustomer({
+    @required int customerId,
+    @required int sellerId,
+    @required String token,
+  }) async {
+    final response = await _dio.post(
+      EndPoints.addSellerToCustomerFavList(customerId),
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer' + token,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ),
+      data: {"seller_id": sellerId},
+    );
+    if (response.statusCode == 200) {
+      // if (response.data['code'] == "401") {
+      //   // await refreshToken();
+      //   await addSellerTofollowedUserOfCustomer(
+      //       customerId: customerId, sellerId: sellerId, token: token);
+      //   return true;
+      // }
+      print('\n1-${response.data}');
+      return true;
+    } else {
+      print('\n -Error IN addPostTofollowedPostsOfCustomer \n${response.data}');
+      throw Exception('Can not Load getRowFollowedPostsOfCustomerByCustomerID');
+    }
+  }
+
+  Future<bool> removeSellerTofollowedUserOfCustomer({
+    @required int customerId,
+    @required int sellerId,
+    @required String token,
+  }) async {
+    final response = await _dio.delete(
+      EndPoints.removeSellerFromCustomerFavList(
+          customerId: customerId, sellerId: sellerId),
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer' + token,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ),
+      // data: {"seller_id": sellerId},
+    );
+    if (response.statusCode == 200) {
+      print('\n1-${response.data}');
+      return true;
+    } else {
+      print('\n -Error IN addPostTofollowedPostsOfCustomer \n${response.data}');
+      throw Exception('Can not Load getRowFollowedPostsOfCustomerByCustomerID');
+    }
+  }
+}

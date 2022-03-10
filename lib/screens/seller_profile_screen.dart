@@ -1,0 +1,210 @@
+import 'dart:io';
+import 'package:dal/business_logic_layer/user_provider.dart';
+import 'package:dal/network/local_host.dart';
+import 'package:dal/screens/edit_seller_profile.dart';
+import 'package:dal/theme/app_colors.dart';
+import 'package:dal/widgets/myDrawer.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+class SellerProfileScreen extends StatefulWidget {
+  static const routeName = 'SellerProfileScreen';
+
+  @override
+  _SellerProfileScreenState createState() => _SellerProfileScreenState();
+}
+
+class _SellerProfileScreenState extends State<SellerProfileScreen> {
+  File file;
+  Future selectFile(BuildContext context) async {
+    var sellerProvider = Provider.of<UserProvider>(context, listen: false);
+    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+    if (result == null) return;
+    final path = result.files.single.path;
+    setState(() {
+      file = File(path);
+      // upLoadedImage = true;
+    });
+    sellerProvider.setProfileImage(path);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var sellerProvider = Provider.of<UserProvider>(context);
+    // final ownerUser = ModalRoute.of(context).settings.arguments as Seller;
+    // sellerProvider.getUserToApp();
+    // final fileName = file != null ? basename(file.path) : 'لم تختر صورة بعد';
+    // bool upLoadedImage = sellerProvider.profileImage == null ? false : true;
+
+    // final user = sellerProvider;
+
+    String userMode = sellerProvider.userMode;
+    print('UUUUUUUUUUUUUUUUUUUU');
+    print("USERMODEEE:" + userMode);
+    double coverHeight = MediaQuery.of(context).size.height / 4;
+    double imageHeight = MediaQuery.of(context).size.height / 8;
+    return SafeArea(
+      child: Scaffold(
+        // drawer: MyDrawer(),
+        // drawerScrimColor: AppColors.primary.withOpacity(0.7),
+        appBar: AppBar(
+          backgroundColor: AppColors.primary,
+          elevation: 0.0,
+        ),
+        // backgroundColor: Colors.white,
+        body: ListView(
+          children: [
+            buildTop(coverHeight, imageHeight, sellerProvider.profileImage),
+            Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton.icon(
+                      onPressed: () => Navigator.of(context)
+                          .pushNamed(EditSellerProfileScreen.routeName),
+                      icon: Icon(Icons.edit),
+                      label: Text(
+                        AppLocalizations.of(context).edit,
+                        // 'تعديل',
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: AppColors.primary,
+                        shape: new RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(30.0),
+                        ),
+                      ),
+                    ),
+                    Text(
+                      AppLocalizations.of(context).accountInfo,
+                      // 'معلومات الحساب',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 30,
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+                accountInfoCard(
+                    icon: Icons.person,
+                    title: AppLocalizations.of(context).name, //"الاسم",
+                    subTitle: sellerProvider.userName),
+                accountInfoCard(
+                    icon: Icons.phone,
+                    title: AppLocalizations.of(context).phoneNumber, //"الرقم",
+                    subTitle: sellerProvider.phoneNumber),
+                CachHelper.getData(key: 'userId') != null
+                    ? accountInfoCard(
+                        icon: Icons.info,
+                        title: AppLocalizations.of(context)
+                            .contactInfo, //'معلومات التواصل',
+                        subTitle: sellerProvider.biography)
+                    : Container(),
+                // accountInfoCard(
+                //     icon: Icons.phone_in_talk,
+                //     title: 'أرقام أخرى',
+                //     subTitle: sellerProvider.getNumbersOfSeller),
+                // accountInfoCard(
+                //     icon: Icons.contact_page,
+                //     title: 'السيرة الشخصية',
+                //     subTitle: sellerProvider.contactInfo),
+                accountInfoCard(
+                    icon: Icons.location_on,
+                    title: AppLocalizations.of(context).city, //'المدينة',
+                    subTitle: sellerProvider.cityName),
+                accountInfoCard(
+                  icon: sellerProvider.gender == 'male'
+                      ? Icons.male
+                      : Icons.female,
+                  title: AppLocalizations.of(context).male, //"الجنس",
+                  subTitle: sellerProvider.gender == 'male'
+                      ? AppLocalizations.of(context).male
+                      : //'ذكر' :
+                      AppLocalizations.of(context).female,
+                  // 'أنثى',
+                ),
+                accountInfoCard(
+                  icon: userMode == 'customer'
+                      ? Icons.attach_money
+                      : Icons.sell_outlined,
+                  title:
+                      AppLocalizations.of(context).accountType, //'نوع الحساب',
+                  subTitle: userMode == 'customer'
+                      ?
+                      // 'مشتري' :
+                      AppLocalizations.of(context).customer
+                      :
+                      //  'بائع',
+                      AppLocalizations.of(context).seller,
+                )
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+Widget buildTop(double coverHeight, imageHeight, String profileImagePath) {
+  return Stack(clipBehavior: Clip.none, alignment: Alignment.center, children: [
+    Container(
+        margin: EdgeInsets.only(bottom: coverHeight / 2),
+        child: buildCoverImage(coverHeight)),
+    Positioned(
+      child: buildProfileImage(imageHeight, profileImagePath),
+      top: coverHeight - imageHeight / 2,
+      // left: MediaQuery.of(context).size.width / 2.5,
+    )
+  ]);
+}
+
+Widget buildCoverImage(double coverHeight) => Container(
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: Colors.grey),
+        ),
+      ),
+      // color: Colors.white,
+      child: Image.asset(
+        'img/logo.png',
+        width: double.infinity,
+        height: coverHeight,
+        fit: BoxFit.contain,
+      ),
+    );
+
+Widget buildProfileImage(double imageHeight, String profileImagePath) =>
+    CircleAvatar(
+      radius: imageHeight / 2,
+      backgroundImage: NetworkImage(
+        'http://malldal.com/dal/' + profileImagePath,
+      ),
+    );
+
+Widget accountInfoCard({IconData icon, String title, String subTitle}) {
+  return Card(
+    elevation: 10,
+    child: ListTile(
+      leading: Icon(
+        icon,
+        size: 30,
+      ),
+      title: Text(
+        title,
+        style: TextStyle(
+            fontSize: 20,
+            color: AppColors.primary,
+            fontWeight: FontWeight.w600),
+      ),
+      subtitle: Text(
+        subTitle,
+        style: TextStyle(
+            fontSize: 15, color: Colors.grey, fontWeight: FontWeight.w600),
+      ),
+    ),
+  );
+}
