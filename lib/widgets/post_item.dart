@@ -1,5 +1,4 @@
 import 'package:card_swiper/card_swiper.dart';
-import 'package:dal/business_logic_layer/all_posts_with_categories.dart';
 import 'package:dal/data_layer/models/post_with_sellers_model.dart';
 import 'package:dal/business_logic_layer/user_provider.dart';
 import 'package:dal/data_layer/repositories/posts_repositories.dart';
@@ -61,7 +60,6 @@ class _PostItemState extends State<PostItem> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-    final postsProvider = Provider.of<AllPostsWithCategories>(context);
     if (userProvider.savedPosts != null) {
       isInteract = userProvider.savedPosts.contains(widget.postId);
     }
@@ -73,12 +71,11 @@ class _PostItemState extends State<PostItem> {
           MaterialPageRoute(
             builder: (_) => OverviewSinglePostScreen(
               postId: widget.postId,
-              sellerName: widget.nameOfSeller,
               postTitle: widget.title,
               postbody: widget.body,
               priceDetails: widget.priceDetails,
               createdAt: widget.createdAt,
-              avgRate: widget.avgRate,
+
               ownerUser: widget.ownerUser,
               postImagePaths: widget.paths,
               // isInteract: widget.isInteract,
@@ -299,8 +296,11 @@ class _PostItemState extends State<PostItem> {
                                                                 backgroundColor:
                                                                     AppColors
                                                                         .primary,
-                                                                textColor: AppColors
-                                                                    .background,
+                                                                textColor: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyText1
+                                                                    .color,
                                                               );
                                                             }
                                                           } else {
@@ -326,11 +326,6 @@ class _PostItemState extends State<PostItem> {
                                                               user.savedPosts
                                                                   .add(widget
                                                                       .postId);
-                                                              // userProvider.user
-                                                              //     .followSellers
-                                                              //     .add(widget
-                                                              //         .ownerUser
-                                                              //         .id);
 
                                                               Utils.showToast(
                                                                 message: AppLocalizations.of(
@@ -340,8 +335,11 @@ class _PostItemState extends State<PostItem> {
                                                                 backgroundColor:
                                                                     AppColors
                                                                         .primary,
-                                                                textColor: AppColors
-                                                                    .background,
+                                                                textColor: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyText1
+                                                                    .color,
                                                               );
                                                               // Navigator.of(context)
                                                               //     .pushReplacementNamed(
@@ -357,8 +355,11 @@ class _PostItemState extends State<PostItem> {
                                                                 backgroundColor:
                                                                     AppColors
                                                                         .primary,
-                                                                textColor: AppColors
-                                                                    .background,
+                                                                textColor: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyText1
+                                                                    .color,
                                                               );
                                                             }
                                                           }
@@ -372,8 +373,11 @@ class _PostItemState extends State<PostItem> {
                                                             backgroundColor:
                                                                 AppColors
                                                                     .primary,
-                                                            textColor: AppColors
-                                                                .background,
+                                                            textColor: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyText1
+                                                                .color,
                                                           );
                                                         },
                                                 ),
@@ -551,7 +555,7 @@ class _PostItemState extends State<PostItem> {
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'هذا البند مهم';
+          return AppLocalizations.of(context).importantItem; //'هذا البند مهم';
         }
         return null;
       },
@@ -623,7 +627,10 @@ class _PostItemState extends State<PostItem> {
                                       AppLocalizations.of(context).newRate +
                                           (rating.toInt()).toString(),
                                   backgroundColor: AppColors.primary,
-                                  textColor: AppColors.background,
+                                  textColor: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      .color,
                                 );
                               });
                             },
@@ -667,7 +674,10 @@ class _PostItemState extends State<PostItem> {
                                         .reviewAdded,
                                     //  'تم إضافة تقييم جديد',
                                     backgroundColor: AppColors.primary,
-                                    textColor: AppColors.background,
+                                    textColor: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .color,
                                   );
                                   Navigator.of(context).pop();
                                 } else {
@@ -676,7 +686,10 @@ class _PostItemState extends State<PostItem> {
                                         .reviewRefused,
                                     // 'تعذر إضافة التقييم',
                                     backgroundColor: AppColors.primary,
-                                    textColor: AppColors.background,
+                                    textColor: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .color,
                                   );
                                 }
                               },
@@ -762,6 +775,7 @@ class ItemHeader extends StatelessWidget {
               backgroundColor: AppColors.accent,
               child: CircleAvatar(
                 radius: 31,
+                backgroundColor: Theme.of(context).colorScheme.background,
                 backgroundImage: NetworkImage(
                   'http://malldal.com/dal/' + sellerProfileImage,
                 ),
@@ -778,7 +792,7 @@ class ItemHeader extends StatelessWidget {
               ),
             ),
             subtitle: Text(
-              createdAt.toString().substring(0, 9),
+              createdAt.toString().substring(0, 10),
               style: TextStyle(
                   // color: AppColors.primary,
                   ),

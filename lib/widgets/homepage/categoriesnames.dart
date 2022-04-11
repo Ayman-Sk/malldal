@@ -5,6 +5,7 @@ import 'package:dal/theme/app_colors.dart';
 import 'package:dal/widgets/center_title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CategoriesTapsWidget extends StatelessWidget {
   final CategoriesRepositoryImp _catRepo = CategoriesRepositoryImp();
@@ -94,7 +95,7 @@ class CategoriesTapsWidget extends StatelessWidget {
           );
         } else if (snapShot.hasError) {
           return CenterTitleWidget(
-            title: 'حصل خطأ في التحميل',
+            title: AppLocalizations.of(context).error, //'حصل خطأ في التحميل',
             iconData: Icons.error,
           );
         }

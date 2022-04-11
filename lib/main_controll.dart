@@ -1,8 +1,13 @@
+// import 'dart:html';
+
+import 'package:dal/main.dart';
 import 'package:dal/screens/category_posts_screen.dart';
-import 'package:dal/screens/customer_profile_screen_v2.dart';
+import 'package:dal/screens/customer_seller_follower.dart';
+import 'package:dal/screens/main_taps/user_profile_screen.dart';
 import 'package:dal/screens/otp_screen.dart';
-import 'package:dal/screens/seller_profile_screen_v2.dart';
-import 'package:dal/screens/tester.dart';
+import 'package:dal/screens/splash_screen.dart';
+import 'package:dal/theme/app_colors.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:dal/business_logic_layer/local_provider.dart';
 import 'package:dal/screens/add_post_screen.dart';
@@ -10,21 +15,19 @@ import 'package:dal/screens/customer_profile_screen.dart';
 import 'package:dal/screens/edit_customer_profile.dart';
 import 'package:dal/screens/edit_seller_profile.dart';
 import 'package:dal/screens/filter_screen.dart';
-// import 'package:dal/screens/customer_profile_screen.dart';
 import 'package:dal/screens/homescreen_with_tabbar_view_controller.dart';
 import 'package:dal/screens/introduction_screen.dart';
 import 'package:dal/screens/autharization/login_card_screen.dart';
 import 'package:dal/screens/autharization/customer_signup_screen.dart';
-// import 'package:dal/screens/registration_for_seller/seller_signup_steps/seller_signup_screens.dart';
 import 'package:dal/screens/seller_account_screen.dart';
 import 'package:dal/screens/seller_posts_screen.dart';
 import 'package:dal/screens/seller_profile_screen.dart';
 import 'package:dal/screens/settings_screen.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
-
 import 'L10N/l10n.dart';
+import 'Services/loacl_notification_service.dart';
 import 'screens/overview_seller_profile_Screen.dart';
-// import 'package:localization/src/localization_extension.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import './theme/my_theme_provider.dart';
@@ -38,12 +41,33 @@ class MainContoller extends StatefulWidget {
   State<MainContoller> createState() => _MainContollerState();
 }
 
-class _MainContollerState extends State<MainContoller>
-    with WidgetsBindingObserver {
+class _MainContollerState extends State<MainContoller> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    LocalNotificationService.initialize(context);
+    //gives you the message on which user taps and it opend the app from terminated state
+    FirebaseMessaging.instance.getInitialMessage().then((message) {
+      if (message != null) {
+        final routeFromMessage = message.data['route'];
+        print(routeFromMessage);
+      }
+    });
+
+    //When App is in forground
+    FirebaseMessaging.onMessage.listen((message) {
+      if (message.notification != null) {
+        print(message.notification.body);
+        print(message.notification.title);
+        LocalNotificationService.display(message);
+      }
+    });
+    //When App is in Background but running
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      final routeFromMessage = message.data['route'];
+      print(routeFromMessage);
+    });
   }
 
   @override
@@ -55,13 +79,22 @@ class _MainContollerState extends State<MainContoller>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.inactive ||
-        state == AppLifecycleState.detached) return;
+    if (state == AppLifecycleState.inactive || state == AppLifecycleState.detached) return;
     final isBackground = state == AppLifecycleState.paused;
     if (isBackground) {
       print('fsjkfsdgirhgre');
     }
   }
+
+  // void showNotification() {
+  //   flutterLocalNotificationsPlugin.show(
+  //       0,
+  //       'Testing',
+  //       'test test test test',
+  //       NotificationDetails(
+  //           android: AndroidNotificationDetails(channel.id, channel.name,
+  //               channelDescription: channel.description, importance: Importance.high, color: Colors.blue, playSound: true, icon: '@mimp/ic_launcher')));
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -81,11 +114,22 @@ class _MainContollerState extends State<MainContoller>
       title: 'dal',
 
       // home: CustomerProfileScreen(),
-      home:
-          // tester(),
-          widget.token == null
-              ? IntroductionScreen()
-              : MainTabBarViewController(),
+      home: Scaffold(
+        // appBar: AppBar(
+        //   backgroundColor: AppColors.primary,
+        // ),
+        body: SplashScreen(),
+        //  Center(
+        //     child: ElevatedButton(
+        //   child: Text('test notification'),
+        //   onPressed: showNotification,
+        // )),
+      ),
+
+      // tester(),
+      // widget.token == null
+      //     ? IntroductionScreen()
+      //     : MainTabBarViewController(),
       //  SplashScreen(),
       //     AnimatedSplashScreen(
       //   duration: 10000,
@@ -111,13 +155,14 @@ class _MainContollerState extends State<MainContoller>
         'SettingsScreen': (context) => SettingsScreen(),
         'AddPostScreen': (context) => AddPostScreen(),
         'SellerAccountScreen': (context) => SellerAccountScreen(),
-        'OverviewSellerProfileScreen': (context) =>
-            OverviewSellerProfileScreen(),
+        'OverviewSellerProfileScreen': (context) => OverviewSellerProfileScreen(),
         'FilterScreen': (context) => FilterScreen(),
         'OtpScreen': (context) => OtpScreen(),
-        'CustomerProfileScreenV2': (context) => CustomerProfileScreenV2(),
-        'SellerProfileScreenV2': (context) => SellerProfileScreenV2(),
-        'CategoryPostsScreen': (context) => CategoryPostsScreen()
+        // 'CustomerProfileScreenV2': (context) => CustomerProfileScreenV2(),
+        // 'SellerProfileScreenV2': (context) => SellerProfileScreenV2(),
+        'CategoryPostsScreen': (context) => CategoryPostsScreen(),
+        'CustomerSellerFollower': (context) => CustomerSellerFollower(),
+        'UserProfileScreenRoute': (context) => UserProfileScreen()
       },
     );
   }

@@ -223,7 +223,7 @@
     "@contactInfo":{
         "description":"Contacct Information Of Seller"
     },
-    "introTitle":"Simple steps separate you from seeing the latest home-made products or displaying your personal products, all through the Dal application.",
+    "introTitle":"Simple steps separate you from seeing the latest home-made products or displaying your personal products, all through the Dal Electronic Mall",
     "@introTitle":{
         "description": "title of introduction Screen"
     },
@@ -338,7 +338,52 @@
     "removeCategory": "Category Removed",
     "@removeCategory":{
         "description": "When User Remove Category From Saved Category"
-    }
+    },
+    "followed":"Followed",
+    "@followed": {
+        "description" : "When User open his account this text will shown on button"
+    },
+    "emptySavedPosts" : "There Are No Posts Saved",
+    "@emptySavedPosts" : {
+        "description" : "Empty List for saved Posts "
+    },
+    "importantItem" : "This Item Is Important",
+    "@importantItem":{
+        "description": "When User want to rate Post"
+    },
+    "productAdded" : " Product added successfully ",
+    "@productAdded" : {
+        "description": "When Seller send New Post Requser"
+    },
+    "contactNumber" : "Contact Number",
+    "@contactNumber":{
+        "description" : "contact number text in Popup Window"
+    },
+    "additionalInformation" : "Additional Information",
+    "@additionalInformation":{
+        "description": "additional Information text in popup Window"
+    },
+    "filterText" : "Choose To Filter Posts",
+    "@filterText" : {
+        "description":"Title of popup filter window"
+    },
+    "ok" : "Ok",
+    "@ok" :{
+        "description": "submit button Text"
+    },
+    "areYouSure":"Are You Sure You Want To Log Out?",
+    "@areYouSure" : {
+        "description" : "popup window when log out"
+    },
+    "areYouSureDelete" : "Are You Sure You Want To Delete The Account?",
+    "@areYouSureDelete" : {
+        "description" : "popup window when delete"
+    },
+    "delete": "Delete?",
+    "yes" : "Yes",
+    "no": "No"
+    
+    
 
     
     

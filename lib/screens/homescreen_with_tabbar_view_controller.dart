@@ -1,6 +1,5 @@
 import 'package:dal/business_logic_layer/all_posts_with_categories.dart';
 import 'package:dal/business_logic_layer/user_provider.dart';
-import 'package:dal/data_layer/models/followed_posts_bycustomer_model.dart';
 import 'package:dal/network/local_host.dart';
 import 'package:dal/screens/main_taps/home_page_tap.dart';
 import 'package:dal/screens/main_taps/customer_categories_Tab.dart';
@@ -28,7 +27,7 @@ class _MainTabBarViewControllerState extends State<MainTabBarViewController>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     Provider.of<AllPostsWithCategories>(context, listen: false).getPostsData();
-    Provider.of<UserProvider>(context, listen: false).getUserToApp();
+    // Provider.of<UserProvider>(context, listen: false).getUserToApp();
   }
 
   @override
@@ -56,7 +55,7 @@ class _MainTabBarViewControllerState extends State<MainTabBarViewController>
     HomePageTap(),
     FollowedPostsTap(),
     CustomerCategoriesTap(),
-    UserProfileScreen(),
+    // UserProfileScreen(),
   ];
 
   @override
@@ -66,39 +65,31 @@ class _MainTabBarViewControllerState extends State<MainTabBarViewController>
     if (isMinimum) {
       listScreens = [
         HomePageTap(),
-        // FollowedPostsTap(),
-        // CustomerCategoriesTap(),
-        UserProfileScreen(),
+        // UserProfileScreen(),
       ];
     }
-    return Scaffold(
-      // backgroundColor: AppColors.background,
-      // endDrawer: MyDrawer(),
-      // drawerScrimColor: AppColors.primary.withOpacity(0.7),
-      // appBar: AppBar(
-      //   title: Text('Dal'),
-      //   centerTitle: true,
-      //   backgroundColor: AppColors.primary,
-      // ),
-      body: listScreens[tabIndex],
-
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      // floatingActionButton: FloatingActionButtonWidget(),
-
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: AppColors.primary,
-        unselectedItemColor: AppColors.primary.withOpacity(0.5),
-        // backgroundColor: Colors.white,
-        currentIndex: tabIndex,
-        onTap: (int index) {
-          setState(() {
-            tabIndex = index;
-            print(index);
-          });
-        },
-        items: getItems(isMinimum),
-      ),
-    );
+    if (isMinimum) {
+      return Scaffold(
+        body: listScreens[tabIndex],
+      );
+    } else {
+      return Scaffold(
+        body: listScreens[tabIndex],
+        bottomNavigationBar: BottomNavigationBar(
+          selectedItemColor: AppColors.primary,
+          unselectedItemColor: AppColors.primary.withOpacity(0.5),
+          // backgroundColor: Colors.white,
+          currentIndex: tabIndex,
+          onTap: (int index) {
+            setState(() {
+              tabIndex = index;
+              print(index);
+            });
+          },
+          items: getItems(isMinimum),
+        ),
+      );
+    }
   }
 
   List<BottomNavigationBarItem> getItems(bool minimum) {
@@ -109,27 +100,13 @@ class _MainTabBarViewControllerState extends State<MainTabBarViewController>
             Icons.home_rounded,
           ),
           label: AppLocalizations.of(context).homePage,
-          // Text(
-          //   AppLocalizations.of(context).homePage,
-          //   // 'الرئيسية',
-          //   style: TextStyle(
-          //     fontSize: 10,
-          //   ),
-          // ),
         ),
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.account_circle_rounded,
-          ),
-          label: AppLocalizations.of(context).profilePage,
-          // Text(
-          //   AppLocalizations.of(context).profilePage,
-          //   // 'حسابي',
-          //   style: TextStyle(
-          //     fontSize: 10,
-          //   ),
-          // ),
-        )
+        // BottomNavigationBarItem(
+        //   icon: Icon(
+        //     Icons.account_circle_rounded,
+        //   ),
+        //   label: AppLocalizations.of(context).profilePage,
+        // )
       ];
     } else {
       return [
@@ -138,13 +115,6 @@ class _MainTabBarViewControllerState extends State<MainTabBarViewController>
             Icons.home_rounded,
           ),
           label: AppLocalizations.of(context).homePage,
-          //  Text(
-          //   AppLocalizations.of(context).homePage,
-          //   // 'الرئيسية',
-          //   style: TextStyle(
-          //     fontSize: 10,
-          //   ),
-          // ),
         ),
         BottomNavigationBarItem(
           icon: Icon(
@@ -152,38 +122,17 @@ class _MainTabBarViewControllerState extends State<MainTabBarViewController>
           ),
           activeIcon: Icon(Icons.favorite),
           label: AppLocalizations.of(context).favoritePage,
-          // Text(
-          //   AppLocalizations.of(context).favoritePage,
-          //   // 'المفضلة',
-          //   style: TextStyle(
-          //     fontSize: 10,
-          //   ),
-          // ),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.system_security_update),
           label: AppLocalizations.of(context).categoryPage,
-          //  Text(
-          //   AppLocalizations.of(context).categoryPage,
-          //   // 'الفئات   ',
-          //   style: TextStyle(
-          //     fontSize: 10,
-          //   ),
-          // ),
         ),
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.account_circle_rounded,
-          ),
-          label: AppLocalizations.of(context).profilePage,
-          // Text(
-          //   AppLocalizations.of(context).profilePage,
-          //   // 'حسابي',
-          //   style: TextStyle(
-          //     fontSize: 10,
-          //   ),
-          // ),
-        )
+        // BottomNavigationBarItem(
+        //   icon: Icon(
+        //     Icons.account_circle_rounded,
+        //   ),
+        //   label: AppLocalizations.of(context).profilePage,
+        // )
       ];
     }
   }

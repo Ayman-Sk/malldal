@@ -524,7 +524,8 @@ class _CustomerSignupScreensState extends State<CustomerSignupScreens> {
                               message: AppLocalizations.of(context)
                                   .signedUpSuccessfully, //'تم إنشاء الحساب بنجاح',
                               backgroundColor: AppColors.primary,
-                              textColor: AppColors.background,
+                              textColor:
+                                  Theme.of(context).textTheme.bodyText1.color,
                             );
                             Navigator.of(context).pushReplacementNamed(
                               LoginCardScreen.routeName,
@@ -533,8 +534,9 @@ class _CustomerSignupScreensState extends State<CustomerSignupScreens> {
                             Utils.showToast(
                               message: AppLocalizations.of(context)
                                   .signedUpError, //'تعذرت عملية إنشاء الحساب',
-                              backgroundColor: Colors.grey,
-                              textColor: Colors.white,
+                              backgroundColor: AppColors.primary,
+                              textColor:
+                                  Theme.of(context).textTheme.bodyText1.color,
                             );
                             setState(() {
                               loading = false;

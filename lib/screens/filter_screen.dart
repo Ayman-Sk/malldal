@@ -9,8 +9,7 @@ import 'package:dal/theme/app_colors.dart';
 import 'package:dal/utils/utils.dart';
 import 'package:dal/widgets/center_title_widget.dart';
 import 'package:dal/widgets/homepage/add_image_item.dart';
-import 'package:dal/widgets/post_item.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:dal/widgets/Post/post_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -83,6 +82,7 @@ class _FilterScreenState extends State<FilterScreen> {
     String filterType = ModalRoute.of(context).settings.arguments;
     var provider = Provider.of<AllPostsWithCategories>(context);
     final addsProvider = Provider.of<AddsProvider>(context, listen: false);
+    List<String> adds = Provider.of<UserProvider>(context).getAdds();
 
     final userPrvider = Provider.of<UserProvider>(context);
     RefreshController _refreshController =
@@ -117,8 +117,25 @@ class _FilterScreenState extends State<FilterScreen> {
             scrollDirection: Axis.vertical,
             itemCount: posts.length,
             separatorBuilder: (context, index) {
-              if (index < addsProvider.adds.length)
-                return AddImageItem(addsProvider.adds[index]);
+              if (index % 4 == 0) {
+                // String path = userProvider.getNextAdds();
+                String path = '';
+                if (index ~/ 4 < adds.length) {
+                  path = adds[index ~/ 4];
+                }
+                if (path.isNotEmpty) {
+                  return Container(
+                    padding: const EdgeInsets.all(8),
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height / 3,
+                    color: Theme.of(context).colorScheme.background,
+                    child: Image.network(
+                      'http://malldal.com/dal/' + path,
+                      fit: BoxFit.fill,
+                    ),
+                  );
+                }
+              }
               return Container();
             },
             itemBuilder: (context, index) {
@@ -128,14 +145,12 @@ class _FilterScreenState extends State<FilterScreen> {
                 builder: (context, user, _) {
                   return PostItem(
                     postId: item.id,
-                    nameOfSeller: item.seller.user.name,
-                    createdAt: item.seller.createdAt,
+                    createdAt: item.createdAt,
                     title: item.title,
                     body: item.body,
                     priceDetails: item.priceDetails,
-                    avgRate: item.avgRate,
-                    ownerUser: item.seller,
-                    price: item.priceDetails,
+                    averageRate: item.avgRate,
+                    owner: item.seller,
                   );
                 },
               );
@@ -347,8 +362,11 @@ class _FilterScreenState extends State<FilterScreen> {
                                       message: AppLocalizations.of(context)
                                           .removeCategory,
                                       // 'تم  إزالة الفئة من المحفوظات',
-                                      backgroundColor: Colors.white,
-                                      textColor: Colors.black,
+                                      backgroundColor: AppColors.primary,
+                                      textColor: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          .color,
                                     );
                                     userPrvider.removeCategoryFromFavorite(
                                         (index + 1).toString());
@@ -361,8 +379,11 @@ class _FilterScreenState extends State<FilterScreen> {
                                       message: AppLocalizations.of(context)
                                           .saveCategory,
                                       // 'تم حفظ  الفئة',
-                                      backgroundColor: Colors.white,
-                                      textColor: Colors.black,
+                                      backgroundColor: AppColors.primary,
+                                      textColor: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          .color,
                                     );
                                     userPrvider.addCategoryToFavorite(
                                         (index + 1).toString());

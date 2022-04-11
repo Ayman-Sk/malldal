@@ -288,7 +288,10 @@ class _OverviewSellerProfileScreenState
         icon: isFollowed
             ? Icon(Icons.person_add_disabled)
             : Icon(Icons.person_add_alt),
-        label: isFollowed ? Text('إلغاء المتابعة') : Text('متابعة'),
+        label: isFollowed
+            ? Text(AppLocalizations.of(context).unfollow)
+            : //'إلغاء المتابعة') :
+            Text(AppLocalizations.of(context).follow), //'متابعة'),
         style: ElevatedButton.styleFrom(
           primary: AppColors.primary,
           shape: new RoundedRectangleBorder(
@@ -306,20 +309,13 @@ class _OverviewSellerProfileScreenState
       ),
       decoration:
           BoxDecoration(border: Border.all(width: 1, color: Colors.grey)));
-  Widget buildProfileImage(double imageHeight, String profileImagePath) => Row(
-        children: [
-          CircleAvatar(
-            radius: imageHeight / 2,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(300),
-              child: Image.asset(
-                profileImagePath,
-                // 'img/test.jpg',
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-        ],
+  Widget buildProfileImage(double imageHeight, String profileImagePath) =>
+      CircleAvatar(
+        radius: imageHeight / 2,
+        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundImage: NetworkImage(
+          'http://malldal.com/dal/' + profileImagePath,
+        ),
       );
   Widget accountInfoCard({IconData icon, String title, String subTitle}) {
     return Card(

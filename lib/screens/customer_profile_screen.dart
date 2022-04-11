@@ -4,8 +4,6 @@ import 'package:dal/network/local_host.dart';
 import 'package:dal/screens/autharization/customer_signup_screen.dart';
 import 'package:dal/screens/autharization/login_card_screen.dart';
 import 'package:dal/theme/app_colors.dart';
-import 'package:dal/widgets/myDrawer.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'edit_customer_profile.dart';
@@ -19,35 +17,31 @@ class CustomerProfileScreen extends StatefulWidget {
 
 class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
   File file;
-  Future selectFile(BuildContext context) async {
-    var userProvider = Provider.of<UserProvider>(context, listen: false);
-    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-    if (result == null) return;
-    final path = result.files.single.path;
-    setState(() {
-      file = File(path);
-      // upLoadedImage = true;
-    });
-    userProvider.setProfileImage(path);
-  }
+  // Future selectFile(BuildContext context) async {
+  //   var userProvider = Provider.of<UserProvider>(context, listen: false);
+  //   final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+  //   if (result == null) return;
+  //   final path = result.files.single.path;
+  //   setState(() {
+  //     file = File(path);
+  //   });
+  //   userProvider.setProfileImage(path);
+  // }
 
   @override
   Widget build(BuildContext context) {
     var customerProvider = Provider.of<UserProvider>(context);
     customerProvider.getUserToApp();
-    // final fileName = file != null ? basename(file.path) : 'لم تختر صورة بعد';
-    // bool upLoadedImage = customerProvider.profileImage == null ? false : true;
+
     int id = CachHelper.getData(key: 'userId');
     String userMode = customerProvider.userMode;
-    // print('UUUUUUUUUUUUUUUUUUUU');
-    // print("USERMODEEE:" + userMode.runtimeType.toString());
-    // print(userMode.runtimeType);
+
     double coverHeight = MediaQuery.of(context).size.height / 4;
     double imageHeight = MediaQuery.of(context).size.height / 8;
     return SafeArea(
       child: Scaffold(
-        drawer: MyDrawer(),
-        drawerScrimColor: AppColors.primary.withOpacity(0.7),
+        // drawer: MyDrawer(),
+        // drawerScrimColor: AppColors.primary.withOpacity(0.7),
         appBar: AppBar(
           title: Text(
             AppLocalizations.of(context).title,
@@ -56,119 +50,122 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
           backgroundColor: AppColors.primary,
           elevation: 10,
         ),
-        // endDrawer: MyDrawer(),
-        // appBar: AppBar(
-        //   backgroundColor: Colors.transparent,
-        //   elevation: 0.0,
-        // ),
-        // backgroundColor: Colors.white,
         body: id == null
-            ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context).unregistered,
-                      // 'يجب أن تكون مسجلا'
-                    ),
-                    ElevatedButton(
-                      style:
-                          ElevatedButton.styleFrom(primary: AppColors.accent),
-                      onPressed: () => Navigator.of(context)
-                          .pushNamed(LoginCardScreen.routeName),
-                      child: Text(
-                        AppLocalizations.of(context).logIn,
-                        // 'تسجيل الدخول'
-                      ),
-                    ),
-                    ElevatedButton(
-                      style:
-                          ElevatedButton.styleFrom(primary: AppColors.accent),
-                      onPressed: () => Navigator.of(context)
-                          .pushNamed(CustomerSignupScreens.routeName),
-                      child: Text(
-                        AppLocalizations.of(context).signup,
-                        // 'إنشاء حساب'
-                      ),
-                    )
-                  ],
-                ),
-              )
-            : ListView(
-                children: [
-                  buildTop(coverHeight, imageHeight,
-                      customerProvider.profileImage, context),
-                  Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          ElevatedButton.icon(
-                            onPressed: () => Navigator.of(context)
-                                .pushNamed(EditCustomerProfileScreen.routeName),
-                            icon: Icon(Icons.edit),
-                            label: Text(
-                              AppLocalizations.of(context).edit,
-                              // 'تعديل'
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              primary: AppColors.primary,
-                              shape: new RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.circular(30.0),
-                              ),
-                            ),
-                          ),
-                          Text(
-                            AppLocalizations.of(context).accountInfo,
-                            // 'معلومات الحساب',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 30,
-                                color: AppColors.primary,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ],
-                      ),
-                      accountInfoCard(
-                          icon: Icons.person,
-                          title: AppLocalizations.of(context).name, // "الاسم",
-                          subTitle: customerProvider.user.name),
-                      accountInfoCard(
-                          icon: Icons.phone,
-                          title: AppLocalizations.of(context)
-                              .phoneNumber, //"الرقم",
-                          subTitle: customerProvider.user.phoneNumber),
-                      accountInfoCard(
-                          icon: Icons.location_on,
-                          title:
-                              AppLocalizations.of(context).city, // 'المدينة',
-                          subTitle: customerProvider.cityName),
-                      accountInfoCard(
-                        icon: customerProvider.gender == 'male'
-                            ? Icons.male
-                            : Icons.female,
-                        title: AppLocalizations.of(context).gender, // "الجنس",
-                        subTitle: customerProvider.gender == 'male'
-                            ? AppLocalizations.of(context).male //'ذكر'
-                            : AppLocalizations.of(context).female, //'أنثى',
-                      ),
-                      accountInfoCard(
-                        icon: userMode == 'customer'
-                            ? Icons.attach_money
-                            : Icons.sell_outlined,
-                        title: AppLocalizations.of(context)
-                            .accountType, // 'نوع الحساب',
-                        subTitle: customerProvider.userMode == 'customer'
-                            ? AppLocalizations.of(context).customer //'مشتري'
-                            : AppLocalizations.of(context).seller, //'بائع',
-                      )
-                    ],
-                  )
-                ],
+            ? buildUnregisteredProfile(context)
+            : buildRegisteredProfile(
+                coverHeight,
+                imageHeight,
+                customerProvider,
+                context,
+                userMode,
               ),
       ),
     );
   }
+
+  ListView buildRegisteredProfile(double coverHeight, double imageHeight,
+      UserProvider customerProvider, BuildContext context, String userMode) {
+    return ListView(
+      children: [
+        buildTop(
+            coverHeight, imageHeight, customerProvider.profileImage, context),
+        Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton.icon(
+                  onPressed: () => Navigator.of(context)
+                      .pushNamed(EditCustomerProfileScreen.routeName),
+                  icon: Icon(Icons.edit),
+                  label: Text(
+                    AppLocalizations.of(context).edit,
+                    // 'تعديل'
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: AppColors.primary,
+                    shape: new RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(30.0),
+                    ),
+                  ),
+                ),
+                Text(
+                  AppLocalizations.of(context).accountInfo,
+                  // 'معلومات الحساب',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 30,
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w600),
+                ),
+              ],
+            ),
+            accountInfoCard(
+                icon: Icons.person,
+                title: AppLocalizations.of(context).name, // "الاسم",
+                subTitle: customerProvider.user.name),
+            accountInfoCard(
+                icon: Icons.phone,
+                title: AppLocalizations.of(context).phoneNumber, //"الرقم",
+                subTitle: customerProvider.user.phoneNumber),
+            accountInfoCard(
+                icon: Icons.location_on,
+                title: AppLocalizations.of(context).city, // 'المدينة',
+                subTitle: customerProvider.cityName),
+            accountInfoCard(
+              icon:
+                  customerProvider.gender == 'male' ? Icons.male : Icons.female,
+              title: AppLocalizations.of(context).gender, // "الجنس",
+              subTitle: customerProvider.gender == 'male'
+                  ? AppLocalizations.of(context).male //'ذكر'
+                  : AppLocalizations.of(context).female, //'أنثى',
+            ),
+            accountInfoCard(
+              icon: userMode == 'customer'
+                  ? Icons.attach_money
+                  : Icons.sell_outlined,
+              title: AppLocalizations.of(context).accountType, // 'نوع الحساب',
+              subTitle: customerProvider.userMode == 'customer'
+                  ? AppLocalizations.of(context).customer //'مشتري'
+                  : AppLocalizations.of(context).seller, //'بائع',
+            )
+          ],
+        )
+      ],
+    );
+  }
+}
+
+Widget buildUnregisteredProfile(BuildContext context) {
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          AppLocalizations.of(context).unregistered,
+          // 'يجب أن تكون مسجلا'
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(primary: AppColors.accent),
+          onPressed: () =>
+              Navigator.of(context).pushNamed(LoginCardScreen.routeName),
+          child: Text(
+            AppLocalizations.of(context).logIn,
+            // 'تسجيل الدخول'
+          ),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(primary: AppColors.accent),
+          onPressed: () =>
+              Navigator.of(context).pushNamed(CustomerSignupScreens.routeName),
+          child: Text(
+            AppLocalizations.of(context).signup,
+            // 'إنشاء حساب'
+          ),
+        )
+      ],
+    ),
+  );
 }
 
 Widget buildTop(double coverHeight, imageHeight, String profileImagePath,
@@ -199,24 +196,30 @@ Widget buildCoverImage(double coverHeight) => Container(
 Widget buildProfileImage(
         double imageHeight, String profileImagePath, BuildContext context) =>
     CircleAvatar(
-        radius: imageHeight / 2,
-        backgroundImage: NetworkImage(
-          'http://malldal.com/dal/' + profileImagePath,
-        )
+      radius: imageHeight / 2,
+      // backgroundColor: Colors.white,
+      // foregroundColor: Colors.amber,
+      // child: Container(
+      //   color: Colors.brown,
+      // ),
+      // child: CachedNetworkImage(
+      //   imageUrl: 'http://malldal.com/dal/' + profileImagePath,
+      //   placeholder: (context, url) =>
+      //       new CircularProgressIndicator(color: AppColors.primary),
+      //   errorWidget: (context, url, error) =>
+      //       new Icon(Icons.error, color: AppColors.primary),
+      //       fadeOutDuration: const Duration(seconds: 1),
+      //           fadeInDuration: const Duration(seconds: 3),
+      // ),
+      backgroundColor: Theme.of(context).colorScheme.background,
 
-        // child: ClipRRect(
-        //   borderRadius: BorderRadius.circular(100),
-        //   child:
-        //       // Image.file(File(
-        //       //   customerProvider.profileImageOfCustomer,
-        //       // ))
-        //       Image.network(
-        //     'http://malldal.com/' + profileImagePath,
-        //     // 'img/test.jpg',
-        //     fit: BoxFit.fitHeight,
-        //   ),
-        // ),
-        );
+      backgroundImage: NetworkImage(
+        'http://malldal.com/dal/' + profileImagePath,
+      ),
+      onBackgroundImageError: (object, stackTrace) {
+        Icon(Icons.error);
+      },
+    );
 
 Widget accountInfoCard({IconData icon, String title, String subTitle}) {
   return Card(

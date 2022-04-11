@@ -3,7 +3,6 @@ import 'package:dal/business_logic_layer/user_provider.dart';
 import 'package:dal/network/local_host.dart';
 import 'package:dal/screens/edit_seller_profile.dart';
 import 'package:dal/theme/app_colors.dart';
-import 'package:dal/widgets/myDrawer.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -56,7 +55,8 @@ class _SellerProfileScreenState extends State<SellerProfileScreen> {
         // backgroundColor: Colors.white,
         body: ListView(
           children: [
-            buildTop(coverHeight, imageHeight, sellerProvider.profileImage),
+            buildTop(
+                coverHeight, imageHeight, sellerProvider.profileImage, context),
             Column(
               children: [
                 Row(
@@ -149,13 +149,14 @@ class _SellerProfileScreenState extends State<SellerProfileScreen> {
   }
 }
 
-Widget buildTop(double coverHeight, imageHeight, String profileImagePath) {
+Widget buildTop(double coverHeight, imageHeight, String profileImagePath,
+    BuildContext context) {
   return Stack(clipBehavior: Clip.none, alignment: Alignment.center, children: [
     Container(
         margin: EdgeInsets.only(bottom: coverHeight / 2),
         child: buildCoverImage(coverHeight)),
     Positioned(
-      child: buildProfileImage(imageHeight, profileImagePath),
+      child: buildProfileImage(imageHeight, profileImagePath, context),
       top: coverHeight - imageHeight / 2,
       // left: MediaQuery.of(context).size.width / 2.5,
     )
@@ -177,9 +178,11 @@ Widget buildCoverImage(double coverHeight) => Container(
       ),
     );
 
-Widget buildProfileImage(double imageHeight, String profileImagePath) =>
+Widget buildProfileImage(
+        double imageHeight, String profileImagePath, BuildContext context) =>
     CircleAvatar(
       radius: imageHeight / 2,
+      backgroundColor: Theme.of(context).colorScheme.background,
       backgroundImage: NetworkImage(
         'http://malldal.com/dal/' + profileImagePath,
       ),

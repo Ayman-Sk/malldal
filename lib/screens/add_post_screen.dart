@@ -270,7 +270,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   title: AppLocalizations.of(context)
                       .chooseProductCities, //'المدينة:',
                   listOfItems: citiesList,
-                  func: getCategories,
+                  func: getCities,
                   items: _citiesdropDownMenueItems,
                   isCities: true),
               //gender
@@ -517,9 +517,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
                         imagesPath: paths);
                     if (res) {
                       Utils.showToast(
-                        message: 'تم إضافة المنتج بنجاح',
+                        message: AppLocalizations.of(context).productAdded,
                         backgroundColor: AppColors.primary,
-                        textColor: AppColors.background,
+                        textColor: Theme.of(context).textTheme.bodyText1.color,
                       );
                       // Navigator.of(context).pushReplacementNamed(
                       //   SellerAccountScreen.routeName,
@@ -527,9 +527,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       Navigator.of(context).pop();
                     } else {
                       Utils.showToast(
-                        message: 'تعذرت عملية إنشاء الحساب',
-                        backgroundColor: Colors.grey,
-                        textColor: Colors.white,
+                        message: AppLocalizations.of(context).error,
+                        backgroundColor: AppColors.primary,
+                        textColor: Theme.of(context).textTheme.bodyText1.color,
                       );
                       setState(() {
                         loading = false;

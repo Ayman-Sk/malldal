@@ -3,10 +3,13 @@ import 'package:dal/widgets/dropdown_model.dart';
 import 'package:dal/business_logic_layer/user_provider.dart';
 import 'package:dal/theme/app_colors.dart';
 import 'package:dal/utils/utils.dart';
+import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../network/end_points.dart';
 
 class EditCustomerProfileScreen extends StatefulWidget {
   static const routeName = 'EditCustomerProfileScreen';
@@ -21,7 +24,8 @@ enum AuthMode { Login, SignUp }
 class _EditCustomerProfileScreenState extends State<EditCustomerProfileScreen> {
   final GlobalKey<FormState> _formkey = GlobalKey();
   FocusNode _numberFocusNode;
-
+  Dio _dio = Dio();
+  List<String> citiesList = [];
   TextEditingController namecontroller;
   TextEditingController phonenumbercontroller;
 
@@ -31,7 +35,7 @@ class _EditCustomerProfileScreenState extends State<EditCustomerProfileScreen> {
   DropDownListModel _selectedgender;
 
   //customer city
-  List<DropDownListModel> _cities = DropDownListModel.getcities();
+  // List<DropDownListModel> _cities = DropDownListModel.getcities();
   List<DropdownMenuItem<DropDownListModel>> _citiesdropDownMenueItems;
   DropDownListModel _selectedcity;
 
@@ -48,7 +52,7 @@ class _EditCustomerProfileScreenState extends State<EditCustomerProfileScreen> {
       Utils.showToast(
         message: 'لم تختر صورة بعد',
         backgroundColor: AppColors.primary,
-        textColor: AppColors.background,
+        textColor: Theme.of(context).textTheme.bodyText1.color,
       );
     } else {
       setState(() {
@@ -70,6 +74,36 @@ class _EditCustomerProfileScreenState extends State<EditCustomerProfileScreen> {
     return false;
   }
 
+  Future<void> getCities(
+      //{String name, String email} في حال بدي
+      ) async {
+    final response = await _dio.get(EndPoints.getAllCities);
+
+    // if (response == null) {
+    //   setState(() {
+    //     loading = true;
+    //   });
+    // }
+    if (response.statusCode == 200 && response.data != null) {
+      setState(() {
+        print('citiiiiiies');
+        List cities = response.data['data']['data'];
+        cities.forEach((element) {
+          citiesList.add(element['cityName']);
+        });
+        _citiesdropDownMenueItems =
+            DropDownListModel.buildDropDownMenuItemFromData(
+                response.data, true);
+        _selectedcity = _citiesdropDownMenueItems[0].value;
+      });
+    } else {
+      setState(() {
+        _citiesdropDownMenueItems = null;
+        print(_citiesdropDownMenueItems);
+      });
+    }
+  }
+
   @override
   void initState() {
     final userInfo = Provider.of<UserProvider>(context, listen: false);
@@ -84,9 +118,10 @@ class _EditCustomerProfileScreenState extends State<EditCustomerProfileScreen> {
         ? _genderdropDownMenueItems[0].value
         : _genderdropDownMenueItems[1].value;
 
-    _citiesdropDownMenueItems =
-        DropDownListModel.buildDropDownMenuItem(_cities);
-    _selectedcity = _citiesdropDownMenueItems[userInfo.cityId].value;
+    // _citiesdropDownMenueItems =
+    // DropDownListModel.buildDropDownMenuItem(_cities);
+    // _selectedcity = _citiesdropDownMenueItems[0].value;
+    getCities();
 
     super.initState();
   }
@@ -344,6 +379,8 @@ class _EditCustomerProfileScreenState extends State<EditCustomerProfileScreen> {
                           backgroundColor: AppColors.primary,
                           child: CircleAvatar(
                             maxRadius: 125,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.background,
                             backgroundImage: !pickImage
                                 ? NetworkImage(
                                     'http://malldal.com/dal/' +
@@ -440,7 +477,7 @@ class _EditCustomerProfileScreenState extends State<EditCustomerProfileScreen> {
                         message: AppLocalizations.of(context)
                             .editSuccessfully, //'تم تعديل المعلومات بنجاح',
                         backgroundColor: AppColors.primary,
-                        textColor: AppColors.background,
+                        textColor: Theme.of(context).textTheme.bodyText1.color,
                       );
                       setState(() {
                         loading = false;
@@ -453,8 +490,8 @@ class _EditCustomerProfileScreenState extends State<EditCustomerProfileScreen> {
                       Utils.showToast(
                         message: AppLocalizations.of(context)
                             .editError, //'تعذرت عملية تعديل المعلومات',
-                        backgroundColor: Colors.grey,
-                        textColor: Colors.white,
+                        backgroundColor: AppColors.primary,
+                        textColor: Theme.of(context).textTheme.bodyText1.color,
                       );
                       setState(() {
                         loading = false;
@@ -473,7 +510,7 @@ class _EditCustomerProfileScreenState extends State<EditCustomerProfileScreen> {
   }
 
   Future selectImage(BuildContext context) async {
-    var provider = Provider.of<UserProvider>(context, listen: false);
+    // var provider = Provider.of<UserProvider>(context, listen: false);
     final result = await FilePicker.platform.pickFiles(
       allowMultiple: false,
     );

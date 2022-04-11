@@ -78,7 +78,8 @@ class _SellerAccountScreenState extends State<SellerAccountScreen> {
         drawerScrimColor: AppColors.primary.withOpacity(0.7),
         body: ListView(
           children: [
-            buildTop(coverHeight, imageHeight, sellerProvider.profileImage),
+            buildTop(
+                coverHeight, imageHeight, sellerProvider.profileImage, context),
             GridView.count(
               crossAxisCount: 3,
               physics:
@@ -103,8 +104,15 @@ Widget gridViewItem(Map<String, dynamic> item, BuildContext context) {
   return GestureDetector(
     onTap: () {
       if (item.keys.contains('Argument')) {
-        Navigator.pushNamed(context, item['Route'],
-            arguments: item['Argument']);
+        if (!item['Argument']) {
+          Navigator.pushNamed(context, item['Route'], arguments: {
+            'isRequest': item['Argument'],
+            'userId': Provider.of<UserProvider>(context, listen: false).userId
+          });
+        } else {
+          Navigator.pushNamed(context, item['Route'],
+              arguments: item['Argument']);
+        }
       } else
         Navigator.pushNamed(context, item['Route']);
     },
@@ -145,15 +153,16 @@ Widget gridViewItem(Map<String, dynamic> item, BuildContext context) {
   );
 }
 
-Widget buildTop(double coverHeight, imageHeight, String profileImagePath) {
+Widget buildTop(double coverHeight, imageHeight, String profileImagePath,
+    BuildContext context) {
   return Stack(clipBehavior: Clip.none, alignment: Alignment.center, children: [
     Container(
         margin: EdgeInsets.only(bottom: coverHeight / 2),
         child: buildCoverImage(coverHeight)),
     Positioned(
-      child: buildProfileImage(imageHeight, profileImagePath),
+      child: buildProfileImage(imageHeight, profileImagePath, context),
       top: coverHeight - imageHeight / 2,
-      // left: MediaQuery.of(context).size.width / 2.5,
+      // left: MediaQuery.of(context).sizefalse.width / 2.5,
     )
   ]);
 }
@@ -170,11 +179,13 @@ Widget buildCoverImage(double coverHeight) => Container(
       ),
     );
 
-Widget buildProfileImage(double imageHeight, String ProfileImagePath) =>
+Widget buildProfileImage(
+        double imageHeight, String profileImagePath, BuildContext context) =>
     CircleAvatar(
       radius: imageHeight / 2,
+      backgroundColor: Theme.of(context).colorScheme.background,
       backgroundImage: NetworkImage(
-        'http://malldal.com/dal/' + ProfileImagePath,
+        'http://malldal.com/dal/' + profileImagePath,
       ),
     );
 

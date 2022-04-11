@@ -53,22 +53,7 @@ class MyUser {
   List<String> favoriteCategory = [];
   List<String> adds = [];
   // List<PostsWithSellerModel>
-  List<String> cities = [
-    'دمشق',
-    'ريف دمشق',
-    'حلب',
-    'طرطوس',
-    'اللاذقية',
-    'حمص',
-    'حماه',
-    'درعا',
-    'السويداء',
-    'القنيطرة',
-    'الرقة',
-    'دير الزور',
-    'الحسكة',
-    'ادلب',
-  ];
+  List<String> cities = [];
 
   MyUser({
     this.id,

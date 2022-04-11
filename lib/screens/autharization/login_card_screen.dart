@@ -192,7 +192,10 @@ class _LoginCardScreenState extends State<LoginCardScreen>
                                                 // 'أنت الان مسجل في التطبيق',
                                                 backgroundColor:
                                                     AppColors.primary,
-                                                textColor: AppColors.background,
+                                                textColor: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    .color,
                                               );
                                               // var myUser = Provider.of<CustomerProvider>(context,listen: false).user;
                                               //   CachHelper.saveData(
@@ -219,8 +222,11 @@ class _LoginCardScreenState extends State<LoginCardScreen>
                                                         .loginRefused,
                                                 // 'تعذرت عملية التسجيل',
                                                 backgroundColor:
-                                                    Colors.redAccent,
-                                                textColor: AppColors.primary,
+                                                    AppColors.primary,
+                                                textColor: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    .color,
                                               );
                                               setState(() {
                                                 loading = false;
@@ -273,7 +279,8 @@ class _LoginCardScreenState extends State<LoginCardScreen>
                                       const EdgeInsets.only(top: 4, bottom: 16),
                                   child: GestureDetector(
                                     onTap: () {
-                                      Navigator.of(context).pushNamed(
+                                      Navigator.of(context)
+                                          .pushReplacementNamed(
                                         MainTabBarViewController.routeName,
                                       );
                                     },

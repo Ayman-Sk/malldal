@@ -219,7 +219,9 @@ class DioHelper {
     // queryParameters: query,
     String lang = 'ar',
   }) async {
+   
     String accessToken = CachHelper.getData(key: 'token');
+     print(url);
     dio.options.headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',

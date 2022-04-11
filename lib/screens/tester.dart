@@ -1,15 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class tester extends StatefulWidget {
-  const tester({Key key}) : super(key: key);
+class Tester extends StatefulWidget {
+  const Tester({Key key}) : super(key: key);
 
   @override
-  State<tester> createState() => _testerState();
+  State<Tester> createState() => _TesterState();
 }
 
-class _testerState extends State<tester> {
+class _TesterState extends State<Tester> {
   List<String> items = ["1", "2", "3", "4", "5", "6", "7", "8"];
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);

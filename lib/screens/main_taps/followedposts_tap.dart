@@ -1,14 +1,12 @@
-import 'package:dal/business_logic_layer/adds_provider.dart';
 import 'package:dal/business_logic_layer/user_provider.dart';
-import 'package:dal/data_layer/models/followed_posts_bycustomer_model.dart';
+import 'package:dal/data_layer/models/followed_posts_by_customer_model.dart';
 import 'package:dal/data_layer/models/post_with_sellers_model.dart';
 import 'package:dal/data_layer/repositories/posts_repositories.dart';
 import 'package:dal/network/local_host.dart';
 import 'package:dal/theme/app_colors.dart';
 import 'package:dal/widgets/center_title_widget.dart';
-import 'package:dal/widgets/homepage/add_image_item.dart';
 import 'package:dal/widgets/myDrawer.dart';
-import 'package:dal/widgets/post_item.dart';
+import 'package:dal/widgets/Post/post_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -61,11 +59,13 @@ class _FollowedPostsTapState extends State<FollowedPostsTap> {
             if (posts.isEmpty) {
               print('\n\n%%%%posts.isEmpty%%%%%\n\n');
               return CenterTitleWidget(
-                title: 'لا يوجد منتجات مفضلة بعد',
+                title: AppLocalizations.of(context)
+                    .emptySavedPosts, //'لا يوجد منتجات مفضلة بعد',
                 iconData: Icons.emoji_flags_outlined,
               );
             } else {
               print('\n\n%%%%posts is%%%%%\n\n');
+              List<String> adds = userProvider.getAdds();
               return Container(
                 padding: EdgeInsets.only(
                   top: 0,
@@ -75,12 +75,17 @@ class _FollowedPostsTapState extends State<FollowedPostsTap> {
                   itemCount: posts.length,
                   separatorBuilder: (context, index) {
                     if (index % 4 == 0) {
-                      String path = userProvider.getNextAdds;
+                      // String path = userProvider.getNextAdds();
+                      String path = '';
+                      if (index ~/ 4 < adds.length) {
+                        path = adds[index ~/ 4];
+                      }
                       if (path.isNotEmpty) {
                         return Container(
                           padding: const EdgeInsets.all(8),
                           width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.height / 3,
+                          color: Theme.of(context).colorScheme.background,
                           child: Image.network(
                             'http://malldal.com/dal/' + path,
                             fit: BoxFit.fill,
@@ -88,7 +93,6 @@ class _FollowedPostsTapState extends State<FollowedPostsTap> {
                         );
                       }
                     }
-                    // return AddImageItem(userProvider.getAdds[index]);
                     return Container();
                   },
                   itemBuilder: (context, index) {
@@ -105,15 +109,15 @@ class _FollowedPostsTapState extends State<FollowedPostsTap> {
                       child: PostItem(
                         // postId: item.,
                         postId: item["id"],
-                        nameOfSeller: item["seller"]["user"]["name"],
-                        createdAt: item["seller"]["created_at"],
+                        // nameOfSeller: item["seller"]["user"]["name"],
+                        createdAt: item["created_at"],
                         title: item["title"],
                         body: item["body"],
                         priceDetails: item["priceDetails"],
-                        avgRate: item["avgRate"],
+                        averageRate: item["avgRate"].toString(),
                         // isInteract: true,
-                        ownerUser: Seller.fromJson(item['seller']),
-                        price: item['priceDetails'],
+                        owner: Seller.fromJson(item['seller']),
+
                         paths: imagePaths,
                       ),
                     );
@@ -123,7 +127,7 @@ class _FollowedPostsTapState extends State<FollowedPostsTap> {
             }
           } else if (snapshot.hasError) {
             return CenterTitleWidget(
-              title: 'حصل خطأ في التحميل',
+              title: AppLocalizations.of(context).error, //'حصل خطأ في التحميل',
               iconData: Icons.error,
             );
           }

@@ -50,7 +50,7 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
       Utils.showToast(
         message: 'لم تختر صورة بعد',
         backgroundColor: AppColors.primary,
-        textColor: AppColors.background,
+        textColor: Theme.of(context).textTheme.bodyText1.color,
       );
     } else {
       setState(() {
@@ -547,7 +547,7 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
                         message: AppLocalizations.of(context)
                             .editSuccessfully, //'تم تعديل المعلومات بنجاح',
                         backgroundColor: AppColors.primary,
-                        textColor: AppColors.background,
+                        textColor: Theme.of(context).textTheme.bodyText1.color,
                       );
                       Navigator.of(context).pushNamedAndRemoveUntil(
                           'MainTabBarViewController', (route) => false);
@@ -555,8 +555,8 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
                       Utils.showToast(
                         message: AppLocalizations.of(context)
                             .editError, //'تعذرت عملية تعديل المعلومات',
-                        backgroundColor: Colors.grey,
-                        textColor: Colors.white,
+                        backgroundColor: AppColors.primary,
+                        textColor: Theme.of(context).textTheme.bodyText1.color,
                       );
                       setState(() {
                         loading = false;

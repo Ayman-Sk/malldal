@@ -1,5 +1,5 @@
 import 'package:dal/data_layer/data_providers/posts_apis.dart';
-import 'package:dal/data_layer/models/followed_posts_bycustomer_model.dart';
+import 'package:dal/data_layer/models/followed_posts_by_customer_model.dart';
 import 'package:dal/data_layer/models/post_with_sellers_model.dart';
 import 'package:flutter/cupertino.dart';
 

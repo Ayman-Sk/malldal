@@ -3,12 +3,13 @@ import 'dart:convert';
 import 'package:dal/data_layer/models/post_with_sellers_model.dart';
 import 'package:dal/network/local_host.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:gson/gson.dart';
 
 class AllPostsWithCategories with ChangeNotifier {
   PostsWithSellerModel _allPosts = PostsWithSellerModel();
   List<PostModel> _displayedPosts = [];
+  List<String> _categoriesList = [];
   int _displayPostsIndex = -1;
+
   // List<String> _categoryFilter = [];
   // List<String> _cityFilter = [];
   String _categoryFilter = "";
@@ -21,6 +22,18 @@ class AllPostsWithCategories with ChangeNotifier {
 
   void addNewPosts(List<PostModel> newPostsData) {
     this._allPosts.data.data.addAll(newPostsData);
+    notifyListeners();
+  }
+
+
+
+  void addCategories(List<String> categories) {
+    this._categoriesList.addAll(categories);
+    notifyListeners();
+  }
+
+  void setCategoriesListEmpty() {
+    this._categoriesList = [];
     notifyListeners();
   }
 
@@ -147,33 +160,42 @@ class AllPostsWithCategories with ChangeNotifier {
   }
 
   int get getDiplayedPostsIndex => this._displayPostsIndex;
+
   String get getCategoryFilter => this._categoryFilter;
+
   String get getCityFilter => this._cityFilter;
+
+  List<String> get getCategories => this._categoriesList;
+
+
   // List<String> get getCategoryFilter => this._categoryFilter;
   // List<String> get getCityFilter => this._cityFilter;
 
   List<PostModel> getDisplayedPosts() {
-    if (_categoryFilter.isEmpty && _cityFilter.isEmpty)
-      this._displayPostsIndex = -1;
-    if (this._displayPostsIndex == -1) return _allPosts.data.data;
-    _displayedPosts = [];
-    _allPosts.data.data.forEach((element) {
-      print(_displayPostsIndex.toString());
-      if (element.categories.any((value) => this._categoryFilter == value)) {
-        _displayedPosts.add(element);
-      }
-      // if (element.cities.any((value) => this._cityFilter.contains(value))) {
-      //   _displayedPosts.add(element);
-      // }
-      // if (element.categories.contains(_displayPostsIndex.toString())) {
-      //   print('Mmmmmmathced Elementttttttttttttttttttttttttt');
-      //   print(element);
-      //   _displayedPosts.add(element);
-      // }
-    });
-    print('ddddddddddddddddddddddddissssplyed');
-    print(_displayedPosts);
-    // notifyListeners();
-    return _displayedPosts;
+    if (_allPosts.data != null) {
+      if (_categoryFilter.isEmpty && _cityFilter.isEmpty) this._displayPostsIndex = -1;
+      if (this._displayPostsIndex == -1) return _allPosts.data.data;
+      _displayedPosts = [];
+      _allPosts.data.data.forEach((element) {
+        print(_displayPostsIndex.toString());
+        if (element.categories.any((value) => this._categoryFilter == value)) {
+          _displayedPosts.add(element);
+        }
+        // if (element.cities.any((value) => this._cityFilter.contains(value))) {
+        //   _displayedPosts.add(element);
+        // }
+        // if (element.categories.contains(_displayPostsIndex.toString())) {
+        //   print('Mmmmmmathced Elementttttttttttttttttttttttttt');
+        //   print(element);
+        //   _displayedPosts.add(element);
+        // }
+      });
+      print('ddddddddddddddddddddddddissssplyed');
+      print(_displayedPosts);
+      // notifyListeners();
+      return _displayedPosts;
+    } else {
+      return [];
+    }
   }
 }

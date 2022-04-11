@@ -4,9 +4,7 @@ import 'package:dal/data_layer/repositories/categories_repository.dart';
 import 'package:dal/screens/category_posts_screen.dart';
 import 'package:dal/theme/app_colors.dart';
 import 'package:dal/utils/utils.dart';
-import 'package:dal/widgets/center_title_widget.dart';
 import 'package:dal/widgets/myDrawer.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -20,44 +18,41 @@ class CustomerCategoriesTap extends StatefulWidget {
 class _CustomerCategoriesTapState extends State<CustomerCategoriesTap> {
   List<int> chekedIndexes = [];
 
-  List<String> categoriesList = [];
+  // List<String> categoriesList = [];
   List<String> citiesList = [];
 
   var items = [];
   CategoriesRepositoryImp _catRepo = CategoriesRepositoryImp();
-  bool isLoading = true;
-  int pageNumber = 1;
+  bool isLoading = false;
+  int pageNumber = 2;
   int pageSize = 8;
-  int allPage = 0;
+  int allPage = 3;
+
   @override
   void initState() {
-    Provider.of<UserProvider>(context, listen: false)
-        .getFollowedCategoriesByCustomerID()
-        .then((value) {
-      // allPage = value['data']['last_page'];
-      print(value);
-      // value['data'].froEach((element) {
-      //   print(element['categories']);
-      // });
-      _catRepo
-          .getAllCategories(
-        refreshed: true,
-        pageNumber: pageNumber,
-        pageSize: pageSize,
-      )
-          .then((value) {
-        setState(() {
-          allPage = value.data.lastPage;
-        });
-        value.data.categories.forEach((element) {
-          categoriesList.add(element.title);
-        });
-        setState(() {
-          pageNumber++;
-          isLoading = false;
-        });
-      });
-    });
+    // Provider.of<UserProvider>(context, listen: false)
+    //     .getFollowedCategoriesByCustomerID()
+    //     .then((value) {
+    //   print(value);
+    //   _catRepo
+    //       .getAllCategories(
+    //     refreshed: true,
+    //     pageNumber: pageNumber,
+    //     pageSize: pageSize,
+    //   )
+    //       .then((value) {
+    //     setState(() {
+    //       allPage = value.data.lastPage;
+    //     });
+    //     value.data.categories.forEach((element) {
+    //       categoriesList.add(element.title);
+    //     });
+    //     setState(() {
+    //       pageNumber++;
+    //       isLoading = false;
+    //     });
+    //   });
+    // });
 
     super.initState();
   }
@@ -65,14 +60,12 @@ class _CustomerCategoriesTapState extends State<CustomerCategoriesTap> {
   @override
   Widget build(BuildContext context) {
     String filterType = ModalRoute.of(context).settings.arguments;
-    var provider = Provider.of<AllPostsWithCategories>(context);
-    final userPrvider = Provider.of<UserProvider>(context);
+    final postProvider = Provider.of<AllPostsWithCategories>(context);
+    final userProvider = Provider.of<UserProvider>(context);
 
-    RefreshController _refreshController =
-        RefreshController(initialRefresh: false);
+    RefreshController _refreshController = RefreshController(initialRefresh: false);
 
     return Scaffold(
-      // backgroundColor: AppColors.background,
       drawer: MyDrawer(),
       drawerScrimColor: AppColors.primary.withOpacity(0.7),
       appBar: AppBar(
@@ -98,26 +91,7 @@ class _CustomerCategoriesTapState extends State<CustomerCategoriesTap> {
                 backgroundColor: AppColors.primary,
               ),
               footer: const ClassicFooter(loadStyle: LoadStyle.ShowWhenLoading),
-              // footer: CustomFooter(
-              //   builder: (BuildContext context, LoadStatus mode) {
-              //     Widget body;
-              //     if (mode == LoadStatus.idle) {
-              //       body = CupertinoActivityIndicator(); //Text("pull up load");
-              //     } else if (mode == LoadStatus.loading) {
-              //       body = CupertinoActivityIndicator();
-              //     } else if (mode == LoadStatus.failed) {
-              //       body = Text("Load Failed!Click retry!");
-              //     } else if (mode == LoadStatus.canLoading) {
-              //       body = Text("release to load more");
-              //     } else {
-              //       body = Text("No more Data");
-              //     }
-              //     return Container(
-              //       height: 55.0,
-              //       child: Center(child: body),
-              //     );
-              //   },
-              // ),
+
               onRefresh: () async {
                 setState(() {
                   pageNumber = 1;
@@ -129,10 +103,12 @@ class _CustomerCategoriesTapState extends State<CustomerCategoriesTap> {
                   pageSize: pageSize,
                 )
                     .then((value) {
-                  categoriesList = [];
+                  postProvider.setCategoriesListEmpty();
+                  List<String> categoriesList=[];
                   value.data.categories.forEach((element) {
                     categoriesList.add(element.title);
                   });
+                  postProvider.addCategories(categoriesList);
                 });
                 if (categories != null) {
                   _refreshController.refreshCompleted();
@@ -162,9 +138,11 @@ class _CustomerCategoriesTapState extends State<CustomerCategoriesTap> {
                       .then((value) {
                     setState(() {
                       // allPage =
+                      List<String> categoriesList=[];
                       value.data.categories.forEach((element) {
                         categoriesList.add(element.title);
                       });
+                      postProvider.addCategories(categoriesList);
                     });
                   });
                   if (categories != null) {
@@ -179,102 +157,85 @@ class _CustomerCategoriesTapState extends State<CustomerCategoriesTap> {
                   }
                 }
               },
-              child: GridView.builder(
+              child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: filterType == 'City'
-                    ? citiesList.length
-                    : categoriesList.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: 3 / 3,
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 3.0,
-                    mainAxisSpacing: 5.0),
+                itemCount: filterType == 'City' ? citiesList.length : postProvider.getCategories.length,
+                // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                //     childAspectRatio: 3 / 3,
+                //     crossAxisCount: 2,
+                //     crossAxisSpacing: 3.0,
+                //     mainAxisSpacing: 5.0),
                 itemBuilder: (context, index) {
-                  bool isFavorite = userPrvider
-                      .isFavoriteCategoryContain((index + 1).toString());
+                  bool isFavorite = userProvider.isFavoriteCategoryContain((index + 1).toString());
                   bool checked = chekedIndexes.contains(index);
-                  Color itemColor = AppColors.primary;
+                  // Color itemColor = AppColors.primary;
 
-                  if (provider.getCategoryFilter
-                      .contains((index + 1).toString())) {
-                    itemColor = AppColors.primary;
+                  if (postProvider.getCategoryFilter.contains((index + 1).toString())) {
+                    // itemColor = AppColors.primary;
                     checked = true;
                   }
 
-                  return Stack(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(
-                                context, CategoryPostsScreen.routeName,
-                                arguments: {'id': index + 1});
-                          },
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            color: itemColor,
-                            elevation: 20,
-                            child: Center(
-                              child: Text(
-                                categoriesList[index],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        left: MediaQuery.of(context).size.width / 5.1,
-                        child: IconButton(
-                          onPressed: () {
-                            setState(
-                              () {
-                                print(isFavorite);
-                                if (userPrvider.isFavoriteCategoryContain(
-                                    (index + 1).toString())) {
-                                  if (userPrvider
-                                          .removeCateogryFromCustomerFavorite(
-                                              (index + 1)) !=
-                                      null) {
-                                    Utils.showToast(
-                                      message: 'تم  إزالة الفئة من المحفوظات',
-                                      backgroundColor: Colors.white,
-                                      textColor: Colors.black,
-                                    );
-                                    userPrvider.removeCategoryFromFavorite(
-                                        (index + 1).toString());
-                                  }
-                                } else {
-                                  if (userPrvider.addCateogryToCustomerFavorite(
-                                          {'category_id': (index + 1)}) !=
-                                      null) {
-                                    Utils.showToast(
-                                      message: 'تم حفظ  الفئة',
-                                      backgroundColor: Colors.white,
-                                      textColor: Colors.black,
-                                    );
-                                    userPrvider.addCategoryToFavorite(
-                                        (index + 1).toString());
-                                  }
-                                }
-                              },
-                            );
-                          },
-                          icon: Icon(
-                            isFavorite ? Icons.star : Icons.star_border,
-                            color: Colors.amber,
-                            size: MediaQuery.of(context).size.width / 12,
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
+                  return buildListViewItem(context, postProvider.getCategories[index], index, isFavorite, userProvider);
                 },
               ),
             ),
+    );
+  }
+
+  Stack buildListViewItem(BuildContext context, String title, int index, bool isFavorite, UserProvider userPrvider) {
+    return Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, CategoryPostsScreen.routeName, arguments: {'id': index + 1});
+            },
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              elevation: 20,
+              child: ListTile(
+                title: Text(title),
+                trailing: GestureDetector(
+                  child: Icon(
+                    isFavorite ? Icons.star : Icons.star_border,
+                    color: Colors.amber,
+                    size: MediaQuery.of(context).size.width / 12,
+                  ),
+                  onTap: () {
+                    setState(
+                      () {
+                        print(isFavorite);
+                        if (userPrvider.isFavoriteCategoryContain((index + 1).toString())) {
+                          if (userPrvider.removeCateogryFromCustomerFavorite((index + 1)) != null) {
+                            Utils.showToast(
+                              message: AppLocalizations.of(context).removeCategory, //'تم  إزالة الفئة من المحفوظات',
+                              backgroundColor: AppColors.primary,
+                              textColor: Theme.of(context).textTheme.bodyText1.color,
+                            );
+                            userPrvider.removeCategoryFromFavorite((index + 1).toString());
+                          }
+                        } else {
+                          if (userPrvider.addCateogryToCustomerFavorite({'category_id': (index + 1)}) != null) {
+                            Utils.showToast(
+                              message: AppLocalizations.of(context).saveCategory, //'تم حفظ  الفئة',
+                              backgroundColor: AppColors.primary,
+                              textColor: Theme.of(context).textTheme.bodyText1.color,
+                            );
+                            userPrvider.addCategoryToFavorite((index + 1).toString());
+                          }
+                        }
+                      },
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -1,22 +1,24 @@
 import 'package:dal/business_logic_layer/adds_provider.dart';
 import 'package:dal/business_logic_layer/all_posts_with_categories.dart';
 import 'package:dal/business_logic_layer/user_provider.dart';
-import 'package:dal/data_layer/models/followed_posts_bycustomer_model.dart';
+import 'package:dal/data_layer/models/followed_posts_by_customer_model.dart';
 import 'package:dal/data_layer/models/post_with_sellers_model.dart';
 import 'package:dal/data_layer/repositories/posts_repositories.dart';
 import 'package:dal/network/local_host.dart';
-import 'package:dal/screens/filter_screen.dart';
 import 'package:dal/theme/app_colors.dart';
 import 'package:dal/widgets/center_title_widget.dart';
-import 'package:dal/widgets/homepage/add_image_item.dart';
 import 'package:dal/widgets/myDrawer.dart';
-import 'package:dal/widgets/post_item.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_search_bar/flutter_search_bar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+import '../../network/end_points.dart';
+import '../../widgets/Post/post_item.dart';
+import '../../widgets/dropdown_model.dart';
+import '../../widgets/multi_selected_drop_down.dart';
 
 class HomePageTap extends StatefulWidget {
   @override
@@ -27,50 +29,325 @@ class _HomePageTapState extends State<HomePageTap> {
   SearchBar searchBar;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  int currentPage = 1;
+  int currentPage = 2;
+  int pageSize = 2;
+  int totalPageNumber = 3;
+
   PostsWithSellerModel allPostsData = PostsWithSellerModel();
   FollowedPostsByCustomerModel followedRes = FollowedPostsByCustomerModel();
   Map<String, dynamic> sellerFollower = {};
   PostsRepositoryImp postsRepositoryImp = PostsRepositoryImp();
+  List<int> listOfCities = [];
+  List<int> listOfCategories = [];
+  int categoryFilter = -1;
+  int cityFilter = -1;
+  List<String> categoryList = [];
+  List<String> citiesList = [];
+  Dio _dio = Dio();
+  List<DropdownMenuItem<DropDownListModel>> _citiesdropDownMenueItems;
 
-  Widget buildFilterPopupMenuButtom(BuildContext context) {
-    List<String> filterItems = [
-      AppLocalizations.of(context).city,
-      AppLocalizations.of(context).category,
-    ];
-    return PopupMenuButton<String>(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20))),
-      icon: Icon(Icons.filter_alt),
-      // onSelected: choiceAction,
-      itemBuilder: (BuildContext context) {
-        return filterItems.map((String choice) {
-          return PopupMenuItem<String>(
-            value: choice,
-            child: GestureDetector(
-              child: Text(choice),
-              onTap: () {
-                print(choice);
-                Navigator.of(context)
-                    .pushNamed(FilterScreen.routeName, arguments: choice)
-                    .then(
-                  (ele) {
-                    setState(
-                      () {
-                        Provider.of<AllPostsWithCategories>(context,
-                                listen: false)
-                            .getDisplayedPosts();
-                      },
-                    );
-                    Navigator.pop(context);
-                  },
-                );
-              },
-            ),
-          );
-        }).toList();
+  List<DropdownMenuItem<DropDownListModel>> _categorydropDownMenueItems;
+
+  @override
+  void initState() {
+    getCategories();
+    getCities();
+    super.initState();
+  }
+
+  Widget buildFilterPopupMenuButtom() {
+    return IconButton(
+      onPressed: () {
+        // getCategories().then(
+        //     (value) => getCities().then((value) => _buildReviewPopupDialog()));
+        _buildReviewPopupDialog();
       },
+      icon: Icon(Icons.filter_alt),
     );
+  }
+
+  Future<void> getCategories(//{String name, String email} في حال بدي
+      ) async {
+    final response = await _dio.get(EndPoints.getAllCategories(1, 30));
+    // if (response == null) {
+    //   setState(() {
+    //     loading = true;
+    //   });
+    // }
+    if (response.statusCode == 200) {
+      setState(() {
+        List categories = response.data['data']['data'];
+        categories.forEach((element) {
+          categoryList.add(element['title']);
+        });
+        print(response.data);
+        _categorydropDownMenueItems =
+            DropDownListModel.buildDropDownMenuItemFromData(
+                response.data, false);
+        // _selectedcategory = _categorydropDownMenueItems[0].value;
+      });
+    } else {
+      setState(() {
+        _categorydropDownMenueItems = null;
+      });
+    }
+  }
+
+  Future<void> getCities(//{String name, String email} في حال بدي
+      ) async {
+    final response = await _dio.get(EndPoints.getAllCities);
+
+    // if (response == null) {
+    //   setState(() {
+    //     loading = true;
+    //   });
+    // }
+    if (response.statusCode == 200) {
+      setState(() {
+        List cities = response.data['data']['data'];
+        cities.forEach((element) {
+          citiesList.add(element['cityName']);
+        });
+        _citiesdropDownMenueItems =
+            DropDownListModel.buildDropDownMenuItemFromData(
+                response.data, true);
+        // _selectedcity = _citiesdropDownMenueItems[0].value;
+      });
+    } else {
+      setState(() {
+        _citiesdropDownMenueItems = null;
+        print(_citiesdropDownMenueItems);
+      });
+    }
+  }
+
+  void _buildReviewPopupDialog() async {
+    // StateSetter _setState;
+    categoryFilter = 0;
+    cityFilter = 0;
+    String categoryTitle = categoryList[0];
+    String cityTitle = citiesList[0];
+    return showDialog(
+        context: context,
+        builder: (_) => StatefulBuilder(builder: (context, _setState) {
+              return AlertDialog(
+                backgroundColor: Colors.transparent,
+                insetPadding: EdgeInsets.zero,
+                contentPadding: EdgeInsets.zero,
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+
+                // insetPadding: const EdgeInsets.all(10),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+
+                content: StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setter) {
+                    _setState = setter;
+                    // Get available height and width of the build area of this widget. Make a choice depending on the size.
+                    var height = MediaQuery.of(context).size.height;
+                    var width = MediaQuery.of(context).size.width;
+
+                    return Container(
+                      height: height / 2,
+                      width: width - 100,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: Theme.of(context).cardColor,
+                      ),
+                      padding: const EdgeInsets.all(4),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            flex: 5,
+                            child: ListView(
+                              shrinkWrap: true,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 8.0, bottom: 20.0),
+                                  child: Text(
+                                    AppLocalizations.of(context).filterText,
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 8.0),
+                                    child: Text(
+                                      AppLocalizations.of(context).category,
+                                      style: TextStyle(
+                                        // color: AppColors.primary,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                DropdownButton(
+                                    isExpanded: true,
+                                    menuMaxHeight:
+                                        MediaQuery.of(context).size.height / 3,
+                                    value: categoryTitle,
+                                    items: categoryList
+                                        .map(buildMenuItem)
+                                        .toList(),
+                                    onChanged: (value) {
+                                      print(categoryTitle);
+                                      _setState(() {
+                                        categoryFilter =
+                                            categoryList.indexOf(value);
+                                        categoryTitle = value;
+                                      });
+                                    }),
+                                // buildDropDownList(
+                                //     // buildSingleItemSelectDropDownList(
+                                //     title: AppLocalizations.of(context)
+                                //         .category, //'فئة المنتج',
+                                //     listOfItems: categoryList,
+                                //     func: getCategories,
+                                //     items: _categorydropDownMenueItems,
+                                //     isCities: false),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 16.0, bottom: 8.0),
+                                  child: Center(
+                                    child: Text(
+                                      AppLocalizations.of(context).city,
+                                      style: TextStyle(
+                                        // color: AppColors.primary,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                DropdownButton(
+                                    isExpanded: true,
+                                    menuMaxHeight:
+                                        MediaQuery.of(context).size.height / 3,
+                                    value: cityTitle,
+                                    items:
+                                        citiesList.map(buildMenuItem).toList(),
+                                    onChanged: (value) {
+                                      print(cityTitle);
+                                      _setState(() {
+                                        cityFilter = citiesList.indexOf(value);
+                                        cityTitle = value;
+                                      });
+                                    }),
+                                // buildDropDownList(
+                                //     title: AppLocalizations.of(context)
+                                //         .city, //'المدينة:',
+                                //     listOfItems: citiesList,
+                                //     func: getCities,
+                                //     items: _citiesdropDownMenueItems,
+                                //     isCities: true),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Align(
+                              alignment: Alignment.bottomCenter,
+                              child: MaterialButton(
+                                color: AppColors.primary,
+                                child: Text(AppLocalizations.of(context).ok),
+                                onPressed: () {
+                                  setState(() {
+                                    isChange = true;
+                                    categoryFilter = categoryFilter + 1;
+                                    currentPage = 1;
+                                  });
+                                  getPostData(
+                                    searchTerm: search,
+                                    refreshed: true,
+                                    categoryFilter: categoryFilter,
+                                  );
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              );
+            }));
+  }
+
+  // Widget buildSingleItemSelectDropDownList(
+  //     {String title,
+  //     List<String> listOfItems,
+  //     Function() func,
+  //     List<DropdownMenuItem<DropDownListModel>> items,
+  //     bool isCities}) {
+  //   return DropdownButton(
+  //       menuMaxHeight: MediaQuery.of(context).size.height / 3,
+  //       value: isCities ? cityTitle : categoryTitle,
+  //       items: listOfItems.map(buildMenuItem).toList(),
+  //       onChanged: (value) {
+  //         setState(() {
+  //           if (isCities) {
+  //             listOfCities[0] = citiesList.indexOf(value);
+  //             cityTitle = value;
+  //           } else {
+  //             listOfCategories[0] = categoryList.indexOf(value);
+  //             categoryTitle = value;
+  //           }
+  //         });
+  //       });
+  // }
+
+  DropdownMenuItem<String> buildMenuItem(String item) =>
+      DropdownMenuItem(value: item, child: Text(item));
+
+  Widget buildDropDownList(
+      {String title,
+      List<String> listOfItems,
+      Function() func,
+      List<DropdownMenuItem<DropDownListModel>> items,
+      bool isCities}) {
+    print('aaaaaaaaaaaaassssssddddddd');
+    print(isCities);
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            title,
+            style: TextStyle(
+              // color: AppColors.primary,
+              fontSize: 20,
+            ),
+          ),
+        ),
+        items == null
+            ? TextButton(
+                onPressed: () => func(), //func()????
+                child: Icon(Icons.refresh),
+              )
+            : CustomMultiselectDropDown(
+                listOFStrings: listOfItems,
+                selectedList: isCities ? addCityFunction : addCategoryFunction,
+              ),
+      ],
+    );
+  }
+
+  void addCityFunction(List<int> listOfItems) {
+    listOfCities = listOfItems;
+    print('Cities' + listOfCities.toString());
+  }
+
+  void addCategoryFunction(List<int> listOfItems) {
+    listOfCategories = listOfItems;
+    print('Categories' + listOfCategories.toString());
   }
 
   AppBar buildAppBar(BuildContext context) {
@@ -79,11 +356,9 @@ class _HomePageTapState extends State<HomePageTap> {
       centerTitle: true,
       backgroundColor: AppColors.primary,
       elevation: 10,
-
-      // leading: buildFilterPopupMenuButtom(),
       actions: [
         searchBar.getSearchAction(context),
-        buildFilterPopupMenuButtom(context),
+        buildFilterPopupMenuButtom(),
       ],
     );
   }
@@ -92,7 +367,6 @@ class _HomePageTapState extends State<HomePageTap> {
   bool isChange = false;
 
   void onSubmitted(String value) {
-    // getPostData(search: value, refreshed: false, context: context);
     setState(() {
       search = value;
       isChange = true;
@@ -125,6 +399,179 @@ class _HomePageTapState extends State<HomePageTap> {
         });
   }
 
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+
+  Future<Widget> getPostData(
+      {bool refreshed = false,
+      String searchTerm,
+      // int currentPage,
+      int categoryFilter}) async {
+    var addsData = await Provider.of<AddsProvider>(context, listen: false)
+        .getAdds(2, currentPage);
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    bool isSeller = userProvider.userMode == 'seller';
+    bool isAnonymous = CachHelper.getData(key: 'userId') == null;
+    final customerId = CachHelper.getData(key: 'userId');
+    final postsProvider =
+        Provider.of<AllPostsWithCategories>(context, listen: false);
+
+    print('getttDataa');
+    print(searchTerm);
+    print('paaaggggeee');
+    print(currentPage);
+    print(totalPageNumber);
+    if (refreshed) {
+      currentPage = 1;
+      print(currentPage);
+      print(totalPageNumber);
+    } else if (currentPage > totalPageNumber) {
+      print(currentPage);
+      print(totalPageNumber);
+      print('No dataaaa');
+      _refreshController.loadNoData();
+      // return null;
+    }
+    if (categoryFilter != -1) {
+      var data = await postsRepositoryImp.getAllPostsByCategoryId(
+          categoryFilter, currentPage, pageSize);
+      print('fffffffffffffffffffffffffffff dataaaaaa');
+      print(data);
+      allPostsData = PostsWithSellerModel.fromJson(data, false);
+      // if (allPostsData.data.data.isEmpty) {
+      //   postsProvider.setAllPost(allPostsData);
+      //   print('emptyyyyyyyyyyyyyyyyyyyy');
+      //   setState(() {
+      //     isChange = false;
+      //   });
+      //   return null;
+      //   // return CenterTitleWidget(
+      //   //   title: AppLocalizations.of(context).empty,
+      //   //   iconData: Icons.hourglass_empty,
+      //   // );
+      // }
+    } else {
+      allPostsData = await postsRepositoryImp.getAllPostsIncludeCategories(
+        currentPage,
+        pageSize,
+        searchTerm,
+      );
+    }
+
+    setState(() {
+      totalPageNumber = allPostsData.data.lastPage;
+    });
+
+    print('adddds');
+    print(addsData['data']['data']);
+    addsData['data']['data'].forEach((element) {
+      userProvider.addAdds(element['url']);
+    });
+    // print(userProvider.get)
+
+    if (!isAnonymous && !isSeller) {
+      followedRes = await postsRepositoryImp
+          .getFollowedPostsOfCustomerByCustomerID(id: customerId);
+      sellerFollower = await userProvider
+          .getFollowedSellersByCustomerID(userProvider.userId);
+      var followedPosts = followedRes.data[0].posts;
+      List<int> ids = [];
+      followedPosts.forEach((element) {
+        ids.add(element['id']);
+      });
+      userProvider.setSavedPosts(ids);
+      ids = [];
+      sellerFollower['data'][0]['sellers'].forEach((element) {
+        // response.entries
+        ids.add(element['id']);
+      });
+      print('bbbbbbbbbbbbbbbbbbbbbbbb');
+      userProvider.setFollowers(ids);
+    }
+    if (allPostsData == null) {
+      return CenterTitleWidget(
+        title: AppLocalizations.of(context).error,
+        iconData: Icons.error,
+      );
+    }
+    // setState(() {
+    //   currentPage++;
+    // });
+    if (!refreshed) {
+      postsProvider.addNewPosts(allPostsData.data.data);
+    } else {
+      postsProvider.setAllPost(allPostsData);
+    }
+
+    List<PostModel> posts = postsProvider.getDisplayedPosts();
+    List<String> adds = userProvider.getAdds();
+    setState(() {
+      isChange = false;
+    });
+    if (posts.isEmpty) {
+      return CenterTitleWidget(
+        title: AppLocalizations.of(context).empty,
+        iconData: Icons.emoji_flags_outlined,
+      );
+    } else {
+      // if (widget.searchTerm == null) {
+      return Container(
+        padding: EdgeInsets.only(
+          top: 50,
+        ),
+        child: ListView.separated(
+          physics: const AlwaysScrollableScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          itemCount: posts.length,
+          separatorBuilder: (context, index) {
+            if (index % 4 == 0) {
+              // String path = userProvider.getNextAdds();
+              String path = '';
+              if (index ~/ 4 < adds.length) {
+                path = adds[index ~/ 4];
+              }
+              if (path.isNotEmpty) {
+                return Container(
+                  padding: const EdgeInsets.all(8),
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height / 3,
+                  color: Theme.of(context).colorScheme.background,
+                  child: Image.network(
+                    'http://malldal.com/dal/' + path,
+                    fit: BoxFit.fill,
+                  ),
+                );
+              }
+            }
+            return Container();
+          },
+          itemBuilder: (context, index) {
+            var item = posts[index];
+            print(item.postImages);
+            // followedPosts.any((element) => element['id']==item.id);
+            return Consumer<UserProvider>(
+              builder: (context, user, _) {
+                List<String> imagePaths = [];
+                item.postImages.forEach((element) {
+                  imagePaths.add('http://malldal.com/dal/' + element['url']);
+                });
+                return PostItem(
+                  postId: item.id,
+                  createdAt: item.createdAt,
+                  title: item.title,
+                  body: item.body,
+                  priceDetails: item.priceDetails,
+                  owner: item.seller,
+                  paths: imagePaths,
+                );
+              },
+            );
+          },
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // List<String> filterItems = [
@@ -132,140 +579,37 @@ class _HomePageTapState extends State<HomePageTap> {
     //   AppLocalizations.of(context).category,
     // ];
 
+    final userProvider = Provider.of<UserProvider>(context);
+    final postsProvider = Provider.of<AllPostsWithCategories>(context);
+    List<String> adds = userProvider.getAdds();
+
+    // final addsProvider = Provider.of<AddsProvider>(context, listen: false);
+    // // final userProvider = Provider.of<UserProvider>(context, listen: false);
+    // bool isSeller = userProvider.userMode == 'seller';
+    // bool isAnonymous = CachHelper.getData(key: 'userId') == null;
+    // final customerId = CachHelper.getData(key: 'userId');
+    // // final postsProvider =
+    // //     Provider.of<AllPostsWithCategories>(context, listen: false);
+
+    // int currentPage = 1;
+    // int totalPage = 2;
+
+    // var prevPage = 0.0;
+    // if (postsProvider.getAllPost().data != null) {
+    //   currentPage = prevPage.round();
+    //   if (prevPage > prevPage.round()) {
+    //     currentPage++;
+    //   }
+    //   prevPage = postsProvider.getDisplayedPosts().length / pageSize;
+    // }
+
     setState(() {
       print('inside');
       print(search);
     });
-    final userProvider = Provider.of<UserProvider>(context);
-    final postsProvider = Provider.of<AllPostsWithCategories>(context);
-    final addsProvider = Provider.of<AddsProvider>(context, listen: false);
-    final customerId = CachHelper.getData(key: 'userId');
-    bool isSeller = userProvider.userMode == 'seller';
-    bool isAnonymous = CachHelper.getData(key: 'userId') == null;
-    RefreshController _refreshController =
-        RefreshController(initialRefresh: false);
 
-    userProvider.index = -1;
-    int pageNumber = 2;
-
-    Future<Widget> getPostData(
-        {bool refreshed = false, String searchTerm}) async {
-      print('getttDataa');
-      print(searchTerm);
-      if (refreshed) {
-        currentPage = 1;
-      } else if (currentPage > pageNumber) {
-        print(currentPage);
-        print(pageNumber);
-        print('No dataaaa');
-        // _refreshController.loadNoData();
-        return null;
-      }
-      allPostsData = await postsRepositoryImp.getAllPostsIncludeCategories(
-        currentPage,
-        3,
-        searchTerm,
-      );
-
-      pageNumber = allPostsData.data.lastPage;
-
-      var addsData = await addsProvider.getAdds();
-      print('adddds');
-      print(addsData['data']['data']);
-      addsData['data']['data'].forEach((element) {
-        userProvider.addAdds(element['url']);
-      });
-
-      if (!isAnonymous && !isSeller) {
-        followedRes = await postsRepositoryImp
-            .getFollowedPostsOfCustomerByCustomerID(id: customerId);
-        sellerFollower = await userProvider
-            .getFollowedSellersByCustomerID(userProvider.userId);
-        var followedPosts = followedRes.data[0].posts;
-        List<int> ids = [];
-        followedPosts.forEach((element) {
-          ids.add(element['id']);
-        });
-        userProvider.setSavedPosts(ids);
-        ids = [];
-        sellerFollower['data'][0]['sellers'].forEach((element) {
-          // response.entries
-          ids.add(element['id']);
-        });
-        print('bbbbbbbbbbbbbbbbbbbbbbbb');
-        userProvider.setFollowers(ids);
-      }
-      if (allPostsData == null) {
-        return CenterTitleWidget(
-          title: AppLocalizations.of(context).error,
-          iconData: Icons.error,
-        );
-      }
-      if (!refreshed) {
-        postsProvider.addNewPosts(allPostsData.data.data);
-      } else {
-        postsProvider.setAllPost(allPostsData);
-      }
-
-      List<PostModel> posts = postsProvider.getDisplayedPosts();
-      setState(() {
-        isChange = false;
-      });
-      if (posts.isEmpty) {
-        return CenterTitleWidget(
-          title: AppLocalizations.of(context).empty,
-          iconData: Icons.emoji_flags_outlined,
-        );
-      } else {
-        // if (widget.searchTerm == null) {
-        return Container(
-          padding: EdgeInsets.only(
-            top: 50,
-          ),
-          child: ListView.separated(
-            physics: const AlwaysScrollableScrollPhysics(),
-            scrollDirection: Axis.vertical,
-            itemCount: posts.length,
-            separatorBuilder: (context, index) {
-              // print(userProvider.getAdds[index]);
-              if (index % 4 == 0) {
-                String path = userProvider.getNextAdds;
-                if (path.isNotEmpty) {
-                  return Image.network('http://malldal.com/dal/' + path);
-                }
-              }
-              // return AddImageItem(userProvider.getAdds[index]);
-              return Container();
-            },
-            itemBuilder: (context, index) {
-              var item = posts[index];
-              print(item.postImages);
-              // followedPosts.any((element) => element['id']==item.id);
-              return Consumer<UserProvider>(
-                builder: (context, user, _) {
-                  List<String> imagePaths = [];
-                  item.postImages.forEach((element) {
-                    imagePaths.add('http://malldal.com/dal/' + element['url']);
-                  });
-                  return PostItem(
-                    postId: item.id,
-                    nameOfSeller: item.seller.user.name,
-                    createdAt: item.seller.createdAt,
-                    title: item.title,
-                    body: item.body,
-                    priceDetails: item.priceDetails,
-                    avgRate: item.avgRate,
-                    ownerUser: item.seller,
-                    price: item.priceDetails,
-                    paths: imagePaths,
-                  );
-                },
-              );
-            },
-          ),
-        );
-      }
-    }
+    // userProvider.index = -1;
+    // int totalPageNumber = 2;
 
     return Scaffold(
       // backgroundColor: AppColors.background,
@@ -273,7 +617,7 @@ class _HomePageTapState extends State<HomePageTap> {
       drawerScrimColor: AppColors.primary.withOpacity(0.7),
       // appBar: searchBar.build(context),
       key: _scaffoldKey,
-      // body: new Center(
+      // body: new Center(1648486844
       //     child: new Text("Don't look at me! Press the search button!")),
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).title),
@@ -289,9 +633,8 @@ class _HomePageTapState extends State<HomePageTap> {
 
         // actions: [searchBar.build(context), buildFilterPopupMenuButtom()],
       ),
-      body:
-          //  SearchResultsListView()
-          SmartRefresher(
+
+      body: SmartRefresher(
         footer: const ClassicFooter(loadStyle: LoadStyle.ShowWhenLoading),
         controller: _refreshController,
         enablePullDown: true,
@@ -299,30 +642,17 @@ class _HomePageTapState extends State<HomePageTap> {
         header: WaterDropMaterialHeader(
           backgroundColor: AppColors.primary,
         ),
-        // footer:
-        // CustomFooter(
-        //   builder: (BuildContext context, LoadStatus mode) {
-        //     Widget body;
-        //     if (mode == LoadStatus.idle) {
-        //       body = CupertinoActivityIndicator(); //Text("pull up load");
-        //     } else if (mode == LoadStatus.loading) {
-        //       body = CupertinoActivityIndicator();
-        //     } else if (mode == LoadStatus.failed) {
-        //       body = Text("Load Failed!Click retry!");
-        //     } else if (mode == LoadStatus.canLoading) {
-        //       body = Text("release to load more");
-        //     } else {
-        //       body = Text("No more Data");
-        //     }
-        //     return Container(
-        //       height: 55.0,
-        //       child: Center(child: body),
-        //     );
-        //   },
-        // ),
+
         onRefresh: () async {
+          setState(() {
+            currentPage = 1;
+            categoryFilter = -1;
+          });
           search = '';
-          var widget = await getPostData(refreshed: true, searchTerm: search);
+          var widget = await getPostData(
+              refreshed: true,
+              searchTerm: search,
+              categoryFilter: categoryFilter);
           if (widget != null) {
             userProvider.index = -1;
             setState(() {
@@ -333,8 +663,9 @@ class _HomePageTapState extends State<HomePageTap> {
             _refreshController.refreshFailed();
           }
         },
-        onLoading: () {
-          var widget = getPostData(searchTerm: search);
+        onLoading: () async {
+          var widget = await getPostData(
+              searchTerm: search, categoryFilter: categoryFilter);
           print(widget.toString());
           if (widget == null) {
             print('no data under');
@@ -354,30 +685,38 @@ class _HomePageTapState extends State<HomePageTap> {
         },
         // color: AppColors.primary,
         // displacement: MediaQuery.of(context).size.height / 10,
-        child: postsProvider.getAllPost().data == null || isChange
-            ? FutureBuilder(
-                future: getPostData(refreshed: true, searchTerm: search),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
-                      child: CircularProgressIndicator(
-                        valueColor:
-                            AlwaysStoppedAnimation<Color>(AppColors.primary),
-                      ),
-                    );
-                  } else if (snapshot.hasError) {
-                    print('ThisData From SSSSSSSSS');
-                    print(snapshot.data);
-                    return CenterTitleWidget(
-                      title: AppLocalizations.of(context).error,
-                      iconData: Icons.error,
-                    );
-                  } else {
-                    return snapshot.data;
-                  }
-                },
+        child: isChange
+            ? Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                ),
               )
-            : postsProvider.getDisplayedPosts().isEmpty
+            :
+            // postsProvider.getAllPost().data == null || isChange
+            //     ? FutureBuilder(
+            //         future: getPostData(refreshed: true, searchTerm: search),
+            //         builder: (context, snapshot) {
+            //           if (snapshot.connectionState == ConnectionState.waiting) {
+            //             return Center(
+            //               child: CircularProgressIndicator(
+            //                 valueColor:
+            //                     AlwaysStoppedAnimation<Color>(AppColors.primary),
+            //               ),
+            //             );
+            //           } else if (snapshot.hasError) {
+            //             print('ThisData From SSSSSSSSS');
+            //             print(snapshot.data);
+            //             return CenterTitleWidget(
+            //               title: AppLocalizations.of(context).error,
+            //               iconData: Icons.error,
+            //             );
+            //           } else {
+            //             return snapshot.data;
+            //           }
+            //         },
+            //       )
+            //     :
+            postsProvider.getDisplayedPosts().isEmpty
                 ? CenterTitleWidget(
                     title: AppLocalizations.of(context).empty,
                     iconData: Icons.error,
@@ -388,12 +727,20 @@ class _HomePageTapState extends State<HomePageTap> {
                     itemCount: postsProvider.getDisplayedPosts().length,
                     separatorBuilder: (context, index) {
                       if (index % 4 == 0) {
-                        String path = userProvider.getNextAdds;
+                        // String path = userProvider.getNextAdds();
+                        String path = '';
+                        if (index ~/ 4 < adds.length) {
+                          path = adds[index ~/ 4];
+                        }
                         if (path.isNotEmpty) {
+                          print("adddssssss Pathhhhhhh");
+                          print(path);
+                          print(userProvider.getAdds);
                           return Container(
                             padding: const EdgeInsets.all(8),
                             width: MediaQuery.of(context).size.width,
                             height: MediaQuery.of(context).size.height / 3,
+                            color: Theme.of(context).colorScheme.background,
                             child: Image.network(
                               'http://malldal.com/dal/' + path,
                               fit: BoxFit.fill,
@@ -419,14 +766,11 @@ class _HomePageTapState extends State<HomePageTap> {
                                 EdgeInsets.only(top: 3, left: 10, right: 10),
                             child: PostItem(
                               postId: item.id,
-                              nameOfSeller: item.seller.user.name,
-                              createdAt: item.seller.createdAt,
+                              createdAt: item.createdAt,
                               title: item.title,
                               body: item.body,
                               priceDetails: item.priceDetails,
-                              avgRate: item.avgRate,
-                              ownerUser: item.seller,
-                              price: item.priceDetails,
+                              owner: item.seller,
                               paths: imagePaths,
                             ),
                           );

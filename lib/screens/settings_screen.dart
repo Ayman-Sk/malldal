@@ -7,8 +7,11 @@ import 'package:dal/theme/my_theme_provider.dart';
 import 'package:dal/widgets/dropdown_model.dart';
 import 'package:dal/widgets/multi_selected_drop_down.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../network/local_host.dart';
 
 class SettingsScreen extends StatefulWidget {
   static const routeName = 'SettingsScreen';
@@ -155,14 +158,80 @@ class _SettingsScreenState extends State<SettingsScreen> {
     print('Cities');
   }
 
+  void _buildYesNoDialog(BuildContext ctx) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            title: Text(AppLocalizations.of(context).delete),
+            content: Text(AppLocalizations.of(context).areYouSureDelete),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () async {
+                  // CachHelper.removeData(key: 'token');
+                  // CachHelper.removeData(key: 'user');
+                  // CachHelper.removeData(key: 'userId');
+                  // CachHelper.removeData(key: 'posts');
+                  // await _deleteCacheDir();
+
+                  // Navigator.of(context).pop();
+                  bool response =
+                      await Provider.of<UserProvider>(context, listen: false)
+                          .deleteUser();
+                  if (response == true) {
+                    CachHelper.removeData(key: 'token');
+                    CachHelper.removeData(key: 'user');
+                    CachHelper.removeData(key: 'userId');
+                    CachHelper.removeData(key: 'posts');
+                    await _deleteCacheDir();
+                    Navigator.of(context).pop();
+                    Navigator.of(context)
+                        .pushReplacementNamed(IntroductionScreen.routeName);
+                  }
+                },
+                child: Text(
+                  AppLocalizations.of(context).yes,
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text(
+                  AppLocalizations.of(context).no,
+                  style: TextStyle(color: AppColors.primary),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<void> _deleteCacheDir() async {
+    final cacheDir = await getTemporaryDirectory();
+
+    if (cacheDir.existsSync()) {
+      cacheDir.deleteSync(recursive: true);
+      print('delete cach memory done');
+    }
+  }
+
+  Future<void> _deleteAppDir() async {
+    final appDir = await getApplicationSupportDirectory();
+
+    if (appDir.existsSync()) {
+      appDir.deleteSync(recursive: true);
+      print('delete app memory done');
+    }
+  }
+
   Widget buildSettingCard(Icon icon, String title, Widget trail) {
     return GestureDetector(
       onTap: () async {
-        bool response = await Provider.of<UserProvider>(context, listen: false)
-            .deleteUser();
-        if (response == true) {
-          Navigator.of(context).pushNamed(IntroductionScreen.routeName);
-        }
+        _buildYesNoDialog(context);
       },
       child: ListTile(
         leading: icon,

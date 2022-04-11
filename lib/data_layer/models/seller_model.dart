@@ -1,49 +1,74 @@
-class SellerModel {
+class Seller {
   int id;
-  String name;
-  String gender;
-  String phone;
   String profileImage;
   String bio;
+  String deletedAt;
   int userId;
   String createdAt;
   String updatedAt;
+  int userCount;
+  User user;
 
-  SellerModel({
-    this.id,
-    this.name,
-    this.gender,
-    this.phone,
-    this.profileImage,
-    this.bio,
-    this.userId,
-    this.createdAt,
-    this.updatedAt,
-  });
+  Seller(
+      {this.id,
+      this.profileImage,
+      this.bio,
+      this.deletedAt,
+      this.userId,
+      this.createdAt,
+      this.updatedAt,
+      this.userCount,
+      this.user});
 
-  SellerModel.fromJson(Map<String, dynamic> json) {
+  Seller.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    name = json['name'];
-    gender = json['gender'];
-    phone = json['phone'];
     profileImage = json['profile_image'];
     bio = json['bio'];
+    deletedAt = json['deleted_at'];
     userId = json['user_id'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+    userCount = json['user_count'];
+    user = json['user'] != null ? new User.fromJson(json['user']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['name'] = this.name;
-    data['gender'] = this.gender;
-    data['phone'] = this.phone;
     data['profile_image'] = this.profileImage;
     data['bio'] = this.bio;
+    data['deleted_at'] = this.deletedAt;
     data['user_id'] = this.userId;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
+    data['user_count'] = this.userCount;
+    if (this.user != null) {
+      data['user'] = this.user.toJson();
+    }
+    return data;
+  }
+}
+
+class User {
+  String name;
+  String gender;
+  String phone;
+
+  User({this.name, this.gender, this.phone});
+
+  User.fromJson(Map<String, dynamic> json) {
+    //TODO
+    //wait alissar to add name
+    name = 'hsdkdsuds'; //json['name'];
+    gender = json['gender'];
+    phone = json['phone'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = this.name;
+    data['gender'] = this.gender;
+    data['phone'] = this.phone;
     return data;
   }
 }

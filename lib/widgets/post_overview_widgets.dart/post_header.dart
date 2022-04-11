@@ -70,6 +70,7 @@ class _PostHeaderWidgetState extends State<PostHeaderWidget> {
                 backgroundColor: AppColors.accent,
                 child: CircleAvatar(
                   radius: 30,
+                  backgroundColor: Theme.of(context).colorScheme.background,
                   backgroundImage: NetworkImage(
                     'http://malldal.com/dal/' + widget.ownerUser.profileImage,
                   ),

@@ -5,24 +5,20 @@ import 'package:flutter/material.dart';
 
 class OverviewSinglePostScreen extends StatefulWidget {
   final int postId;
-  final String sellerName;
   final String postTitle;
   final String postbody;
   final String priceDetails;
   final String createdAt;
-  final int avgRate;
   final Seller ownerUser;
   final List<String> postImagePaths;
   // final bool isInteract;
   // Function toggleInteract;
   OverviewSinglePostScreen({
     @required this.postId,
-    @required this.sellerName,
     @required this.postTitle,
     @required this.postbody,
     @required this.priceDetails,
     @required this.createdAt,
-    @required this.avgRate,
     @required this.ownerUser,
     @required this.postImagePaths,
     // @required this.isInteract,
@@ -58,12 +54,12 @@ class _OverviewSinglePostScreenState extends State<OverviewSinglePostScreen> {
           child: Center(
             child: PostOverViewWidget(
               postId: widget.postId,
-              nameOfSeller: widget.sellerName,
+              nameOfSeller: widget.ownerUser.user.name,
               createdAt: widget.createdAt,
               title: widget.postTitle,
               body: widget.postbody,
               priceDetails: widget.priceDetails,
-              avgRate: widget.avgRate,
+              // avgRate: widget.avgRate,
               ownerUser: widget.ownerUser,
               postImages: widget.postImagePaths,
               // isInteract: widget.isInteract,

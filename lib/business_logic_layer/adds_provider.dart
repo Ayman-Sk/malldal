@@ -19,10 +19,10 @@ class AddsProvider extends ChangeNotifier {
 
   List<String> get adds => _adds;
 
-  Future<Map<String, dynamic>> getAdds() async {
+  Future<Map<String, dynamic>> getAdds(int pageSize, int pageNumber) async {
     try {
       dynamic response = await DioHelper.getAdds(
-        url: EndPoints.getAllAdds,
+        url: EndPoints.getAllAdds(pageSize,pageNumber),
       );
       print('\nget adds Response : ${response.data}\n');
       if (response.data['data'] != null) {
@@ -31,11 +31,11 @@ class AddsProvider extends ChangeNotifier {
         // CachHelper.saveData(key: 'userId', value: userId);
         return response.data;
       } else {
-        print('***\nError In get customer Sellers\n***');
+        print('***\nError In get Adds\n***');
         return null;
       }
     } catch (e) {
-      print('get Seller Is error is $e');
+      print('get Adds Is error is $e');
       return Future.value();
     }
   }

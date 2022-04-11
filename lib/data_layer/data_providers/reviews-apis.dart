@@ -16,8 +16,9 @@ class ReviewsAPIs {
       EndPoints.reviews,
       options: Options(
         headers: {
+          'Authorization': 'Bearer' + token,
           'Content-Type': 'application/json',
-          'Authorization': ''
+          'Accept': 'application/json',
         },
       ),
       data: {

@@ -15,15 +15,6 @@ class IntroductionScreen extends StatefulWidget {
 }
 
 class _IntroductionScreenState extends State<IntroductionScreen> {
-  _launchURL() async {
-    const url = 'https://www.facebook.com/chi.team.dev';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     var userProvider = Provider.of<UserProvider>(context);
@@ -110,42 +101,11 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                           ),
                         ),
                       ),
-                      // Padding(
-                      //   padding: EdgeInsets.all(8.0),
-                      //   child: ClipRRect(
-                      //     borderRadius: BorderRadius.circular(20.0),
-                      //     child: InkWell(
-                      //       onTap: () {
-                      //         Navigator.of(context).pushReplacementNamed(
-                      //             SellerSignupScreens.routeName);
-                      //       },
-                      //       child: Container(
-                      //         alignment: Alignment.center,
-                      //         width: 130,
-                      //         height: 50,
-                      //         color: Colors.white,
-                      //         child: Directionality(
-                      //           textDirection: TextDirection.rtl,
-                      //           child: Text(
-                      //             "إنشاء حساب بائع",
-                      //             style: TextStyle(
-                      //                 color: AppColors.primary,
-                      //                 fontWeight: FontWeight.bold,
-                      //                 fontSize: 15),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
-                      ////
                       Padding(
                         padding: EdgeInsets.only(top: 16),
                         child: GestureDetector(
                           onTap: () {
-                            // Provider.of<UserProvider>(context, listen: false)
-                            //     .setRegisteredFalse();
-                            Navigator.of(context).pushNamed(
+                            Navigator.of(context).pushReplacementNamed(
                               MainTabBarViewController.routeName,
                             );
                           },
@@ -157,7 +117,8 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                                   child: GestureDetector(
                                     onTap: () {
                                       userProvider.setUserMode('');
-                                      Navigator.of(context).pushNamed(
+                                      Navigator.of(context)
+                                          .pushReplacementNamed(
                                         MainTabBarViewController.routeName,
                                       );
                                     },
@@ -205,24 +166,37 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                 ),
               ),
               Center(
-                child: TextButton(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('Powerd by ', style: TextStyle(color: Colors.black)),
-                      Text(
-                        "CHI",
-                        style: TextStyle(color: Color(0XFFF05F23)),
-                      )
-                    ],
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: TextButton(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Powerd by ',
+                            style: TextStyle(color: Colors.black)),
+                        Text(
+                          "CHI",
+                          style: TextStyle(color: Color(0XFFF05F23)),
+                        )
+                      ],
+                    ),
+                    onPressed: _launchURL,
                   ),
-                  onPressed: _launchURL,
                 ),
-              )
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  _launchURL() async {
+    const url = 'https://www.facebook.com/chi.team.dev';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

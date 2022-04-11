@@ -3,33 +3,50 @@ import 'package:dal/business_logic_layer/all_posts_with_categories.dart';
 import 'package:dal/business_logic_layer/local_provider.dart';
 import 'package:dal/business_logic_layer/post_request_provider.dart';
 import 'package:dal/business_logic_layer/seller_provider.dart';
+import 'package:dal/data_layer/data_providers/get_data.dart';
 import 'package:dal/main_controll.dart';
 import 'package:dal/network/dio_helper.dart';
 import 'package:dal/business_logic_layer/user_provider.dart';
 import 'package:dal/network/local_host.dart';
 import 'package:dal/theme/app_colors.dart';
 import 'package:dal/theme/my_theme_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
-// import 'package:localization/src/localization_extension.dart';
 
-void main() async {
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  'high_importance_channel',
+  'High Importance Notifications',
+  description: 'This Channel is used for important notification',
+  importance: Importance.high,
+  playSound: true,
+);
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+Future<void> backgroundHandler(RemoteMessage message) async {
+  print(message.data.toString());
+  print(message.notification.title);
+}
+
+Future<void> main() async {
   Provider.debugCheckInvalidValueType = null;
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+
   await CachHelper.init();
   DioHelper.init();
-  SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(
-        statusBarColor: AppColors.primary,
-        systemNavigationBarDividerColor: Colors.white),
-  );
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: AppColors.primary, systemNavigationBarDividerColor: Colors.white));
 
   // var tokenn =
   //     'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9kYWwuY2hpLXRlYW0uY29tXC9hcGlcL2F1dGgiLCJpYXQiOjE2NDQwMTk5ODAsImV4cCI6MTY0NDAyMzU4MCwibmJmIjoxNjQ0MDE5OTgwLCJqdGkiOiJxR0dxRzRWT2F3bXZEMU1EIiwic3ViIjozOCwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.81DvxyWwFkvkdwTeADOUbiLpIhdEV1ueKLUXp51eqLE';
   // CachHelper.removeData(key: 'user');
   // CachHelper.removeData(key: 'token');
   String token = CachHelper.getData(key: 'token');
+
   runApp(MyApp(token));
 }
 
@@ -55,11 +72,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<ThemeProvider>(create: (_) => ThemeProvider()),
         // ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider()),
         // ChangeNotifierProvider<PostsProvider>(create: (_) => PostsProvider()),
-        ChangeNotifierProvider<PostRequestProvider>(
-            create: (_) => PostRequestProvider()),
+        ChangeNotifierProvider<PostRequestProvider>(create: (_) => PostRequestProvider()),
         ChangeNotifierProvider<AddsProvider>(create: (_) => AddsProvider()),
-        ChangeNotifierProvider<AllPostsWithCategories>(
-            create: (_) => AllPostsWithCategories()),
+        ChangeNotifierProvider<AllPostsWithCategories>(create: (_) => AllPostsWithCategories()),
       ],
       child: MainContoller(token: token),
       // child: MaterialApp(

@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:gson/gson.dart';
+
 PostsWithSellerModel postsWithSellerFromJson(String str) =>
     PostsWithSellerModel.fromJson(json.decode(str), false);
 
@@ -19,7 +21,7 @@ class PostsWithSellerModel {
   int code;
   dynamic message;
   dynamic messageAr;
-  Data data;
+  Data data = Data();
 
   factory PostsWithSellerModel.fromJson(
           Map<String, dynamic> json, bool isFromCategory) =>
@@ -129,7 +131,7 @@ class PostModel {
   dynamic deletedAt;
   String body;
   String priceDetails;
-  int avgRate;
+  String avgRate;
   int sellerId;
   int postRequestId;
   String createdAt;
@@ -146,7 +148,7 @@ class PostModel {
         deletedAt: json["deleted_at"],
         body: json["body"],
         priceDetails: json["priceDetails"],
-        avgRate: json["avgRate"],
+        avgRate: json["avgRate"].toString(),
         sellerId: json["seller_id"],
         postRequestId: json["post_request_id"],
         createdAt: json["created_at"],

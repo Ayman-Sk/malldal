@@ -11,16 +11,14 @@ class UserProvider with ChangeNotifier {
   String message;
 
   int index = -1;
+
   // String name;
   // String number;
   // String gender = 'male' ;
   // int city = 0;
   // String imagePath;
   MyUser _myUser = MyUser(
-    gender: 'male',
-    cityId: 0,
-    userMode: 'customer',
-  );
+      gender: 'male', cityId: 0, userMode: 'customer', followSellers: []);
   Locale local;
 
   void setID(int userid) {
@@ -70,7 +68,7 @@ class UserProvider with ChangeNotifier {
 
   void setFollowers(List<int> followers) {
     _myUser.followSellers = followers;
-    // notifyListeners();
+    notifyListeners();
   }
 
   void addFolower(int id) {
@@ -84,8 +82,9 @@ class UserProvider with ChangeNotifier {
   }
 
   void setSavedPosts(List<int> savedPosts) {
-    _myUser.savedPosts = savedPosts;
-    // notifyListeners();
+    _myUser.savedPosts = [];
+    _myUser.savedPosts.addAll(savedPosts);
+    notifyListeners();
   }
 
   void addPostToSavedPost(int id) {
@@ -109,32 +108,51 @@ class UserProvider with ChangeNotifier {
   }
 
   void addAdds(String data) {
-    _myUser.adds.add(data);
+    if (!_myUser.adds.contains(data)) _myUser.adds.add(data);
   }
 
   bool isFavoriteCategoryContain(String index) {
     return _myUser.favoriteCategory.contains(index);
   }
 
+  List<String> getAdds() => _myUser.adds;
+
   MyUser get user => _myUser;
+
   // get
   int get userId => _myUser.id;
+
   String get userName => _myUser.name;
+
   String get phoneNumber => _myUser.phoneNumber;
+
   String get gender => _myUser.gender;
+
   int get cityId => _myUser.cityId;
-  String get cityName => _myUser.cities[_myUser.cityId];
+
+  //TODO wait alissar to add city name
+  String get cityName => _myUser.cityId.toString();
+
   String get profileImage => _myUser.profileImage;
+
   String get userMode => _myUser.userMode;
+
   String get biography => _myUser.biography;
+
   List<PostModel> get posts => _myUser.posts;
+
   List<PostModel> get postRequest => _myUser.postRequest;
+
   List<int> get followers => _myUser.followSellers;
+
   List<int> get savedPosts => _myUser.savedPosts;
+
   List<String> get favoriteCategories => _myUser.favoriteCategory;
+
   Locale get appLocal => local;
+
   // List<String> get getAdds => _myUser.adds;
-  String get getNextAdds {
+  String getNextAdds() {
     if (index < _myUser.adds.length && _myUser.adds.isNotEmpty) {
       index++;
       return _myUser.adds[index];
@@ -142,6 +160,7 @@ class UserProvider with ChangeNotifier {
       return '';
     }
   }
+
   // List<int>
   // UserMode get modeOfUserAsString =>
   // int get userIdOfCustomer => _myUser.userId;
@@ -258,18 +277,18 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> getSellerPossts(bool isRequset) async {
+  Future<bool> getSellerPosts(
+      bool isRequest, int id, int pageNumber, int pageSize) async {
     // try {
-    dynamic response = isRequset
+    dynamic response = isRequest
         ? await DioHelper.sellerPosts(
-            url: EndPoints.getPostRequestBySellerID(userId),
+            url: EndPoints.getPostRequestBySellerID(id, pageNumber, pageSize),
             lang: 'en',
-            isRequset: isRequset,
-          )
+            isRequset: isRequest)
         : await DioHelper.sellerPosts(
-            url: EndPoints.getPostsBySellerID(userId),
+            url: EndPoints.getPostsBySellerID(id, pageNumber, pageSize),
             lang: 'en',
-            isRequset: isRequset);
+            isRequset: isRequest);
 
     if (response.data['status'] == 'true') {
       print('\npppossstsssResponse : ${response.data}');
@@ -280,7 +299,7 @@ class UserProvider with ChangeNotifier {
         (element) {
           PostModel model = PostModel.fromJson(element);
           print(_myUser.posts);
-          isRequset ? _myUser.postRequest.add(model) : _myUser.posts.add(model);
+          isRequest ? _myUser.postRequest.add(model) : _myUser.posts.add(model);
           print(_myUser.posts.length);
         },
       );
@@ -517,7 +536,7 @@ class UserProvider with ChangeNotifier {
 
         CachHelper.saveData(
             key: 'userId', value: response.data['user'][0][userMode]['id']);
-
+        CachHelper.saveData(key: 'userMode', value: userMode);
         print(userMode);
 
         print('mooooooooooooooooode');
