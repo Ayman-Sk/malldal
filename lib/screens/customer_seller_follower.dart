@@ -19,8 +19,7 @@ class _CustomerSellerFollowerState extends State<CustomerSellerFollower> {
   int currentPage = 1;
   int pageNumber = 2;
   List<Seller> displayedSellers = [];
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: true);
+  RefreshController _refreshController = RefreshController(initialRefresh: true);
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +29,7 @@ class _CustomerSellerFollowerState extends State<CustomerSellerFollower> {
     Future<bool> getFollowerData({
       bool refreshed = false,
     }) async {
-      followersData = await userProvider
-          .getFollowedSellersByCustomerID(userProvider.userId);
+      followersData = await userProvider.getFollowedSellersByCustomerID(userProvider.userId);
       print(followersData);
       if (followersData == null) {
         return false;
@@ -39,14 +37,12 @@ class _CustomerSellerFollowerState extends State<CustomerSellerFollower> {
         followersData['data'][0]['sellers'].forEach(
           (element) {
             setState(() {
-              if(refreshed)
-                {
-                  displayedSellers =[];
-                  displayedSellers.add(Seller.fromJson(element));
-                }
-              else{
-                displayedSellers.add(Seller.fromJson(element));
+              if (refreshed) {
+                displayedSellers = [];
               }
+              print('dio element');
+              print(element['user']);
+              displayedSellers.add(Seller.fromJson(element));
             });
           },
         );
@@ -55,10 +51,7 @@ class _CustomerSellerFollowerState extends State<CustomerSellerFollower> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-          centerTitle: true,
-          title: Text(AppLocalizations.of(context).followed),
-          backgroundColor: AppColors.primary),
+      appBar: AppBar(centerTitle: true, title: Text(AppLocalizations.of(context).followed), backgroundColor: AppColors.primary),
       body: SmartRefresher(
         footer: const ClassicFooter(loadStyle: LoadStyle.ShowWhenLoading),
         controller: _refreshController,
@@ -98,11 +91,7 @@ class _CustomerSellerFollowerState extends State<CustomerSellerFollower> {
             itemBuilder: (_, index) {
               return GestureDetector(
                 child: listViewItem(displayedSellers[index], context),
-                onTap: () => Navigator.of(context)
-                    .pushNamed(SellerPostScreen.routeName, arguments: {
-                  'userId': displayedSellers[index].id,
-                  'isRequest': false
-                }),
+                onTap: () => Navigator.of(context).pushNamed(SellerPostScreen.routeName, arguments: {'userId': displayedSellers[index].id, 'isRequest': false}),
               );
             }),
       ),
@@ -114,11 +103,8 @@ Widget listViewItem(Seller seller, BuildContext context) {
   return ListTile(
     leading: CircleAvatar(
       backgroundColor: Theme.of(context).colorScheme.background,
-      backgroundImage:
-          NetworkImage('http://malldal.com/dal/' + seller.profileImage),
+      backgroundImage: NetworkImage('http://malldal.com/dal/' + seller.profileImage),
     ),
-    //TODO
-    //wait alissar to add name
-    title: Text(seller.bio),
+    title: Text(seller.user.name),
   );
 }

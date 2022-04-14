@@ -11,10 +11,10 @@ class CategoriesRepositoryImp {
     int pageSize,
   }) async {
     CategoryModelRes allCategories = CategoryModelRes();
-    List<CategoryModel> catLists = [];
+    // List<CategoryModel> catLists = [];
     final rowCategories = await catAPI.getRowCategories(pageNumber, pageSize);
     allCategories = CategoryModelRes.fromJson(rowCategories);
-    catLists = allCategories.data.categories;
+    // catLists = allCategories.data.categories;
     return allCategories;
   }
 

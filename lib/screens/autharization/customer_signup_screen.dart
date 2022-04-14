@@ -34,9 +34,9 @@ class _CustomerSignupScreensState extends State<CustomerSignupScreens> {
   DropDownListModel _selectedgender;
 
   //customer city
-  List<DropDownListModel> _cities = DropDownListModel.getcities();
+  // List<DropDownListModel> _cities = DropDownListModel.getcities();
   List<DropdownMenuItem<DropDownListModel>> _citiesdropDownMenueItems;
-  DropDownListModel _selectedcity;
+  DropDownListModel _selectedCity;
 
   File file;
   bool imageselected = false;
@@ -92,7 +92,7 @@ class _CustomerSignupScreensState extends State<CustomerSignupScreens> {
         _citiesdropDownMenueItems =
             DropDownListModel.buildDropDownMenuItemFromData(
                 response.data, true);
-        _selectedcity = _citiesdropDownMenueItems[0].value;
+        _selectedCity = _citiesdropDownMenueItems[0].value;
       });
     } else {
       setState(() {
@@ -110,9 +110,9 @@ class _CustomerSignupScreensState extends State<CustomerSignupScreens> {
         DropDownListModel.buildDropDownMenuItem(_genders);
     _selectedgender = _genderdropDownMenueItems[0].value;
 
-    _citiesdropDownMenueItems =
-        DropDownListModel.buildDropDownMenuItem(_cities);
-    _selectedcity = _citiesdropDownMenueItems[0].value;
+    // _citiesdropDownMenueItems =
+    //     DropDownListModel.buildDropDownMenuItem(_cities);
+    _selectedCity = _citiesdropDownMenueItems[0].value;
 
     getImageFileFromAssets('user.jpg').then((value) => file = value);
 
@@ -339,14 +339,16 @@ class _CustomerSignupScreensState extends State<CustomerSignupScreens> {
                                 color: AppColors.primary,
                               ),
                               isExpanded: true,
-                              value: _selectedcity,
+                              value: _selectedCity,
                               items: _citiesdropDownMenueItems,
                               onChanged: (val) {
                                 setState(
                                   () {
-                                    _selectedcity = val;
-                                    customerProvider
-                                        .setCityId(_selectedcity.id);
+                                    _selectedCity = val;
+
+                                    customerProvider.setCityId(
+                                        citiesList.indexOf(_selectedCity.name) +
+                                            1);
                                   },
                                 );
                               },
@@ -510,7 +512,11 @@ class _CustomerSignupScreensState extends State<CustomerSignupScreens> {
                             return Future.value(false);
                           }
                           _formkey.currentState.save();
-                          bool res;
+                          bool res = false;
+                          print(customerProvider.user.name);
+                          print(customerProvider.user.gender);
+                          print(customerProvider.user.cityId);
+                          print(customerProvider.user.phoneNumber);
                           res = await _submit(
                             customerProvider.user.name,
                             customerProvider.user.gender,

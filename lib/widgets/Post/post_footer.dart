@@ -1,4 +1,3 @@
-import 'package:dal/business_logic_layer/all_posts_with_categories.dart';
 import 'package:dal/widgets/Post/review_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -28,8 +27,7 @@ class _PostFooterState extends State<PostFooter> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-    final postsProvider = Provider.of<AllPostsWithCategories>(context);
-
+    // final postsProvider = Provider.of<AllPostsWithCategories>(context);
 
     return Column(
       children: [
@@ -40,10 +38,7 @@ class _PostFooterState extends State<PostFooter> {
                 ? [
                     ReviewDialog(postId: widget.postId),
                   ]
-                : [
-                    ReviewDialog(postId: widget.postId),
-                    buildSaveButton(userProvider)
-                  ],
+                : [ReviewDialog(postId: widget.postId), buildSaveButton(userProvider)],
           ),
         ),
       ],

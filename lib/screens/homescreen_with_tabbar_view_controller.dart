@@ -4,28 +4,39 @@ import 'package:dal/network/local_host.dart';
 import 'package:dal/screens/main_taps/home_page_tap.dart';
 import 'package:dal/screens/main_taps/customer_categories_Tab.dart';
 import 'package:dal/screens/main_taps/followedposts_tap.dart';
-import 'package:dal/screens/main_taps/user_profile_screen.dart';
 import 'package:dal/theme/app_colors.dart';
+import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../network/end_points.dart';
+
 class MainTabBarViewController extends StatefulWidget {
   static const routeName = 'MainTabBarViewController';
   @override
-  _MainTabBarViewControllerState createState() =>
-      _MainTabBarViewControllerState();
+  _MainTabBarViewControllerState createState() => _MainTabBarViewControllerState();
 }
 
-class _MainTabBarViewControllerState extends State<MainTabBarViewController>
-    with WidgetsBindingObserver {
+class _MainTabBarViewControllerState extends State<MainTabBarViewController> with WidgetsBindingObserver {
   // List<Widget> listScreens;
+  String firebaseToken = '';
+
   int tabIndex = 0;
   // int userId = CachHelper.getData(key: 'userId');
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    FirebaseMessaging.instance.getToken().then((value) {
+      setState(() {
+        firebaseToken = value;
+      });
+      print('fireeeeeebaseeeeee Tokennnn');
+      print(value);
+    });
+    print(firebaseToken);
     Provider.of<AllPostsWithCategories>(context, listen: false).getPostsData();
     // Provider.of<UserProvider>(context, listen: false).getUserToApp();
   }
@@ -39,13 +50,11 @@ class _MainTabBarViewControllerState extends State<MainTabBarViewController>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.inactive ||
-        state == AppLifecycleState.detached) return;
+    if (state == AppLifecycleState.inactive || state == AppLifecycleState.detached) return;
     final isBackground = state == AppLifecycleState.paused;
     if (isBackground) {
       print('we will save data');
-      Provider.of<AllPostsWithCategories>(context, listen: false)
-          .savePostsData();
+      Provider.of<AllPostsWithCategories>(context, listen: false).savePostsData();
       print('ayman');
       print('alaa');
     }
@@ -58,10 +67,46 @@ class _MainTabBarViewControllerState extends State<MainTabBarViewController>
     // UserProfileScreen(),
   ];
 
+  Future<bool> addFcmToken({
+    @required int customerId,
+    @required String firebaseoken,
+  }) async {
+    Dio _dio = Dio();
+    final response = await _dio.post(
+      EndPoints.saveFcmToken(customerId),
+      options: Options(
+        headers: {
+          // 'Authorization': 'Bearer' + token,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ),
+      data: {"FCMtoken": firebaseToken},
+    );
+    if (response.statusCode == 200) {
+      print('ffffffffccccccccccccccmmmmmmmmmmmmm');
+      print(response.data);
+      // if (response.data['code'] == "401") {
+      //   // await refreshToken();
+      //   await addSellerTofollowedUserOfCustomer(
+      //       customerId: customerId, sellerId: sellerId, token: token);
+      //   return true;
+      // }
+      print('\n1-${response.data}');
+      return true;
+    } else {
+      print('\n -Error IN addFcmToken \n${response.data}');
+      throw Exception('Can not Load addFcmToken');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool isMinimum = CachHelper.getData(key: 'userId') == null ||
-        Provider.of<UserProvider>(context).userMode == 'seller';
+    print('innnnnnnnnn builddddddddd');
+    print(firebaseToken);
+    addFcmToken(customerId: CachHelper.getData(key: 'userId'), firebaseoken: firebaseToken);
+
+    bool isMinimum = CachHelper.getData(key: 'userId') == null || Provider.of<UserProvider>(context).userMode == 'seller';
     if (isMinimum) {
       listScreens = [
         HomePageTap(),

@@ -26,22 +26,28 @@ class _SellerPostScreenState extends State<SellerPostScreen> {
   int pageSize = 1;
   List<PostModel> posts = [];
   // bool isLoading = true;
-  RefreshController _refreshController = RefreshController(initialRefresh: true);
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: true);
 
-
-  Future<bool> getSellerPosts(bool isRefresh,bool isRequest, int id, int pageNumber, int pageSize) async {
+  Future<bool> getSellerPosts(bool isRefresh, bool isRequest, int id,
+      int pageNumber, int pageSize) async {
     // try {
     dynamic response = isRequest
-        ? await DioHelper.sellerPosts(url: EndPoints.getPostRequestBySellerID(id, pageNumber, pageSize), lang: 'en', isRequset: isRequest)
-        : await DioHelper.sellerPosts(url: EndPoints.getPostsBySellerID(id, pageNumber, pageSize), lang: 'en', isRequset: isRequest);
+        ? await DioHelper.sellerPosts(
+            url: EndPoints.getPostRequestBySellerID(id, pageNumber, pageSize),
+            lang: 'en',
+            isRequset: isRequest)
+        : await DioHelper.sellerPosts(
+            url: EndPoints.getPostsBySellerID(id, pageNumber, pageSize),
+            lang: 'en',
+            isRequset: isRequest);
 
     if (response.data['status'] == 'true') {
       print('\npppossstsssResponse : ${response.data}');
       totalPageNumber = response.data['data']['last_page'];
-      if(isRefresh)
-        {
-          posts = [];
-        }
+      if (isRefresh) {
+        posts = [];
+      }
 
       List allPosts = response.data['data']['data'];
 
@@ -64,13 +70,11 @@ class _SellerPostScreenState extends State<SellerPostScreen> {
       print('Error in get Postsss');
       return false;
     }
-
   }
-
 
   @override
   Widget build(BuildContext context) {
-    var sellerProvider = Provider.of<UserProvider>(context, listen: false);
+    // var sellerProvider = Provider.of<UserProvider>(context, listen: false);
     final arguments = ModalRoute.of(context).settings.arguments as Map;
 
     // Future<bool> _myData;
@@ -84,7 +88,16 @@ class _SellerPostScreenState extends State<SellerPostScreen> {
     return Scaffold(
       // backgroundColor: AppColors.background,
       drawer: MyDrawer(),
-      appBar: AppBar(backgroundColor: AppColors.primary, leading: IconButton(onPressed: Navigator.of(context).pop, icon: Icon(Icons.arrow_back_sharp))),
+      appBar: AppBar(
+          centerTitle: true,
+          title: Text(arguments['isRequest']
+              ? AppLocalizations.of(context).posts
+              : AppLocalizations.of(context).pendingPosts),
+          // title: arguments['isRequest']?Text(AppLocalizations.of(context).posts):Text(AppLoca),
+          backgroundColor: AppColors.primary,
+          leading: IconButton(
+              onPressed: Navigator.of(context).pop,
+              icon: Icon(Icons.arrow_back_sharp))),
       body: SmartRefresher(
           controller: _refreshController,
           enablePullDown: true,
@@ -96,7 +109,8 @@ class _SellerPostScreenState extends State<SellerPostScreen> {
               currentPageNumber = 1;
             });
             // sellerProvider.getSellerPosts(arguments['isRequest'], arguments['userId'],currentPageNumber,pageSize);
-            bool getPosts = await getSellerPosts(true,arguments['isRequest'], arguments['userId'], currentPageNumber, pageSize);
+            bool getPosts = await getSellerPosts(true, arguments['isRequest'],
+                arguments['userId'], currentPageNumber, pageSize);
 
             if (getPosts) {
               setState(() {
@@ -105,9 +119,7 @@ class _SellerPostScreenState extends State<SellerPostScreen> {
             } else {
               _refreshController.refreshFailed();
             }
-
           },
-
           onLoading: () async {
             print('asdasdas');
             print(totalPageNumber);
@@ -122,23 +134,32 @@ class _SellerPostScreenState extends State<SellerPostScreen> {
               });
               // _refreshController.loadNoData();
             } else {
-              bool getPosts = await getSellerPosts(false,arguments['isRequest'], arguments['userId'], currentPageNumber, pageSize);
+              bool getPosts = await getSellerPosts(
+                  false,
+                  arguments['isRequest'],
+                  arguments['userId'],
+                  currentPageNumber,
+                  pageSize);
               if (getPosts) {
                 _refreshController.loadComplete();
               } else {
                 _refreshController.loadFailed();
               }
             }
-
           },
-          child:posts.isEmpty?CenterTitleWidget(title: AppLocalizations.of(context).empty, iconData: Icons.flag)
-          // isLoading
-          //     ? Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary)))
-          //     :
-          :ListView.builder(
-                  itemCount: posts.length, //arguments['isRequest'] ? sellerProvider.postRequest.length : sellerProvider.posts.length,
+          child: posts.isEmpty
+              ? CenterTitleWidget(
+                  title: AppLocalizations.of(context).empty,
+                  iconData: Icons.flag)
+              // isLoading
+              //     ? Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary)))
+              //     :
+              : ListView.builder(
+                  itemCount: posts
+                      .length, //arguments['isRequest'] ? sellerProvider.postRequest.length : sellerProvider.posts.length,
                   itemBuilder: (context, index) {
-                    var item = posts[index]; //arguments['isRequest'] ? sellerProvider.postRequest[index] : sellerProvider.posts[index];
+                    var item = posts[
+                        index]; //arguments['isRequest'] ? sellerProvider.postRequest[index] : sellerProvider.posts[index];
 
                     List<String> paths = [];
                     item.postImages.forEach((element) {

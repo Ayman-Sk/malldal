@@ -130,8 +130,7 @@ class UserProvider with ChangeNotifier {
 
   int get cityId => _myUser.cityId;
 
-  //TODO wait alissar to add city name
-  String get cityName => _myUser.cityId.toString();
+  String get cityName => _myUser.cityName;
 
   String get profileImage => _myUser.profileImage;
 
@@ -550,6 +549,9 @@ class UserProvider with ChangeNotifier {
           userName: response.data['user'][0]['name'],
           gender: response.data['user'][0]['gender'],
           cityId: response.data['user'][0][userMode]['city_id'],
+          cityName: userMode == 'customer'
+              ? response.data['user'][0][userMode]['city']['cityName']
+              : '',
           biography: response.data['user'][0][userMode]['bio'],
           profileImage: response.data['user'][0][userMode]['profile_image'],
           phoneNumber: response.data['user'][0]['phone'],
@@ -580,6 +582,7 @@ class UserProvider with ChangeNotifier {
           name: hashedUser['name'],
           gender: hashedUser['gender'],
           cityId: int.parse(hashedUser['city_id'].toString()),
+          cityName: hashedUser['city_name'],
           biography: hashedUser['biography'],
           profileImage: hashedUser['profile_image'],
           phoneNumber: hashedUser['phone'],
@@ -597,6 +600,7 @@ class UserProvider with ChangeNotifier {
       @required String modeOfuser,
       @required List<int> followers,
       int cityId = 0,
+      String cityName = '',
       String biography = ''}) {
     // print('-->name OfCustomer : $nameOfCustomer\n');
     // print('-->gender OfCustomer : $genderOfCustomer\n');
@@ -610,6 +614,7 @@ class UserProvider with ChangeNotifier {
         name: userName,
         gender: gender,
         cityId: cityId == null ? 0 : cityId,
+        cityName: cityName == null ? '' : cityName,
         biography: biography == null ? ' ' : biography,
         profileImage: profileImage,
         phoneNumber: phoneNumber,

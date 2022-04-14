@@ -176,7 +176,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get contactInfo => 'Contact Information';
 
   @override
-  String get introTitle => 'Simple steps separate you from seeing the latest home-made products or displaying your personal products, all through the Dal application.';
+  String get introTitle => 'Simple steps separate you from seeing the latest home-made products or displaying your personal products, all through the Dal Electronic Mall';
 
   @override
   String get letStart => 'Let\'s Get Started';

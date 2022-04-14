@@ -3,7 +3,6 @@ import 'package:dal/business_logic_layer/all_posts_with_categories.dart';
 import 'package:dal/business_logic_layer/local_provider.dart';
 import 'package:dal/business_logic_layer/post_request_provider.dart';
 import 'package:dal/business_logic_layer/seller_provider.dart';
-import 'package:dal/data_layer/data_providers/get_data.dart';
 import 'package:dal/main_controll.dart';
 import 'package:dal/network/dio_helper.dart';
 import 'package:dal/business_logic_layer/user_provider.dart';

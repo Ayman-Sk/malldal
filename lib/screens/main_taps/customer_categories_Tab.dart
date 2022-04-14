@@ -104,7 +104,7 @@ class _CustomerCategoriesTapState extends State<CustomerCategoriesTap> {
                 )
                     .then((value) {
                   postProvider.setCategoriesListEmpty();
-                  List<String> categoriesList=[];
+                  List<String> categoriesList = [];
                   value.data.categories.forEach((element) {
                     categoriesList.add(element.title);
                   });
@@ -138,7 +138,7 @@ class _CustomerCategoriesTapState extends State<CustomerCategoriesTap> {
                       .then((value) {
                     setState(() {
                       // allPage =
-                      List<String> categoriesList=[];
+                      List<String> categoriesList = [];
                       value.data.categories.forEach((element) {
                         categoriesList.add(element.title);
                       });
@@ -167,12 +167,12 @@ class _CustomerCategoriesTapState extends State<CustomerCategoriesTap> {
                 //     mainAxisSpacing: 5.0),
                 itemBuilder: (context, index) {
                   bool isFavorite = userProvider.isFavoriteCategoryContain((index + 1).toString());
-                  bool checked = chekedIndexes.contains(index);
+                  // bool checked = chekedIndexes.contains(index);
                   // Color itemColor = AppColors.primary;
 
                   if (postProvider.getCategoryFilter.contains((index + 1).toString())) {
                     // itemColor = AppColors.primary;
-                    checked = true;
+                    // checked = true;
                   }
 
                   return buildListViewItem(context, postProvider.getCategories[index], index, isFavorite, userProvider);

@@ -176,7 +176,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get contactInfo => 'معلومات التواصل';
 
   @override
-  String get introTitle => 'خطوات بسيطة تفصلك عن رؤية اخر المنتجات المنزلية الصنع او عرض منتجاتك الشخصية كل ذلك عبر تطبيق دال .';
+  String get introTitle => 'خطوات بسيطة تفصلك عن رؤية اخر المنتجات المنزلية الصنع او عرض منتجاتك الشخصية كل ذلك عبر مول دال الإلكتروني .';
 
   @override
   String get letStart => 'هيا بنا نبدأ';

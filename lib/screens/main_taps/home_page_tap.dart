@@ -81,9 +81,7 @@ class _HomePageTapState extends State<HomePageTap> {
           categoryList.add(element['title']);
         });
         print(response.data);
-        _categorydropDownMenueItems =
-            DropDownListModel.buildDropDownMenuItemFromData(
-                response.data, false);
+        _categorydropDownMenueItems = DropDownListModel.buildDropDownMenuItemFromData(response.data, false);
         // _selectedcategory = _categorydropDownMenueItems[0].value;
       });
     } else {
@@ -108,9 +106,7 @@ class _HomePageTapState extends State<HomePageTap> {
         cities.forEach((element) {
           citiesList.add(element['cityName']);
         });
-        _citiesdropDownMenueItems =
-            DropDownListModel.buildDropDownMenuItemFromData(
-                response.data, true);
+        _citiesdropDownMenueItems = DropDownListModel.buildDropDownMenuItemFromData(response.data, true);
         // _selectedcity = _citiesdropDownMenueItems[0].value;
       });
     } else {
@@ -137,8 +133,7 @@ class _HomePageTapState extends State<HomePageTap> {
                 clipBehavior: Clip.antiAliasWithSaveLayer,
 
                 // insetPadding: const EdgeInsets.all(10),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
 
                 content: StatefulBuilder(
                   builder: (BuildContext context, StateSetter setter) {
@@ -164,8 +159,7 @@ class _HomePageTapState extends State<HomePageTap> {
                               shrinkWrap: true,
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 8.0, bottom: 20.0),
+                                  padding: const EdgeInsets.only(top: 8.0, bottom: 20.0),
                                   child: Text(
                                     AppLocalizations.of(context).filterText,
                                     style: const TextStyle(
@@ -189,17 +183,13 @@ class _HomePageTapState extends State<HomePageTap> {
                                 ),
                                 DropdownButton(
                                     isExpanded: true,
-                                    menuMaxHeight:
-                                        MediaQuery.of(context).size.height / 3,
+                                    menuMaxHeight: MediaQuery.of(context).size.height / 3,
                                     value: categoryTitle,
-                                    items: categoryList
-                                        .map(buildMenuItem)
-                                        .toList(),
+                                    items: categoryList.map(buildMenuItem).toList(),
                                     onChanged: (value) {
                                       print(categoryTitle);
                                       _setState(() {
-                                        categoryFilter =
-                                            categoryList.indexOf(value);
+                                        categoryFilter = categoryList.indexOf(value);
                                         categoryTitle = value;
                                       });
                                     }),
@@ -212,8 +202,7 @@ class _HomePageTapState extends State<HomePageTap> {
                                 //     items: _categorydropDownMenueItems,
                                 //     isCities: false),
                                 Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 16.0, bottom: 8.0),
+                                  padding: const EdgeInsets.only(top: 16.0, bottom: 8.0),
                                   child: Center(
                                     child: Text(
                                       AppLocalizations.of(context).city,
@@ -227,11 +216,9 @@ class _HomePageTapState extends State<HomePageTap> {
 
                                 DropdownButton(
                                     isExpanded: true,
-                                    menuMaxHeight:
-                                        MediaQuery.of(context).size.height / 3,
+                                    menuMaxHeight: MediaQuery.of(context).size.height / 3,
                                     value: cityTitle,
-                                    items:
-                                        citiesList.map(buildMenuItem).toList(),
+                                    items: citiesList.map(buildMenuItem).toList(),
                                     onChanged: (value) {
                                       print(cityTitle);
                                       _setState(() {
@@ -304,15 +291,9 @@ class _HomePageTapState extends State<HomePageTap> {
   //       });
   // }
 
-  DropdownMenuItem<String> buildMenuItem(String item) =>
-      DropdownMenuItem(value: item, child: Text(item));
+  DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(value: item, child: Text(item));
 
-  Widget buildDropDownList(
-      {String title,
-      List<String> listOfItems,
-      Function() func,
-      List<DropdownMenuItem<DropDownListModel>> items,
-      bool isCities}) {
+  Widget buildDropDownList({String title, List<String> listOfItems, Function() func, List<DropdownMenuItem<DropDownListModel>> items, bool isCities}) {
     print('aaaaaaaaaaaaassssssddddddd');
     print(isCities);
     return Column(
@@ -399,22 +380,19 @@ class _HomePageTapState extends State<HomePageTap> {
         });
   }
 
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   Future<Widget> getPostData(
       {bool refreshed = false,
       String searchTerm,
       // int currentPage,
       int categoryFilter}) async {
-    var addsData = await Provider.of<AddsProvider>(context, listen: false)
-        .getAdds(2, currentPage);
+    var addsData = await Provider.of<AddsProvider>(context, listen: false).getAdds(2, currentPage);
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     bool isSeller = userProvider.userMode == 'seller';
     bool isAnonymous = CachHelper.getData(key: 'userId') == null;
     final customerId = CachHelper.getData(key: 'userId');
-    final postsProvider =
-        Provider.of<AllPostsWithCategories>(context, listen: false);
+    final postsProvider = Provider.of<AllPostsWithCategories>(context, listen: false);
 
     print('getttDataa');
     print(searchTerm);
@@ -433,8 +411,7 @@ class _HomePageTapState extends State<HomePageTap> {
       // return null;
     }
     if (categoryFilter != -1) {
-      var data = await postsRepositoryImp.getAllPostsByCategoryId(
-          categoryFilter, currentPage, pageSize);
+      var data = await postsRepositoryImp.getAllPostsByCategoryId(categoryFilter, currentPage, pageSize);
       print('fffffffffffffffffffffffffffff dataaaaaa');
       print(data);
       allPostsData = PostsWithSellerModel.fromJson(data, false);
@@ -470,10 +447,8 @@ class _HomePageTapState extends State<HomePageTap> {
     // print(userProvider.get)
 
     if (!isAnonymous && !isSeller) {
-      followedRes = await postsRepositoryImp
-          .getFollowedPostsOfCustomerByCustomerID(id: customerId);
-      sellerFollower = await userProvider
-          .getFollowedSellersByCustomerID(userProvider.userId);
+      followedRes = await postsRepositoryImp.getFollowedPostsOfCustomerByCustomerID(id: customerId);
+      sellerFollower = await userProvider.getFollowedSellersByCustomerID(userProvider.userId);
       var followedPosts = followedRes.data[0].posts;
       List<int> ids = [];
       followedPosts.forEach((element) {
@@ -649,10 +624,7 @@ class _HomePageTapState extends State<HomePageTap> {
             categoryFilter = -1;
           });
           search = '';
-          var widget = await getPostData(
-              refreshed: true,
-              searchTerm: search,
-              categoryFilter: categoryFilter);
+          var widget = await getPostData(refreshed: true, searchTerm: search, categoryFilter: categoryFilter);
           if (widget != null) {
             userProvider.index = -1;
             setState(() {
@@ -664,8 +636,7 @@ class _HomePageTapState extends State<HomePageTap> {
           }
         },
         onLoading: () async {
-          var widget = await getPostData(
-              searchTerm: search, categoryFilter: categoryFilter);
+          var widget = await getPostData(searchTerm: search, categoryFilter: categoryFilter);
           print(widget.toString());
           if (widget == null) {
             print('no data under');
@@ -758,12 +729,10 @@ class _HomePageTapState extends State<HomePageTap> {
                         builder: (context, user, _) {
                           List<String> imagePaths = [];
                           item.postImages.forEach((element) {
-                            imagePaths.add(
-                                'http://malldal.com/dal/' + element['url']);
+                            imagePaths.add('http://malldal.com/dal/' + element['url']);
                           });
                           return Padding(
-                            padding:
-                                EdgeInsets.only(top: 3, left: 10, right: 10),
+                            padding: EdgeInsets.only(top: 3, left: 10, right: 10),
                             child: PostItem(
                               postId: item.id,
                               createdAt: item.createdAt,

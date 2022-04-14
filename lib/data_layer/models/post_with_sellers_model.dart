@@ -1,12 +1,8 @@
 import 'dart:convert';
 
-import 'package:gson/gson.dart';
+PostsWithSellerModel postsWithSellerFromJson(String str) => PostsWithSellerModel.fromJson(json.decode(str), false);
 
-PostsWithSellerModel postsWithSellerFromJson(String str) =>
-    PostsWithSellerModel.fromJson(json.decode(str), false);
-
-String postsWithSellerToJson(PostsWithSellerModel data) =>
-    json.encode(data.toJson());
+String postsWithSellerToJson(PostsWithSellerModel data) => json.encode(data.toJson());
 
 class PostsWithSellerModel {
   PostsWithSellerModel({
@@ -23,9 +19,7 @@ class PostsWithSellerModel {
   dynamic messageAr;
   Data data = Data();
 
-  factory PostsWithSellerModel.fromJson(
-          Map<String, dynamic> json, bool isFromCategory) =>
-      PostsWithSellerModel(
+  factory PostsWithSellerModel.fromJson(Map<String, dynamic> json, bool isFromCategory) => PostsWithSellerModel(
         status: json["status"],
         code: json["code"],
         message: json["message"],
@@ -75,8 +69,7 @@ class Data {
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         currentPage: json["current_page"],
-        data: List<PostModel>.from(
-            json["data"].map((x) => PostModel.fromJson(x))),
+        data: List<PostModel>.from(json["data"].map((x) => PostModel.fromJson(x))),
         firstPageUrl: json["first_page_url"],
         from: json["from"],
         lastPage: json["last_page"],
@@ -154,10 +147,7 @@ class PostModel {
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
         postImages: List<dynamic>.from(json["post_images"].map((x) => x)),
-        categories: json["categories"] == null
-            ? []
-            : List<String>.from(
-                json["categories"].map((element) => element['id'].toString())),
+        categories: json["categories"] == null ? [] : List<String>.from(json["categories"].map((element) => element['id'].toString())),
         seller: Seller.fromJson(json["seller"]),
         isSaved: json['is_saved'],
       );
@@ -202,8 +192,7 @@ class Seller {
 
   factory Seller.fromJson(Map<String, dynamic> json) => Seller(
         id: json["id"],
-        profileImage: json[
-            'profile_image'], //profileImageValues.map[json["profile_image"]],
+        profileImage: json['profile_image'], //profileImageValues.map[json["profile_image"]],
         bio: json["bio"],
         deletedAt: json["deleted_at"],
         userId: json["user_id"],
@@ -214,8 +203,7 @@ class Seller {
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "profile_image":
-            profileImage, //profileImageValues.reverse[profileImage],
+        "profile_image": profileImage, //profileImageValues.reverse[profileImage],
         "bio": bio,
         "deleted_at": deletedAt,
         "user_id": userId,
@@ -259,8 +247,7 @@ final genderValues = EnumValues({"male": Gender.MALE});
 
 enum Name { IMMANUEL_SWANIAWSKI }
 
-final nameValues =
-    EnumValues({"Immanuel Swaniawski": Name.IMMANUEL_SWANIAWSKI});
+final nameValues = EnumValues({"Immanuel Swaniawski": Name.IMMANUEL_SWANIAWSKI});
 
 class Link {
   Link({

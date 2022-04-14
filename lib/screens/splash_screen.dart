@@ -1,7 +1,5 @@
-import 'package:dal/business_logic_layer/user_provider.dart';
 import 'package:dal/data_layer/data_providers/get_data.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
 import 'package:dal/network/local_host.dart';
@@ -56,11 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
-        children: [
-          Expanded(flex: 1, child: Container()),
-          Expanded(flex: 1, child: VideoPlayer(controller)),
-          Expanded(flex: 1, child: Container())
-        ],
+        children: [Expanded(flex: 1, child: Container()), Expanded(flex: 1, child: VideoPlayer(controller)), Expanded(flex: 1, child: Container())],
       ),
     );
   }

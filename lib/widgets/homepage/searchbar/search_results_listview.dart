@@ -1,4 +1,3 @@
-import 'package:dal/business_logic_layer/adds_provider.dart';
 import 'package:dal/business_logic_layer/all_posts_with_categories.dart';
 import 'package:dal/business_logic_layer/user_provider.dart';
 import 'package:dal/data_layer/models/followed_posts_by_customer_model.dart';
@@ -7,7 +6,6 @@ import 'package:dal/data_layer/repositories/posts_repositories.dart';
 import 'package:dal/network/local_host.dart';
 import 'package:dal/widgets/center_title_widget.dart';
 import 'package:dal/theme/app_colors.dart';
-import 'package:dal/widgets/homepage/add_image_item.dart';
 // import 'package:dal/widgets/post_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -31,13 +29,11 @@ class _SearchResultsListViewState extends State<SearchResultsListView> {
 
   bool isAnonymous = CachHelper.getData(key: 'userId') == null;
 
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   bool isRefreshed = true;
   int currentPage = 1;
-  List<dynamic> gatAllMatchedProducts(
-      String searchTerm, List<PostModel> posts) {
+  List<dynamic> gatAllMatchedProducts(String searchTerm, List<PostModel> posts) {
     List<PostModel> matchedProducts = [];
     for (var item in posts) {
       // var index = posts.indexOf(item);
@@ -52,7 +48,7 @@ class _SearchResultsListViewState extends State<SearchResultsListView> {
   @override
   Widget build(BuildContext context) {
     final postsProvider = Provider.of<AllPostsWithCategories>(context);
-    final addsProvider = Provider.of<AddsProvider>(context, listen: false);
+    // final addsProvider = Provider.of<AddsProvider>(context, listen: false);
     final userProvider = Provider.of<UserProvider>(context);
     final customerId = CachHelper.getData(key: 'userId');
     // final userMode = CachHelper.getData(key: 'userMode');
@@ -72,10 +68,8 @@ class _SearchResultsListViewState extends State<SearchResultsListView> {
         '',
       );
       if (!isAnonymous && !isSeller) {
-        followedRes = await postsRepositoryImp
-            .getFollowedPostsOfCustomerByCustomerID(id: customerId);
-        sellerFollower = await userProvider
-            .getFollowedSellersByCustomerID(userProvider.userId);
+        followedRes = await postsRepositoryImp.getFollowedPostsOfCustomerByCustomerID(id: customerId);
+        sellerFollower = await userProvider.getFollowedSellersByCustomerID(userProvider.userId);
         var followedPosts = followedRes.data[0].posts;
         List<int> ids = [];
         followedPosts.forEach((element) {
@@ -168,8 +162,7 @@ class _SearchResultsListViewState extends State<SearchResultsListView> {
           return Container(
             padding: EdgeInsets.only(top: 50, bottom: 80),
             child: ListView(
-              children:
-                  gatAllMatchedProducts(widget.searchTerm, posts).map((e) {
+              children: gatAllMatchedProducts(widget.searchTerm, posts).map((e) {
                 // var index = gatAllMatchedProducts(widget.searchTerm, posts)
                 //     .indexOf(e);
                 return PostItem(
@@ -304,8 +297,7 @@ class _SearchResultsListViewState extends State<SearchResultsListView> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(
                     child: CircularProgressIndicator(
-                      valueColor:
-                          AlwaysStoppedAnimation<Color>(AppColors.primary),
+                      valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
                     ),
                   );
                 } else if (snapshot.hasError) {

@@ -10,8 +10,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../Post/review_dialog.dart';
-
 // ignore: must_be_immutable
 class PostFooterWidget extends StatefulWidget {
   // final int avgRate;

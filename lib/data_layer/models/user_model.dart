@@ -54,6 +54,7 @@ class MyUser {
   List<String> adds = [];
   // List<PostsWithSellerModel>
   List<String> cities = [];
+  String cityName = '';
 
   MyUser({
     this.id,
@@ -76,6 +77,7 @@ class MyUser {
     this.contactInfo,
     this.followSellers,
     this.savedPosts,
+    this.cityName,
     // this.posts,
   });
 
@@ -87,6 +89,7 @@ class MyUser {
         profileImage: json["profile_image"],
         biography: json['biography'],
         cityId: json["city_id"],
+        cityName: json["city_name"],
         userId: json["user_id"],
         userMode: json['mode'],
         verification: json["verification"],
@@ -100,6 +103,7 @@ class MyUser {
       'name': name,
       'gender': gender,
       'city_id': cityId,
+      'city_name': cityName,
       'profile_image': profileImage,
       'phone': phoneNumber,
       'mode': userMode,

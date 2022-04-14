@@ -1,7 +1,7 @@
 import 'package:dal/data_layer/models/post_with_sellers_model.dart';
 import 'package:dal/network/local_host.dart';
 import 'package:dal/theme/app_colors.dart';
-import 'package:dal/widgets/Post/post_footer.dart';
+
 import 'package:dal/widgets/post_overview_widgets.dart/post_body.dart';
 import 'package:dal/widgets/post_overview_widgets.dart/post_footer.dart';
 import 'package:dal/widgets/post_overview_widgets.dart/post_header.dart';

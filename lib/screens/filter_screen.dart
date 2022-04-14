@@ -1,4 +1,3 @@
-import 'package:dal/business_logic_layer/adds_provider.dart';
 import 'package:dal/business_logic_layer/all_posts_with_categories.dart';
 import 'package:dal/business_logic_layer/user_provider.dart';
 import 'package:dal/data_layer/models/post_with_sellers_model.dart';
@@ -8,7 +7,6 @@ import 'package:dal/network/local_host.dart';
 import 'package:dal/theme/app_colors.dart';
 import 'package:dal/utils/utils.dart';
 import 'package:dal/widgets/center_title_widget.dart';
-import 'package:dal/widgets/homepage/add_image_item.dart';
 import 'package:dal/widgets/Post/post_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -54,10 +52,7 @@ class _FilterScreenState extends State<FilterScreen> {
   int pageSize = 6;
   @override
   void initState() {
-    _catRepo
-        .getAllCategories(
-            refreshed: true, pageNumber: pageNumber, pageSize: pageSize)
-        .then((value) {
+    _catRepo.getAllCategories(refreshed: true, pageNumber: pageNumber, pageSize: pageSize).then((value) {
       value.data.categories.forEach((element) {
         categoriesList.add(element.title);
       });
@@ -81,17 +76,15 @@ class _FilterScreenState extends State<FilterScreen> {
   Widget build(BuildContext context) {
     String filterType = ModalRoute.of(context).settings.arguments;
     var provider = Provider.of<AllPostsWithCategories>(context);
-    final addsProvider = Provider.of<AddsProvider>(context, listen: false);
+    // final addsProvider = Provider.of<AddsProvider>(context, listen: false);
     List<String> adds = Provider.of<UserProvider>(context).getAdds();
 
     final userPrvider = Provider.of<UserProvider>(context);
-    RefreshController _refreshController =
-        RefreshController(initialRefresh: false);
+    RefreshController _refreshController = RefreshController(initialRefresh: false);
     int pageNumebr = 1;
     int pageSize = 50;
     Future<Widget> getPostData(int id) async {
-      allPostsData = await postsRepositoryImp.getAllPostsByCategoryId(
-          id, pageNumebr, pageSize);
+      allPostsData = await postsRepositoryImp.getAllPostsByCategoryId(id, pageNumebr, pageSize);
 
       if (allPostsData == null) {
         return CenterTitleWidget(
@@ -262,8 +255,7 @@ class _FilterScreenState extends State<FilterScreen> {
         },
         child: GridView.builder(
           shrinkWrap: true,
-          itemCount:
-              filterType == 'City' ? citiesList.length : categoriesList.length,
+          itemCount: filterType == 'City' ? citiesList.length : categoriesList.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             childAspectRatio: 3 / 3,
             crossAxisCount: 2,
@@ -271,8 +263,7 @@ class _FilterScreenState extends State<FilterScreen> {
             mainAxisSpacing: 5.0,
           ),
           itemBuilder: (context, index) {
-            bool isFavorite =
-                userPrvider.isFavoriteCategoryContain((index + 1).toString());
+            bool isFavorite = userPrvider.isFavoriteCategoryContain((index + 1).toString());
             bool checked = index == cheak; //chekedIndexes.contains(index);
             Color itemColor = Theme.of(context).cardColor;
             if (filterType == 'City') {
@@ -304,17 +295,12 @@ class _FilterScreenState extends State<FilterScreen> {
                         print(provider.getCategoryFilter);
                         if (checked) {
                           // chekedIndexes.remove(index);
-                          filterType == 'City'
-                              ? provider.remveCityFilter()
-                              : provider.removeCategoryFilter();
+                          filterType == 'City' ? provider.remveCityFilter() : provider.removeCategoryFilter();
                           checked = false;
                         } else {
                           getPostData(index);
                           // chekedIndexes.add(index);
-                          filterType == 'City'
-                              ? provider.setCityFilter((index + 1).toString())
-                              : provider
-                                  .setCategoryFilter((index + 1).toString());
+                          filterType == 'City' ? provider.setCityFilter((index + 1).toString()) : provider.setCategoryFilter((index + 1).toString());
 
                           provider.setIndexOfCategory(index + 1);
                         }
@@ -331,16 +317,13 @@ class _FilterScreenState extends State<FilterScreen> {
                       elevation: 20,
                       child: Center(
                         child: Text(
-                          filterType == 'City'
-                              ? citiesList[index]
-                              : categoriesList[index],
+                          filterType == 'City' ? citiesList[index] : categoriesList[index],
                         ),
                       ),
                     ),
                   ),
                 ),
-                filterType == 'City' ||
-                        CachHelper.getData(key: 'userId') == null
+                filterType == 'City' || CachHelper.getData(key: 'userId') == null
                     ? Container()
                     : Positioned(
                         bottom: 0,
@@ -352,41 +335,25 @@ class _FilterScreenState extends State<FilterScreen> {
                               () {
                                 isFavorite = true;
                                 print(isFavorite);
-                                if (userPrvider.isFavoriteCategoryContain(
-                                    (index + 1).toString())) {
-                                  if (userPrvider
-                                          .removeCateogryFromCustomerFavorite(
-                                              (index + 1)) !=
-                                      null) {
+                                if (userPrvider.isFavoriteCategoryContain((index + 1).toString())) {
+                                  if (userPrvider.removeCateogryFromCustomerFavorite((index + 1)) != null) {
                                     Utils.showToast(
-                                      message: AppLocalizations.of(context)
-                                          .removeCategory,
+                                      message: AppLocalizations.of(context).removeCategory,
                                       // 'تم  إزالة الفئة من المحفوظات',
                                       backgroundColor: AppColors.primary,
-                                      textColor: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1
-                                          .color,
+                                      textColor: Theme.of(context).textTheme.bodyText1.color,
                                     );
-                                    userPrvider.removeCategoryFromFavorite(
-                                        (index + 1).toString());
+                                    userPrvider.removeCategoryFromFavorite((index + 1).toString());
                                   }
                                 } else {
-                                  if (userPrvider.addCateogryToCustomerFavorite(
-                                          {'category_id': (index + 1)}) !=
-                                      null) {
+                                  if (userPrvider.addCateogryToCustomerFavorite({'category_id': (index + 1)}) != null) {
                                     Utils.showToast(
-                                      message: AppLocalizations.of(context)
-                                          .saveCategory,
+                                      message: AppLocalizations.of(context).saveCategory,
                                       // 'تم حفظ  الفئة',
                                       backgroundColor: AppColors.primary,
-                                      textColor: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1
-                                          .color,
+                                      textColor: Theme.of(context).textTheme.bodyText1.color,
                                     );
-                                    userPrvider.addCategoryToFavorite(
-                                        (index + 1).toString());
+                                    userPrvider.addCategoryToFavorite((index + 1).toString());
                                   }
                                 }
                               },

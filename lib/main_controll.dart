@@ -1,12 +1,9 @@
 // import 'dart:html';
-
-import 'package:dal/main.dart';
 import 'package:dal/screens/category_posts_screen.dart';
 import 'package:dal/screens/customer_seller_follower.dart';
 import 'package:dal/screens/main_taps/user_profile_screen.dart';
 import 'package:dal/screens/otp_screen.dart';
 import 'package:dal/screens/splash_screen.dart';
-import 'package:dal/theme/app_colors.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:dal/business_logic_layer/local_provider.dart';
@@ -23,7 +20,6 @@ import 'package:dal/screens/seller_account_screen.dart';
 import 'package:dal/screens/seller_posts_screen.dart';
 import 'package:dal/screens/seller_profile_screen.dart';
 import 'package:dal/screens/settings_screen.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'L10N/l10n.dart';
 import 'Services/loacl_notification_service.dart';
@@ -47,6 +43,7 @@ class _MainContollerState extends State<MainContoller> with WidgetsBindingObserv
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     LocalNotificationService.initialize(context);
+
     //gives you the message on which user taps and it opend the app from terminated state
     FirebaseMessaging.instance.getInitialMessage().then((message) {
       if (message != null) {
@@ -99,6 +96,7 @@ class _MainContollerState extends State<MainContoller> with WidgetsBindingObserv
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+
     return MaterialApp(
       themeMode: themeProvider.themeMode,
       theme: MyThemes.lightTheme, //ThemeData(fontFamily: 'QTNOWTitle'),

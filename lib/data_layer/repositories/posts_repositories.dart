@@ -29,11 +29,9 @@ class PostsRepositoryImp extends PostsRepository {
     return allposts;
   }
 
-  Future<PostsWithSellerModel> getAllPostsIncludeCategories(
-      int pageNumber, int pageSize, String search) async {
+  Future<PostsWithSellerModel> getAllPostsIncludeCategories(int pageNumber, int pageSize, String search) async {
     PostsWithSellerModel allposts = PostsWithSellerModel();
-    final rowPosts = await postAPI.getRowPostsIncludeCategories(
-        pageNumber, pageSize, search);
+    final rowPosts = await postAPI.getRowPostsIncludeCategories(pageNumber, pageSize, search);
     var _allposts = PostsWithSellerModel.fromJson(rowPosts, false);
     print('allposts with cate :');
     _allposts.data.data.forEach((element) {
@@ -44,11 +42,9 @@ class PostsRepositoryImp extends PostsRepository {
     return allposts;
   }
 
-  Future<dynamic> getAllPostsByCategoryId(
-      int id, int pageNumber, int pageSize) async {
-    PostsWithSellerModel allposts = PostsWithSellerModel();
-    final rowPosts =
-        await postAPI.getRowPostsByCategoryId(id, pageNumber, pageSize);
+  Future<dynamic> getAllPostsByCategoryId(int id, int pageNumber, int pageSize) async {
+    // PostsWithSellerModel allposts = PostsWithSellerModel();
+    final rowPosts = await postAPI.getRowPostsByCategoryId(id, pageNumber, pageSize);
     // var _allposts = PostsWithSellerModel.fromJson(rowPosts, true);
     // allposts = _allposts;
     return rowPosts;
@@ -74,13 +70,10 @@ class PostsRepositoryImp extends PostsRepository {
   }
 
   @override
-  Future<FollowedPostsByCustomerModel> getFollowedPostsOfCustomerByCustomerID(
-      {@required int id}) async {
+  Future<FollowedPostsByCustomerModel> getFollowedPostsOfCustomerByCustomerID({@required int id}) async {
     FollowedPostsByCustomerModel followedPosts = FollowedPostsByCustomerModel();
-    final rowFollowedPosts =
-        await postAPI.getRowFollowedPostsOfCustomerByCustomerID(id: id);
-    var _followedPosts =
-        FollowedPostsByCustomerModel.fromJson(rowFollowedPosts);
+    final rowFollowedPosts = await postAPI.getRowFollowedPostsOfCustomerByCustomerID(id: id);
+    var _followedPosts = FollowedPostsByCustomerModel.fromJson(rowFollowedPosts);
     followedPosts = _followedPosts;
     return followedPosts;
   }

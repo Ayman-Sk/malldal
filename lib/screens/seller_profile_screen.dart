@@ -55,16 +55,14 @@ class _SellerProfileScreenState extends State<SellerProfileScreen> {
         // backgroundColor: Colors.white,
         body: ListView(
           children: [
-            buildTop(
-                coverHeight, imageHeight, sellerProvider.profileImage, context),
+            buildTop(coverHeight, imageHeight, sellerProvider.profileImage, context),
             Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     ElevatedButton.icon(
-                      onPressed: () => Navigator.of(context)
-                          .pushNamed(EditSellerProfileScreen.routeName),
+                      onPressed: () => Navigator.of(context).pushNamed(EditSellerProfileScreen.routeName),
                       icon: Icon(Icons.edit),
                       label: Text(
                         AppLocalizations.of(context).edit,
@@ -81,10 +79,7 @@ class _SellerProfileScreenState extends State<SellerProfileScreen> {
                       AppLocalizations.of(context).accountInfo,
                       // 'معلومات الحساب',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 30,
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.w600),
+                      style: TextStyle(fontSize: 30, color: AppColors.primary, fontWeight: FontWeight.w600),
                     ),
                   ],
                 ),
@@ -99,8 +94,7 @@ class _SellerProfileScreenState extends State<SellerProfileScreen> {
                 CachHelper.getData(key: 'userId') != null
                     ? accountInfoCard(
                         icon: Icons.info,
-                        title: AppLocalizations.of(context)
-                            .contactInfo, //'معلومات التواصل',
+                        title: AppLocalizations.of(context).contactInfo, //'معلومات التواصل',
                         subTitle: sellerProvider.biography)
                     : Container(),
                 // accountInfoCard(
@@ -111,14 +105,12 @@ class _SellerProfileScreenState extends State<SellerProfileScreen> {
                 //     icon: Icons.contact_page,
                 //     title: 'السيرة الشخصية',
                 //     subTitle: sellerProvider.contactInfo),
+                // accountInfoCard(
+                //     icon: Icons.location_on,
+                //     title: AppLocalizations.of(context).city, //'المدينة',
+                //     subTitle: sellerProvider.cityName),
                 accountInfoCard(
-                    icon: Icons.location_on,
-                    title: AppLocalizations.of(context).city, //'المدينة',
-                    subTitle: sellerProvider.cityName),
-                accountInfoCard(
-                  icon: sellerProvider.gender == 'male'
-                      ? Icons.male
-                      : Icons.female,
+                  icon: sellerProvider.gender == 'male' ? Icons.male : Icons.female,
                   title: AppLocalizations.of(context).male, //"الجنس",
                   subTitle: sellerProvider.gender == 'male'
                       ? AppLocalizations.of(context).male
@@ -127,11 +119,8 @@ class _SellerProfileScreenState extends State<SellerProfileScreen> {
                   // 'أنثى',
                 ),
                 accountInfoCard(
-                  icon: userMode == 'customer'
-                      ? Icons.attach_money
-                      : Icons.sell_outlined,
-                  title:
-                      AppLocalizations.of(context).accountType, //'نوع الحساب',
+                  icon: userMode == 'customer' ? Icons.attach_money : Icons.sell_outlined,
+                  title: AppLocalizations.of(context).accountType, //'نوع الحساب',
                   subTitle: userMode == 'customer'
                       ?
                       // 'مشتري' :
@@ -149,12 +138,9 @@ class _SellerProfileScreenState extends State<SellerProfileScreen> {
   }
 }
 
-Widget buildTop(double coverHeight, imageHeight, String profileImagePath,
-    BuildContext context) {
+Widget buildTop(double coverHeight, imageHeight, String profileImagePath, BuildContext context) {
   return Stack(clipBehavior: Clip.none, alignment: Alignment.center, children: [
-    Container(
-        margin: EdgeInsets.only(bottom: coverHeight / 2),
-        child: buildCoverImage(coverHeight)),
+    Container(margin: EdgeInsets.only(bottom: coverHeight / 2), child: buildCoverImage(coverHeight)),
     Positioned(
       child: buildProfileImage(imageHeight, profileImagePath, context),
       top: coverHeight - imageHeight / 2,
@@ -178,9 +164,7 @@ Widget buildCoverImage(double coverHeight) => Container(
       ),
     );
 
-Widget buildProfileImage(
-        double imageHeight, String profileImagePath, BuildContext context) =>
-    CircleAvatar(
+Widget buildProfileImage(double imageHeight, String profileImagePath, BuildContext context) => CircleAvatar(
       radius: imageHeight / 2,
       backgroundColor: Theme.of(context).colorScheme.background,
       backgroundImage: NetworkImage(
@@ -198,15 +182,11 @@ Widget accountInfoCard({IconData icon, String title, String subTitle}) {
       ),
       title: Text(
         title,
-        style: TextStyle(
-            fontSize: 20,
-            color: AppColors.primary,
-            fontWeight: FontWeight.w600),
+        style: TextStyle(fontSize: 20, color: AppColors.primary, fontWeight: FontWeight.w600),
       ),
       subtitle: Text(
         subTitle,
-        style: TextStyle(
-            fontSize: 15, color: Colors.grey, fontWeight: FontWeight.w600),
+        style: TextStyle(fontSize: 15, color: Colors.grey, fontWeight: FontWeight.w600),
       ),
     ),
   );

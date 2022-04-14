@@ -342,7 +342,8 @@ class _EditCustomerProfileScreenState extends State<EditCustomerProfileScreen> {
                           setState(
                             () {
                               _selectedcity = val;
-                              provider.setCityId(_selectedcity.id);
+                              provider.setCityId(
+                                  citiesList.indexOf(_selectedcity.name) + 1);
                             },
                           );
                         },

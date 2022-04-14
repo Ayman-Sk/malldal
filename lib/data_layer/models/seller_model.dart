@@ -9,16 +9,7 @@ class Seller {
   int userCount;
   User user;
 
-  Seller(
-      {this.id,
-      this.profileImage,
-      this.bio,
-      this.deletedAt,
-      this.userId,
-      this.createdAt,
-      this.updatedAt,
-      this.userCount,
-      this.user});
+  Seller({this.id, this.profileImage, this.bio, this.deletedAt, this.userId, this.createdAt, this.updatedAt, this.userCount, this.user});
 
   Seller.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -29,7 +20,7 @@ class Seller {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     userCount = json['user_count'];
-    user = json['user'] != null ? new User.fromJson(json['user']) : null;
+    user = json['user'] != null ? User.fromJson(json['user']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -57,11 +48,11 @@ class User {
   User({this.name, this.gender, this.phone});
 
   User.fromJson(Map<String, dynamic> json) {
-    //TODO
-    //wait alissar to add name
-    name = 'hsdkdsuds'; //json['name'];
-    gender = json['gender'];
-    phone = json['phone'];
+    this.name = json['name'];
+    this.gender = json['gender'];
+    this.phone = json['phone'];
+    print('frommmmmmmjsonnnnnnnnnnn');
+    print(name);
   }
 
   Map<String, dynamic> toJson() {

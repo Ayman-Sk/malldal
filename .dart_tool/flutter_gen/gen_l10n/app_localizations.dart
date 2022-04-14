@@ -433,7 +433,7 @@ abstract class AppLocalizations {
   /// title of introduction Screen
   ///
   /// In en, this message translates to:
-  /// **'Simple steps separate you from seeing the latest home-made products or displaying your personal products, all through the Dal application.'**
+  /// **'Simple steps separate you from seeing the latest home-made products or displaying your personal products, all through the Dal Electronic Mall'**
   String get introTitle;
 
   /// No description provided for @letStart.
