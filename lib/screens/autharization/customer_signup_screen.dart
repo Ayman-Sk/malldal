@@ -34,7 +34,7 @@ class _CustomerSignupScreensState extends State<CustomerSignupScreens> {
   DropDownListModel _selectedgender;
 
   //customer city
-  // List<DropDownListModel> _cities = DropDownListModel.getcities();
+  List<DropDownListModel> _cities = DropDownListModel.getcities();
   List<DropdownMenuItem<DropDownListModel>> _citiesdropDownMenueItems;
   DropDownListModel _selectedCity;
 
@@ -110,8 +110,8 @@ class _CustomerSignupScreensState extends State<CustomerSignupScreens> {
         DropDownListModel.buildDropDownMenuItem(_genders);
     _selectedgender = _genderdropDownMenueItems[0].value;
 
-    // _citiesdropDownMenueItems =
-    //     DropDownListModel.buildDropDownMenuItem(_cities);
+    _citiesdropDownMenueItems =
+        DropDownListModel.buildDropDownMenuItem(_cities);
     _selectedCity = _citiesdropDownMenueItems[0].value;
 
     getImageFileFromAssets('user.jpg').then((value) => file = value);

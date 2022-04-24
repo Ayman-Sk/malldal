@@ -202,7 +202,7 @@ class EndPoints {
   static String getPostRequestBySellerID(
           int id, int pageNumber, int pageSize) =>
       baseUrl +
-      '/post_requests?page[number]=1&$pageNumber&page[size]=$pageSize&filter[seller_id]=$id';
+      '/post_requests?page[number]=$pageNumber&page[size]=$pageSize&filter[seller_id]=$id';
 
   // static String getAllPostsIncudeCategories = posts + '?include=categories';
   static String getAllPostsIncudeCategories(
@@ -264,6 +264,11 @@ class EndPoints {
 
   static String getPostsByCategoryId(int catId, int pageNumber, int pageSize) =>
       posts + '/category/$catId?page[number]=$pageNumber&page[size]=$pageSize';
+
+  static String getPostsByCategoryIdAndCityID(
+          int categoryId, int cityId, int pageNumber, int pageSize) =>
+      posts +
+      '/category/$categoryId/city/$cityId?page[number]=$pageNumber&page[size]=$pageSize';
 
   ////////////////////////////////////////////////////////////////// categorys Done
 

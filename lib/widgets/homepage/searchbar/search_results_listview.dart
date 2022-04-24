@@ -29,11 +29,13 @@ class _SearchResultsListViewState extends State<SearchResultsListView> {
 
   bool isAnonymous = CachHelper.getData(key: 'userId') == null;
 
-  RefreshController _refreshController = RefreshController(initialRefresh: false);
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
 
   bool isRefreshed = true;
   int currentPage = 1;
-  List<dynamic> gatAllMatchedProducts(String searchTerm, List<PostModel> posts) {
+  List<dynamic> gatAllMatchedProducts(
+      String searchTerm, List<PostModel> posts) {
     List<PostModel> matchedProducts = [];
     for (var item in posts) {
       // var index = posts.indexOf(item);
@@ -68,8 +70,10 @@ class _SearchResultsListViewState extends State<SearchResultsListView> {
         '',
       );
       if (!isAnonymous && !isSeller) {
-        followedRes = await postsRepositoryImp.getFollowedPostsOfCustomerByCustomerID(id: customerId);
-        sellerFollower = await userProvider.getFollowedSellersByCustomerID(userProvider.userId);
+        followedRes = await postsRepositoryImp
+            .getFollowedPostsOfCustomerByCustomerID(id: customerId);
+        sellerFollower = await userProvider
+            .getFollowedSellersByCustomerID(userProvider.userId);
         var followedPosts = followedRes.data[0].posts;
         List<int> ids = [];
         followedPosts.forEach((element) {
@@ -162,7 +166,8 @@ class _SearchResultsListViewState extends State<SearchResultsListView> {
           return Container(
             padding: EdgeInsets.only(top: 50, bottom: 80),
             child: ListView(
-              children: gatAllMatchedProducts(widget.searchTerm, posts).map((e) {
+              children:
+                  gatAllMatchedProducts(widget.searchTerm, posts).map((e) {
                 // var index = gatAllMatchedProducts(widget.searchTerm, posts)
                 //     .indexOf(e);
                 return PostItem(
@@ -297,7 +302,8 @@ class _SearchResultsListViewState extends State<SearchResultsListView> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(
                     child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(AppColors.primary),
                     ),
                   );
                 } else if (snapshot.hasError) {

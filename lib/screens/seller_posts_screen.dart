@@ -31,6 +31,10 @@ class _SellerPostScreenState extends State<SellerPostScreen> {
 
   Future<bool> getSellerPosts(bool isRefresh, bool isRequest, int id,
       int pageNumber, int pageSize) async {
+    print('pages');
+    print(pageSize);
+    print(pageNumber);
+    print(totalPageNumber);
     // try {
     dynamic response = isRequest
         ? await DioHelper.sellerPosts(
@@ -91,8 +95,8 @@ class _SellerPostScreenState extends State<SellerPostScreen> {
       appBar: AppBar(
           centerTitle: true,
           title: Text(arguments['isRequest']
-              ? AppLocalizations.of(context).posts
-              : AppLocalizations.of(context).pendingPosts),
+              ? AppLocalizations.of(context).pendingPosts
+              : AppLocalizations.of(context).posts),
           // title: arguments['isRequest']?Text(AppLocalizations.of(context).posts):Text(AppLoca),
           backgroundColor: AppColors.primary,
           leading: IconButton(

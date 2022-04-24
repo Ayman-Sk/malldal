@@ -456,7 +456,10 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   style: ElevatedButton.styleFrom(primary: AppColors.accent),
                   child: Center(
                     child: Text(
-                      AppLocalizations.of(context).addPhoto,
+                      imageselected == true
+                          ? AppLocalizations.of(context).addAnotherPhoto
+                          : AppLocalizations.of(context).addPhoto,
+
                       // 'إضافة صورة',
                     ),
                   ),

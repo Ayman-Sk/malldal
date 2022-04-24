@@ -74,9 +74,20 @@ class _PostItemState extends State<PostItem> {
       child: Container(
         padding: const EdgeInsets.only(top: 10, left: 5, right: 5),
         height: MediaQuery.of(context).size.height / 2,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30.0),
+          // color: Colors.grey,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey,
+              offset: Offset(0.0, 1.0), //(x,y)
+              blurRadius: 6.0,
+            ),
+          ],
+        ),
         child: ClipRRect(
           child: Card(
-            elevation: 10,
+            // elevation: 10,
             shape: RoundedRectangleBorder(
                 side: BorderSide(
                     color: AppColors.primary.withOpacity(0.5), width: 1),

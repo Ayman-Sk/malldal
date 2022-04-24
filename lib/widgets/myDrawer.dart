@@ -65,7 +65,8 @@ class _MyDrawerState extends State<MyDrawer> {
       items = [
         {
           'Icon': Icons.verified_user,
-          'Title': AppLocalizations.of(context).followed, //'البائعون المتابعون',
+          'Title':
+              AppLocalizations.of(context).followed, //'البائعون المتابعون',
           'Route': CustomerSellerFollower.routeName,
           'Replace': false,
           'Argument': false,
@@ -92,7 +93,8 @@ class _MyDrawerState extends State<MyDrawer> {
               children: [
                 Column(children: [
                   buildDrawerHeader(),
-                  buildDrawerItem(AppLocalizations.of(context).logIn, Icons.login, LoginCardScreen.routeName, true, 1),
+                  buildDrawerItem(AppLocalizations.of(context).logout,
+                      Icons.logout, LoginCardScreen.routeName, true, 1),
                 ]),
                 powerdByCHI(),
 
@@ -103,16 +105,19 @@ class _MyDrawerState extends State<MyDrawer> {
           : Column(
               children: [
                 buildDrawerHeader(),
-                buildUserProfileItem(userProvider.profileImage, userProvider.userName),
+                buildUserProfileItem(
+                    userProvider.profileImage, userProvider.userName),
                 Expanded(
                   child: ListView.separated(
                     shrinkWrap: true,
                     itemCount: items.length,
                     itemBuilder: (context, index) {
                       var item = items[index];
-                      return buildDrawerItem(item['Title'], item['Icon'], item['Route'], item['Replace'], index);
+                      return buildDrawerItem(item['Title'], item['Icon'],
+                          item['Route'], item['Replace'], index);
                     },
-                    separatorBuilder: (BuildContext context, _) => Divider(thickness: 0.3),
+                    separatorBuilder: (BuildContext context, _) =>
+                        Divider(thickness: 0.3),
                   ),
                 ),
                 powerdByCHI()
@@ -170,7 +175,8 @@ class _MyDrawerState extends State<MyDrawer> {
         });
   }
 
-  Widget buildDrawerItem(String title, IconData icon, String route, bool replace, int index) {
+  Widget buildDrawerItem(
+      String title, IconData icon, String route, bool replace, int index) {
     return GestureDetector(
       onTap: () async {
         if (replace) {
@@ -178,8 +184,10 @@ class _MyDrawerState extends State<MyDrawer> {
         } else {
           // Navigator.of(context).pushNamed(route);
           if (items[index].keys.contains('Argument')) {
-            Navigator.pushNamed(context, items[index]['Route'],
-                arguments: {'isRequest': items[index]['Argument'], 'userId': Provider.of<UserProvider>(context, listen: false).userId});
+            Navigator.pushNamed(context, items[index]['Route'], arguments: {
+              'isRequest': items[index]['Argument'],
+              'userId': Provider.of<UserProvider>(context, listen: false).userId
+            });
           } else
             Navigator.pushNamed(context, items[index]['Route']);
         }
@@ -228,7 +236,8 @@ class _MyDrawerState extends State<MyDrawer> {
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: Theme.of(context).colorScheme.background,
-          backgroundImage: NetworkImage('http://malldal.com/dal/' + profileImage),
+          backgroundImage:
+              NetworkImage('http://malldal.com/dal/' + profileImage),
         ),
         title: Text(userName),
       ),
@@ -244,7 +253,10 @@ class _MyDrawerState extends State<MyDrawer> {
             textDirection: TextDirection.ltr,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [Text('Powerd by ', style: TextStyle(color: Colors.black)), Text("CHI", style: TextStyle(color: Color(0XFFF05F23)))],
+              children: [
+                Text('Powerd by ', style: TextStyle(color: Colors.black)),
+                Text("CHI", style: TextStyle(color: Color(0XFFF05F23)))
+              ],
             ),
           ),
         ),

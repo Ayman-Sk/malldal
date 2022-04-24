@@ -164,6 +164,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get addPhoto => 'إضافة صورة';
 
   @override
+  String get addAnotherPhoto => 'إضافة صورة أخرى';
+
+  @override
   String get saveEdit => 'حفظ التعديلات';
 
   @override

@@ -207,6 +207,10 @@
     "@addPhoto":{
         "description": "when user want add his photo"
     },
+    "addAnotherPhoto": "Add Another Photo",
+    "@addAnotherPhoto":{
+        "description": "When user want to add new photo"
+    },
     "saveEdit":"Save Edits",
     "@saveEdit":{
         "description":"When User want to save Edit"

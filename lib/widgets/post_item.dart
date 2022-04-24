@@ -660,6 +660,8 @@ class _PostItemState extends State<PostItem> {
                             //
                             GestureDetector(
                               onTap: () async {
+                                print('text');
+                                print(ratingController.text);
                                 bool res;
                                 res = await reviewRepositoryImp
                                     .addReviewToSinglePost(

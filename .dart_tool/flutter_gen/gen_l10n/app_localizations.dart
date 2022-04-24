@@ -406,6 +406,12 @@ abstract class AppLocalizations {
   /// **'Add Photo'**
   String get addPhoto;
 
+  /// When user want to add new photo
+  ///
+  /// In en, this message translates to:
+  /// **'Add Another Photo'**
+  String get addAnotherPhoto;
+
   /// When User want to save Edit
   ///
   /// In en, this message translates to:

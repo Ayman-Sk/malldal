@@ -12,6 +12,15 @@ class ReviewsAPIs {
     @required int customerId,
     @required String token,
   }) async {
+    print('rate');
+    print(rate);
+    print('notes');
+    print(notes);
+    print('post');
+    print(postId);
+    print('cus');
+    print(customerId);
+    print(token);
     final response = await _dio.post(
       EndPoints.reviews,
       options: Options(

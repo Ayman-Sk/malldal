@@ -47,6 +47,20 @@ class PostsAPIs {
     }
   }
 
+  Future<dynamic> getRowPostsByCategoryIdAndCityId(
+      int categoryId, int cityId, int pageNumber, int pageSize) async {
+    final response = await _dio.get(EndPoints.getPostsByCategoryIdAndCityID(
+        categoryId, cityId, pageNumber, pageSize));
+    print('resss :$response');
+    if (response.statusCode == 200) {
+      print('\nPostData${response.data}');
+      return response.data;
+    } else {
+      print('EEEEERRROR :${response.statusCode}');
+      throw Exception('Can not Load Raw PostsWithSellers');
+    }
+  }
+
   Future<dynamic> getSingleRowPostByID({@required int postId}) async {
     final response = await _dio.get(EndPoints.getSinglePostById(postId));
     if (response.statusCode == 200) {

@@ -51,6 +51,7 @@
     "wrongNumber": "الرقم غير صحيح",
     "canChooseImage": "بإمكانك اختيار صورتك من هنا",
     "addPhoto": "إضافة صورة",
+    "addAnotherPhoto": "إضافة صورة أخرى",
     "saveEdit":"حفظ التعديلات",
     "editSuccessfully":"تم تعديل المعلومات بنجاح",
     "editError":"تعذرت عملية تعديل المعلومات",
