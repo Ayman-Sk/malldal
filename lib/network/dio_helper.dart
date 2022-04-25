@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
+import 'end_points.dart';
 import 'local_host.dart';
 
 class DioHelper {
@@ -43,6 +44,9 @@ class DioHelper {
       print('RES:$response');
       print('status code is ${response.statusCode}');
       return response;
+    } else if (response.data['code'] == '401') {
+      await refreshToken();
+      await addCategoryAsFavorite(url: url, data: data);
     } else {
       print('RES:$response');
       print('status code is ${response.statusCode}');
@@ -63,6 +67,9 @@ class DioHelper {
       print('RES:$response');
       print('status code is ${response.statusCode}');
       return response;
+    } else if (response.data['code'] == '401') {
+      await refreshToken();
+      await deleteCategoryFromFavorite(url: url);
     } else {
       print('RES:$response');
       print('status code is ${response.statusCode}');
@@ -151,6 +158,9 @@ class DioHelper {
       print('RES:$response');
       print('status code is ${response.statusCode}');
       return false;
+    } else if (response.data['code'] == '401') {
+      await refreshToken();
+      await addPostRequest(url: url, data: data);
     } else {
       print('RES:$response');
       print('status code is ${response.statusCode}');
@@ -183,6 +193,9 @@ class DioHelper {
       print('RES:$response');
       print('status code is ${response.statusCode}');
       return false;
+    } else if (response.data['code'] == '401') {
+      await refreshToken();
+      sellerPosts(url: url);
     } else {
       print('RES:$response');
       print('status code is ${response.statusCode}');
@@ -219,9 +232,8 @@ class DioHelper {
     // queryParameters: query,
     String lang = 'ar',
   }) async {
-   
     String accessToken = CachHelper.getData(key: 'token');
-     print(url);
+    print(url);
     dio.options.headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -232,6 +244,9 @@ class DioHelper {
       print('RES:$response');
       print('status code is ${response.statusCode}');
       return false;
+    } else if (response.data['code'] == '401') {
+      await refreshToken();
+      deleteUserAccount(url: url);
     } else {
       print('RES:$response');
       print('status code is ${response.statusCode}');
@@ -333,6 +348,9 @@ class DioHelper {
       print('RES:$response');
       print('status code is ${response.statusCode}');
       return false;
+    } else if (response.data['code'] == '401') {
+      await refreshToken();
+      updateUserData(url: url, data: data);
     } else {
       print('RES:$response');
       print('status code is ${response.statusCode}');
@@ -340,32 +358,19 @@ class DioHelper {
     }
   }
 
-  // if (token != null) {
-  //     header['Authorization'] = 'Bearer ' + token;
-  //   }
-  // static Future<bool> addToSavedPost(
-  //     {int postId, int cusId, String token}) async {
-  //   dio.options.headers = {
-  //     'Authorization': 'Bearer ' + token,
-  //     'Content-Type': 'application/json',
-  //     'Accept': 'application/json',
-  //   };
-  //   try {
-  //     Response response = await dio.post(
-  //         EndPoints.addPostToCustomerFavList(customerId: ),
-  //         data: {'post_id': postId});
-  //     if (response.statusCode == 200) {
-  //       return Future.value(true);
-  //     } else {
-  //       return Future.value(false);
-  //     }
-  //     // var _favoritesCar = PostModel.fromJson(response.data);
-  //     // favoritesCar = _favoritesCar;
-  //   } on DioError catch (e) {
-  //     print('\n************\n');
-  //     print(e.error);
-  //     print('\n************\n');
-  //   }
-  // }
-
+  static Future<void> refreshToken() async {
+    dio = Dio();
+    final token = CachHelper.getData(key: 'token');
+    dio.options.headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer' + token,
+    };
+    final response = await dio.post(EndPoints.refreshToken);
+    if (response.data['code'] == 200) {
+      final token = response.data['data']['token'];
+      print(token);
+      CachHelper.saveData(key: 'token', value: token);
+    }
+  }
 }

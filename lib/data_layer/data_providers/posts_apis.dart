@@ -2,6 +2,8 @@ import 'package:dal/network/end_points.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../../network/local_host.dart';
+
 class PostsAPIs {
   Dio _dio = Dio();
 
@@ -133,6 +135,10 @@ class PostsAPIs {
       // }
       print('\n1-${response.data}');
       return true;
+    } else if (response.data['code'] == '401') {
+      await refreshToken();
+      await addPostTofollowedPostsOfCustomer(
+          cutomerId: cutomerId, postId: postId, token: token);
     } else {
       print('\n -Error IN addPostTofollowedPostsOfCustomer \n${response.data}');
       throw Exception('Can not Load getRowFollowedPostsOfCustomerByCustomerID');
@@ -162,10 +168,30 @@ class PostsAPIs {
     if (response.statusCode == 200) {
       print('\n1-${response.data}');
       return true;
+    } else if (response.data['code'] == '401') {
+      await refreshToken();
+      await removePostFromfollowedPostsOfCustomer(
+          cutomerId: cutomerId, postId: postId, token: token);
     } else {
       print(
           '\n -Error IN removePostTofollowedPostsOfCustomer \n${response.data}');
       throw Exception('Can not Load removeFollowedPostsOfCustomerByCustomerID');
+    }
+  }
+
+  Future<void> refreshToken() async {
+    _dio = Dio();
+    final token = CachHelper.getData(key: 'token');
+    _dio.options.headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer' + token,
+    };
+    final response = await _dio.post(EndPoints.refreshToken);
+    if (response.data['code'] == 200) {
+      final token = response.data['data']['token'];
+      print(token);
+      CachHelper.saveData(key: 'token', value: token);
     }
   }
 }

@@ -383,6 +383,10 @@
     "@areYouSureDelete" : {
         "description" : "popup window when delete"
     },
+    "emptyNotification": "There are no notificans",
+    "@emptyNotification":{
+        "description": "Ehen there is no notification"
+    },
     "delete": "Delete?",
     "yes" : "Yes",
     "no": "No"

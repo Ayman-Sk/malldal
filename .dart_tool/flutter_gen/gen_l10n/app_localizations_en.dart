@@ -296,6 +296,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get areYouSureDelete => 'Are You Sure You Want To Delete The Account?';
 
   @override
+  String get emptyNotification => 'There are no notificans';
+
+  @override
   String get delete => 'Delete?';
 
   @override

@@ -16,10 +16,12 @@ import '../network/end_points.dart';
 class MainTabBarViewController extends StatefulWidget {
   static const routeName = 'MainTabBarViewController';
   @override
-  _MainTabBarViewControllerState createState() => _MainTabBarViewControllerState();
+  _MainTabBarViewControllerState createState() =>
+      _MainTabBarViewControllerState();
 }
 
-class _MainTabBarViewControllerState extends State<MainTabBarViewController> with WidgetsBindingObserver {
+class _MainTabBarViewControllerState extends State<MainTabBarViewController>
+    with WidgetsBindingObserver {
   // List<Widget> listScreens;
   String firebaseToken = '';
 
@@ -50,11 +52,13 @@ class _MainTabBarViewControllerState extends State<MainTabBarViewController> wit
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.inactive || state == AppLifecycleState.detached) return;
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.detached) return;
     final isBackground = state == AppLifecycleState.paused;
     if (isBackground) {
       print('we will save data');
-      Provider.of<AllPostsWithCategories>(context, listen: false).savePostsData();
+      Provider.of<AllPostsWithCategories>(context, listen: false)
+          .savePostsData();
       print('ayman');
       print('alaa');
     }
@@ -68,15 +72,14 @@ class _MainTabBarViewControllerState extends State<MainTabBarViewController> wit
   ];
 
   Future<bool> addFcmToken({
-    @required int customerId,
+    @required int userId,
     @required String firebaseoken,
   }) async {
     Dio _dio = Dio();
     final response = await _dio.post(
-      EndPoints.saveFcmToken(customerId),
+      EndPoints.saveFcmToken(userId),
       options: Options(
         headers: {
-          // 'Authorization': 'Bearer' + token,
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
@@ -86,6 +89,9 @@ class _MainTabBarViewControllerState extends State<MainTabBarViewController> wit
     if (response.statusCode == 200) {
       print('ffffffffccccccccccccccmmmmmmmmmmmmm');
       print(response.data);
+      print(userId);
+      print(firebaseoken);
+      print(CachHelper.getData(key: 'userMode'));
       // if (response.data['code'] == "401") {
       //   // await refreshToken();
       //   await addSellerTofollowedUserOfCustomer(
@@ -104,9 +110,11 @@ class _MainTabBarViewControllerState extends State<MainTabBarViewController> wit
   Widget build(BuildContext context) {
     print('innnnnnnnnn builddddddddd');
     print(firebaseToken);
-    addFcmToken(customerId: CachHelper.getData(key: 'userId'), firebaseoken: firebaseToken);
+    addFcmToken(
+        userId: CachHelper.getData(key: 'userId'), firebaseoken: firebaseToken);
 
-    bool isMinimum = CachHelper.getData(key: 'userId') == null || Provider.of<UserProvider>(context).userMode == 'seller';
+    bool isMinimum = CachHelper.getData(key: 'userId') == null ||
+        Provider.of<UserProvider>(context).userMode == 'seller';
     if (isMinimum) {
       listScreens = [
         HomePageTap(),

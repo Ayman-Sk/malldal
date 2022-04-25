@@ -1,11 +1,24 @@
+import 'package:dal/network/local_host.dart';
 import 'package:flutter/cupertino.dart';
 
 class EndPoints {
   // static final String baseUrl = 'http://dal.chi-team.com/api';
   static final String baseUrl = 'http://malldal.com/dal/api';
 
-  // static final String refreshToken = baseUrl + '/auth/refresh';
+  //refresh Token
+  static final String refreshToken = baseUrl + '/auth/refresh';
+  //Notification
 
+  static String getNotification(int id) =>
+      CachHelper.getData(key: 'userMode') == 'customer'
+          ? baseUrl + '/publicNotifications/customers/$id'
+          : baseUrl + '/publicNotifications/sellers/$id';
+
+  static String getSellerNotification(int id) =>
+      baseUrl + '/publicNotifications/sellers/$id';
+
+  static String getCustomerNotification(int id) =>
+      baseUrl + '/publicNotifications/customers/$id';
   // Seller
   // //get
   static final String allSellers = baseUrl + '/sellers';
@@ -151,7 +164,18 @@ class EndPoints {
   //create customer DOOONE
   static final String customerSignUp = baseUrl + '/customers';
   static final String userLogin = baseUrl + '/auth';
-  static String saveFcmToken(int id) => baseUrl + '/auth/saveFcm/$id';
+  // static String saveFcmToken(int id) => baseUrl + '/auth/saveFcm/$id';
+
+  // static String saveSellerFcmToken(int id) =>
+  //     baseUrl + '/auth/saveFcm/customers/$id';
+
+  // static String saveCustomerFcmToken(int id) =>
+  //     baseUrl + '/auth/saveFcm/sellers/$id';
+
+  static String saveFcmToken(int id) =>
+      CachHelper.getData(key: 'userMode') == 'customer'
+          ? baseUrl + '/auth/saveFcm/customers/$id'
+          : baseUrl + '/auth/saveFcm/sellers/$id';
 
   // static final String customerLogin = baseUrl + '/auth';
   //update customer *** عم يرجعلي غير مصرح
