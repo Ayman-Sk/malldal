@@ -13,10 +13,12 @@ class ThemeProvider extends ChangeNotifier {
 
 class MyThemes {
   static final darkTheme = ThemeData(
+    fontFamily: "QTNOWTitle",
     scaffoldBackgroundColor: Colors.grey.shade900,
     colorScheme: ColorScheme.dark(),
   );
   static final lightTheme = ThemeData(
+    fontFamily: "QTNOWTitle",
     scaffoldBackgroundColor: Colors.white,
     colorScheme: ColorScheme.light(),
   );

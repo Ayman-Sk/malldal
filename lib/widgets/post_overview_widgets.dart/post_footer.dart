@@ -10,6 +10,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../Post/review_dialog.dart';
+
 // ignore: must_be_immutable
 class PostFooterWidget extends StatefulWidget {
   // final int avgRate;
@@ -101,7 +103,7 @@ class _PostFooterWidgetState extends State<PostFooterWidget> {
                     child: GestureDetector(
                       onTap: () {
                         // ReviewDialog(postId: widget.postId);
-
+                        // ReviewDialog(postId: widget.postId);
                         _buildReviewPopupDialog();
                         // print(
                         //   '%%%%\n${CachHelper.getData(key: 'userId')}\n%%%%',
@@ -124,62 +126,84 @@ class _PostFooterWidgetState extends State<PostFooterWidget> {
                   )
                 : Container(),
 
-            CachHelper.getData(key: 'userId') != null && Provider.of<UserProvider>(context).userMode != 'seller'
+            CachHelper.getData(key: 'userId') != null &&
+                    Provider.of<UserProvider>(context).userMode != 'seller'
                 ? Expanded(
                     flex: 1,
-                    child: Provider.of<UserProvider>(context).userId != null && Provider.of<UserProvider>(context).userMode != 'seller'
+                    child: Provider.of<UserProvider>(context).userId != null &&
+                            Provider.of<UserProvider>(context).userMode !=
+                                'seller'
                         ? Container(
                             child: Center(
                               child: IconButton(
                                 icon: Icon(
-                                  widget.isInteract ? Icons.favorite : Icons.favorite_border,
+                                  widget.isInteract
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
                                   color: AppColors.focus,
                                   size: 20,
                                 ),
                                 onPressed: token != null
                                     ? () async {
-                                        if (userProvider.savedPosts.contains(widget.postId)) {
+                                        if (userProvider.savedPosts
+                                            .contains(widget.postId)) {
                                           bool res;
-                                          res = await postsRepositoryImp.removePostFromFollowedPostsOfCustomer(
-                                              cutomerId: CachHelper.getData(
-                                                key: 'userId',
-                                              ),
-                                              postId: widget.postId,
-                                              token: token);
+                                          res = await postsRepositoryImp
+                                              .removePostFromFollowedPostsOfCustomer(
+                                                  cutomerId: CachHelper.getData(
+                                                    key: 'userId',
+                                                  ),
+                                                  postId: widget.postId,
+                                                  token: token);
                                           if (res) {
                                             setState(() {
                                               widget.isInteract = false;
                                               widget.toggleInteract();
                                             });
-                                            userProvider.savedPosts.remove(widget.postId);
+                                            userProvider.savedPosts
+                                                .remove(widget.postId);
                                             Utils.showToast(
-                                              message: AppLocalizations.of(context).removePost,
+                                              message:
+                                                  AppLocalizations.of(context)
+                                                      .removePost,
                                               // 'تم إلغاء التفاعل',
-                                              backgroundColor: AppColors.primary,
-                                              textColor: Theme.of(context).textTheme.bodyText1.color,
+                                              backgroundColor:
+                                                  AppColors.primary,
+                                              textColor: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1
+                                                  .color,
                                             );
                                           }
                                         } else {
                                           print('bbbefffore');
                                           bool res;
-                                          res = await postsRepositoryImp.addPostTofollowedPostsOfCustomer(
-                                              cutomerId: CachHelper.getData(
-                                                key: 'userId',
-                                              ),
-                                              postId: widget.postId,
-                                              token: token);
+                                          res = await postsRepositoryImp
+                                              .addPostTofollowedPostsOfCustomer(
+                                                  cutomerId: CachHelper.getData(
+                                                    key: 'userId',
+                                                  ),
+                                                  postId: widget.postId,
+                                                  token: token);
                                           if (res) {
                                             setState(() {
                                               widget.isInteract = true;
                                               widget.toggleInteract();
                                             });
-                                            userProvider.savedPosts.add(widget.postId);
+                                            userProvider.savedPosts
+                                                .add(widget.postId);
 
                                             Utils.showToast(
-                                              message: AppLocalizations.of(context).postFavorite,
+                                              message:
+                                                  AppLocalizations.of(context)
+                                                      .postFavorite,
                                               //  'تفاعلت مع هذا المنشور',
-                                              backgroundColor: AppColors.primary,
-                                              textColor: Theme.of(context).textTheme.bodyText1.color,
+                                              backgroundColor:
+                                                  AppColors.primary,
+                                              textColor: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1
+                                                  .color,
                                             );
                                             // Navigator.of(context)
                                             //     .pushReplacementNamed(
@@ -188,20 +212,30 @@ class _PostFooterWidgetState extends State<PostFooterWidget> {
                                             // );
                                           } else {
                                             Utils.showToast(
-                                              message: AppLocalizations.of(context).favoriteRefused,
+                                              message:
+                                                  AppLocalizations.of(context)
+                                                      .favoriteRefused,
                                               // 'حصل خطأ ما أثناء حفظ المنشور',
-                                              backgroundColor: AppColors.primary,
-                                              textColor: Theme.of(context).textTheme.bodyText1.color,
+                                              backgroundColor:
+                                                  AppColors.primary,
+                                              textColor: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1
+                                                  .color,
                                             );
                                           }
                                         }
                                       }
                                     : () {
                                         Utils.showToast(
-                                          message: AppLocalizations.of(context).unregistered,
+                                          message: AppLocalizations.of(context)
+                                              .unregistered,
                                           // 'يجب أن تكون مسجل في التطبيق',
                                           backgroundColor: AppColors.primary,
-                                          textColor: Theme.of(context).textTheme.bodyText1.color,
+                                          textColor: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1
+                                              .color,
                                         );
                                       },
                               ),
@@ -215,7 +249,8 @@ class _PostFooterWidgetState extends State<PostFooterWidget> {
     );
   }
 
-  TextFormField _buildRatingTextFormField(TextEditingController ratingController) {
+  TextFormField _buildRatingTextFormField(
+      TextEditingController ratingController) {
     return TextFormField(
       controller: ratingController,
       keyboardType: TextInputType.name,
@@ -273,7 +308,10 @@ class _PostFooterWidgetState extends State<PostFooterWidget> {
     String notes = '',
   }) {
     return ElevatedButton(
-      child: Text(buttonLabel, style: TextStyle(fontSize: 15, color: Theme.of(context).textTheme.bodyLarge.color)),
+      child: Text(buttonLabel,
+          style: TextStyle(
+              fontSize: 15,
+              color: Theme.of(context).textTheme.bodyLarge.color)),
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all<Color>(Colors.grey[350]),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -290,7 +328,7 @@ class _PostFooterWidgetState extends State<PostFooterWidget> {
           bool res;
           res = await reviewRepositoryImp.addReviewToSinglePost(
             rate: rating.toInt(),
-            notes: notes,
+            notes: 'asdsd', //notes,
             postId: widget.postId,
             customerId: CachHelper.getData(key: 'userId'),
           );
@@ -337,7 +375,9 @@ class _PostFooterWidgetState extends State<PostFooterWidget> {
                 _buildSvgPicture(width: 30, height: 30, top: -35, left: 100),
                 _buildSvgPicture(width: 30, height: 30, top: -35, right: 100),
                 Container(
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: Theme.of(context).cardColor),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Theme.of(context).cardColor),
                   padding: const EdgeInsets.all(4),
                   child: SingleChildScrollView(
                     child: Column(
@@ -363,7 +403,8 @@ class _PostFooterWidgetState extends State<PostFooterWidget> {
                           minRating: 0,
                           itemSize: 25,
                           allowHalfRating: true,
-                          itemPadding: const EdgeInsets.symmetric(horizontal: 5),
+                          itemPadding:
+                              const EdgeInsets.symmetric(horizontal: 5),
                           itemBuilder: (context, _) => const Icon(
                             Icons.star,
                             color: AppColors.focus,

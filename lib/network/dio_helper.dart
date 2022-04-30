@@ -154,11 +154,12 @@ class DioHelper {
         ? await dio.post(url, data: bodyFormData)
         : await dio.post(url, data: data);
 
-    if (response.data['data'] == null) {
-      print('RES:$response');
-      print('status code is ${response.statusCode}');
-      return false;
-    } else if (response.data['code'] == '401') {
+    // if (response.data['data'] == null) {
+    //   print('RES:$response');
+    //   print('status code is ${response.statusCode}');
+    //   return false;
+    // } else
+    if (response.data['code'] == '401') {
       await refreshToken();
       await addPostRequest(url: url, data: data);
     } else {

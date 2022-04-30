@@ -171,39 +171,39 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<bool> addCateogryToCustomerFavorite(Map<String, dynamic> data) async {
-    try {
-      dynamic response = await DioHelper.addCategoryAsFavorite(
-          url: EndPoints.addCategoryToCustomerFavList(userId), data: data);
-      print('\nResponse : ${response.data}\n');
-      if (response.data['data'] != null) {
-        return true;
-      } else {
-        print('***\nError In Add Request\n***');
-        return false;
-      }
-    } catch (e) {
-      print('register error is $e');
-      return Future.value(false);
+    // try {
+    dynamic response = await DioHelper.addCategoryAsFavorite(
+        url: EndPoints.addCategoryToCustomerFavList(userId), data: data);
+    print('\nResponse : ${response.data}\n');
+    if (response.data['data'] != null) {
+      return true;
+    } else {
+      print('***\nError In Add Request\n***');
+      return false;
     }
+    // } catch (e) {
+    //   print('register error is $e');
+    //   return Future.value(false);
+    // }
   }
 
   Future<bool> removeCateogryFromCustomerFavorite(int categoryId) async {
-    try {
-      dynamic response = await DioHelper.deleteCategoryFromFavorite(
-        url: EndPoints.removeCategoryFromCustomerFavList(
-            customerId: userId, categoryId: categoryId),
-      );
-      print('\nResponse : ${response.data}\n');
-      if (response.data['code'] != null) {
-        return true;
-      } else {
-        print('***\nError In Add Request\n***');
-        return false;
-      }
-    } catch (e) {
-      print('register error is $e');
-      return Future.value(false);
+    // try {
+    dynamic response = await DioHelper.deleteCategoryFromFavorite(
+      url: EndPoints.removeCategoryFromCustomerFavList(
+          customerId: userId, categoryId: categoryId),
+    );
+    print('\nResponse : ${response.data}\n');
+    if (response.data['code'] != null) {
+      return true;
+    } else {
+      print('***\nError In Add Request\n***');
+      return false;
     }
+    // } catch (e) {
+    //   print('register error is $e');
+    //   return Future.value(false);
+    // }
   }
 
   Future<Map<String, dynamic>> getFollowedSellersByCustomerID(
@@ -254,26 +254,26 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<bool> createPostRequest(Map<String, dynamic> data) async {
-    try {
-      dynamic response = await DioHelper.addPostRequest(
-          url: EndPoints.addPostRequest(userId),
-          isFormData: true,
-          lang: 'en',
-          data: data);
-      print('\nResponse : ${response.data}\n');
-      if (response.data['data'] != null) {
-        int postId = response.data['data'][0]['id'];
-        print('\nuser Id : $postId\n');
-        // CachHelper.saveData(key: 'userId', value: userId);
-        return true;
-      } else {
-        print('***\nError In Add Request\n***');
-        return false;
-      }
-    } catch (e) {
-      print('register error is $e');
-      return Future.value(false);
+    // try {
+    dynamic response = await DioHelper.addPostRequest(
+        url: EndPoints.addPostRequest(userId),
+        isFormData: true,
+        lang: 'en',
+        data: data);
+    print('\nResponse : ${response.data}\n');
+    if (response.data['data'] != null) {
+      int postId = response.data['data'][0]['id'];
+      print('\nuser Id : $postId\n');
+      // CachHelper.saveData(key: 'userId', value: userId);
+      return true;
+    } else {
+      print('***\nError In Add Request\n***');
+      return false;
     }
+    // } catch (e) {
+    //   print('add error is $e');
+    //   return Future.value(false);
+    // }
   }
 
   Future<bool> getSellerPosts(
@@ -317,52 +317,51 @@ class UserProvider with ChangeNotifier {
 
   Future<bool> updateSellerInfo(String name, String gender, String bio,
       String imagePath, String phoneNumber) async {
-    try {
-      print('seeeeend iddddd');
-      print(userId);
-      dynamic response = await DioHelper.updateUserData(
-        url: EndPoints.updateSellerByID(userId),
-        isFormData: true,
-        lang: 'en',
-        data: {
-          'name': name,
-          'gender': gender,
-          'bio': bio,
-          'profile_image': imagePath,
-          'phone': phoneNumber,
-        },
+    print('seeeeend iddddd');
+    print(userId);
+    dynamic response = await DioHelper.updateUserData(
+      url: EndPoints.updateSellerByID(userId),
+      isFormData: true,
+      lang: 'en',
+      data: {
+        'name': name,
+        'gender': gender,
+        'bio': bio,
+        'profile_image': imagePath,
+        'phone': phoneNumber,
+      },
+    );
+    print(userId);
+    print('\nResponse : ${response.data}\n');
+    if (response.data['data'] != null) {
+      _myUser.name = name;
+      _myUser.gender = gender;
+      _myUser.biography = bio;
+      _myUser.profileImage = imagePath;
+      _myUser.phoneNumber = phoneNumber;
+      int userId = response.data['data']['id'];
+      print('\nuser Id : $userId\n');
+      CachHelper.saveData(key: 'userId', value: userId);
+      CachHelper.removeData(key: 'user');
+      saveUserinApp(
+        idOfUser: userId,
+        userName: userName,
+        gender: gender,
+        modeOfuser: _myUser.userMode,
+        phoneNumber: phoneNumber,
+        profileImage: imagePath,
+        biography: bio,
+        followers: _myUser.followSellers,
       );
-      print(userId);
-      print('\nResponse : ${response.data}\n');
-      if (response.data['data'] != null) {
-        _myUser.name = name;
-        _myUser.gender = gender;
-        _myUser.biography = bio;
-        _myUser.profileImage = imagePath;
-        _myUser.phoneNumber = phoneNumber;
-        int userId = response.data['data']['id'];
-        print('\nuser Id : $userId\n');
-        CachHelper.saveData(key: 'userId', value: userId);
-        CachHelper.removeData(key: 'user');
-        saveUserinApp(
-          idOfUser: userId,
-          userName: userName,
-          gender: gender,
-          modeOfuser: _myUser.userMode,
-          phoneNumber: phoneNumber,
-          profileImage: imagePath,
-          biography: bio,
-          followers: _myUser.followSellers,
-        );
-        return true;
-      } else {
-        print('***\nError In Update\n***');
-        return false;
-      }
-    } catch (e) {
-      print('register error is $e');
-      return Future.value(false);
+      return true;
+    } else {
+      print('***\nError In Update\n***');
+      return false;
     }
+
+    //   print('register error is $e');
+    //   return Future.value(false);
+    // }
   }
 
   Future<bool> updateCustomerInfo(
@@ -372,66 +371,66 @@ class UserProvider with ChangeNotifier {
     String imagePath,
     String phoneNumber,
   ) async {
-    try {
-      print('seeeeend iddddd');
-      print(userId);
-      dynamic response = imagePath.isEmpty
-          ? await DioHelper.updateUserData(
-              url: EndPoints.updateCustomer(userId),
-              isFormData: true,
-              lang: 'en',
-              data: {
-                'name': name,
-                'gender': gender,
-                'city_id': cityId,
-                'phone': phoneNumber,
-              },
-            )
-          : await DioHelper.updateUserData(
-              url: EndPoints.updateCustomer(userId),
-              isFormData: true,
-              lang: 'en',
-              data: {
-                'name': name,
-                'gender': gender,
-                'city_id': cityId,
-                'profile_image': imagePath,
-                'phone': phoneNumber,
-              },
-            );
-      print(userId);
-      print('\nResponse : ${response.data}\n');
-      if (response.data['data'] != null) {
-        print(
-            'ppppppppppppppppppppppppppppppppppppppppppppppprrrrrrrrrrrrroooooooooffffffffile');
-        print(response.data['data']['profile_image']);
-        _myUser.name = name;
-        _myUser.gender = gender;
-        _myUser.cityId = cityId;
-        _myUser.profileImage = response.data['data']['profile_image'];
-        _myUser.phoneNumber = phoneNumber;
-        int userId = response.data['data']['id'];
-        print('\nuser Id : $userId\n');
-        CachHelper.saveData(key: 'userId', value: userId);
-        CachHelper.removeData(key: 'user');
-        saveUserinApp(
-            idOfUser: userId,
-            userName: userName,
-            gender: gender,
-            modeOfuser: _myUser.userMode,
-            phoneNumber: phoneNumber,
-            profileImage: _myUser.profileImage,
-            cityId: cityId,
-            followers: _myUser.followSellers);
-        return true;
-      } else {
-        print('***\nError In Update\n***');
-        return false;
-      }
-    } catch (e) {
-      print('register error is $e');
-      return Future.value(false);
+    // try {
+    print('seeeeend iddddd');
+    print(userId);
+    dynamic response = imagePath.isEmpty
+        ? await DioHelper.updateUserData(
+            url: EndPoints.updateCustomer(userId),
+            isFormData: true,
+            lang: 'en',
+            data: {
+              'name': name,
+              'gender': gender,
+              'city_id': cityId,
+              'phone': phoneNumber,
+            },
+          )
+        : await DioHelper.updateUserData(
+            url: EndPoints.updateCustomer(userId),
+            isFormData: true,
+            lang: 'en',
+            data: {
+              'name': name,
+              'gender': gender,
+              'city_id': cityId,
+              'profile_image': imagePath,
+              'phone': phoneNumber,
+            },
+          );
+    print(userId);
+    print('\nResponse : ${response.data}\n');
+    if (response.data['data'] != null) {
+      print(
+          'ppppppppppppppppppppppppppppppppppppppppppppppprrrrrrrrrrrrroooooooooffffffffile');
+      print(response.data['data']['profile_image']);
+      _myUser.name = name;
+      _myUser.gender = gender;
+      _myUser.cityId = cityId;
+      _myUser.profileImage = response.data['data']['profile_image'];
+      _myUser.phoneNumber = phoneNumber;
+      int userId = response.data['data']['id'];
+      print('\nuser Id : $userId\n');
+      CachHelper.saveData(key: 'userId', value: userId);
+      CachHelper.removeData(key: 'user');
+      saveUserinApp(
+          idOfUser: userId,
+          userName: userName,
+          gender: gender,
+          modeOfuser: _myUser.userMode,
+          phoneNumber: phoneNumber,
+          profileImage: _myUser.profileImage,
+          cityId: cityId,
+          followers: _myUser.followSellers);
+      return true;
+    } else {
+      print('***\nError In Update\n***');
+      return false;
     }
+    // } catch (e) {
+    //   print('register error is $e');
+    //   return Future.value(false);
+    // }
   }
 
   Future<bool> deleteUser() async {
@@ -486,33 +485,33 @@ class UserProvider with ChangeNotifier {
     String imagePath,
     String phoneNumber,
   ) async {
-    try {
-      dynamic response = await DioHelper.registeraitionOfCustomer(
-        url: EndPoints.customerSignUp,
-        isFormData: true,
-        lang: 'en',
-        data: {
-          'name': name,
-          'gender': gender,
-          'city_id': cityId,
-          'profile_image': imagePath,
-          'phone': phoneNumber,
-        },
-      );
-      print('\nResponse : ${response.data}\n');
-      if (response.data['data'] != null) {
-        int userId = response.data['data'][0]['id'];
-        print('\nuser Id : $userId\n');
-        CachHelper.saveData(key: 'userId', value: userId);
-        return true;
-      } else {
-        print('***\nError In Sign Up\n***');
-        return false;
-      }
-    } catch (e) {
-      print('register error is $e');
-      return Future.value(false);
+    // try{
+    dynamic response = await DioHelper.registeraitionOfCustomer(
+      url: EndPoints.customerSignUp,
+      isFormData: true,
+      lang: 'en',
+      data: {
+        'name': name,
+        'gender': gender,
+        'city_id': cityId,
+        'profile_image': imagePath,
+        'phone': phoneNumber,
+      },
+    );
+    print('\nResponse : ${response.data}\n');
+    if (response.data['data'] != null) {
+      int userId = response.data['data'][0]['id'];
+      print('\nuser Id : $userId\n');
+      CachHelper.saveData(key: 'userId', value: userId);
+      return true;
+    } else {
+      print('***\nError In Sign Up\n***');
+      return false;
     }
+    // } catch (e) {
+    //   print('register error is $e');
+    //   return Future.value(false);
+    // }
   }
 
   Future<bool> login(

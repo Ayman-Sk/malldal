@@ -118,16 +118,16 @@ class _ReviewDialogState extends State<ReviewDialog> {
                                   onRatingUpdate: (rat) {
                                     setState(() {
                                       rating = rat;
-                                      Utils.showToast(
-                                        message: AppLocalizations.of(context)
-                                                .newRate +
-                                            (rating.toInt()).toString(),
-                                        backgroundColor: AppColors.primary,
-                                        textColor: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1
-                                            .color,
-                                      );
+                                      // Utils.showToast(
+                                      //   message: AppLocalizations.of(context)
+                                      //           .newRate +
+                                      //       (rating.toInt()).toString(),
+                                      //   backgroundColor: AppColors.primary,
+                                      //   textColor: Theme.of(context)
+                                      //       .textTheme
+                                      //       .bodyText1
+                                      //       .color,
+                                      // );
                                     });
                                   },
                                 ),
