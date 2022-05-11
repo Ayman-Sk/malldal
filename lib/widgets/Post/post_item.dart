@@ -19,6 +19,7 @@ class PostItem extends StatefulWidget {
   final String createdAt;
   final List<String> paths;
   final Seller owner;
+  final bool isEditable;
   const PostItem({
     Key key,
     this.postId,
@@ -29,6 +30,7 @@ class PostItem extends StatefulWidget {
     this.createdAt,
     this.paths,
     this.owner,
+    this.isEditable,
   }) : super(key: key);
 
   @override
@@ -105,9 +107,10 @@ class _PostItemState extends State<PostItem> {
                       postBody: widget.body,
                       price: widget.priceDetails,
                       sellerProfileImage: widget.owner.profileImage,
+                      isEditable: widget.isEditable,
                     ),
                   ),
-                  Expanded(flex: 3, child: PostBody(imagesPath: widget.paths)),
+                  Expanded(flex: 4, child: PostBody(imagesPath: widget.paths)),
                   CachHelper.getData(key: 'userId') == null
                       ? Container()
                       : Expanded(

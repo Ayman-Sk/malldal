@@ -13,7 +13,6 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../business_logic_layer/user_provider.dart';
-// import 'package:url_launcher/url_launcher.dart';
 
 class MyDrawer extends StatefulWidget {
   @override

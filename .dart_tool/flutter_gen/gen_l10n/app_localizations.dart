@@ -670,11 +670,17 @@ abstract class AppLocalizations {
   /// **'Are You Sure You Want To Delete The Account?'**
   String get areYouSureDelete;
 
-  /// Ehen there is no notification
+  /// When there is no notification
   ///
   /// In en, this message translates to:
   /// **'There are no notificans'**
   String get emptyNotification;
+
+  /// Title of Edit Product Screen
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Product'**
+  String get editProduct;
 
   /// No description provided for @delete.
   ///

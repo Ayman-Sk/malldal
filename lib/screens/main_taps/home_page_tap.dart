@@ -753,6 +753,7 @@ class _HomePageTapState extends State<HomePageTap> {
                   priceDetails: item.priceDetails,
                   owner: item.seller,
                   paths: imagePaths,
+                  isEditable: false,
                 );
               },
             );
@@ -979,6 +980,7 @@ class _HomePageTapState extends State<HomePageTap> {
                               priceDetails: item.priceDetails,
                               owner: item.seller,
                               paths: imagePaths,
+                              isEditable: false,
                             ),
                           );
                         },

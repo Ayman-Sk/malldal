@@ -1,9 +1,11 @@
 import 'package:dal/business_logic_layer/user_provider.dart';
 import 'package:dal/data_layer/repositories/posts_repositories.dart';
 import 'package:dal/data_layer/repositories/reviews_repository.dart';
+import 'package:dal/network/end_points.dart';
 import 'package:dal/network/local_host.dart';
 import 'package:dal/theme/app_colors.dart';
 import 'package:dal/utils/utils.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
@@ -18,8 +20,10 @@ class PostFooterWidget extends StatefulWidget {
   final int postId;
   bool isInteract;
   final Function toggleInteract;
+  final int sellerId;
   PostFooterWidget({
     // @required this.avgRate,
+    @required this.sellerId,
     @required this.postId,
     @required this.isInteract,
     @required this.toggleInteract,
@@ -34,6 +38,12 @@ class _PostFooterWidgetState extends State<PostFooterWidget> {
   // bool isInteract = false;
   String token = CachHelper.getData(key: 'token');
   PostsRepositoryImp postsRepositoryImp = PostsRepositoryImp();
+  Dio _dio = Dio();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,73 +69,9 @@ class _PostFooterWidgetState extends State<PostFooterWidget> {
         // ),
         child: Row(
           children: [
-            // CachHelper.getData(key: 'userId') != null &&
-            //         Provider.of<UserProvider>(context).userMode != 'seller'
-            //     ? Expanded(
-            //         flex: 1,
-            //         child: Container(
-            //           child: Center(
-            //               child: IconButton(
-            //             icon: Icon(
-            //               isFav ? Icons.star : Icons.star_border,
-            //               color: AppColors.focus,
-            //               size: 20,
-            //             ),
-            //             onPressed: () {
-            //               setState(
-            //                 () {
-            //                   if (isFav) {
-            //                     isFav = false;
-            //                     Utils.showToast(
-            //                       message: 'أزيل من المفضلة',
-            //                       backgroundColor: AppColors.primary,
-            //                       textColor: AppColors.background,
-            //                     );
-            //                   } else {
-            //                     isFav = true;
-            //                     Utils.showToast(
-            //                       message: 'تمت الإضافة الى المفضلة',
-            //                       backgroundColor: AppColors.primary,
-            //                       textColor: AppColors.background,
-            //                     );
-            //                   }
-            //                 },
-            //               );
-            //             },
-            //           )),
-            //         ),
-            //       )
-            //     : Container(),
             CachHelper.getData(key: 'userId') != null
-                // Provider.of<UserProvider>(context).userMode != 'seller'
-                ? Expanded(
-                    flex: 1,
-                    child: GestureDetector(
-                      onTap: () {
-                        // ReviewDialog(postId: widget.postId);
-                        // ReviewDialog(postId: widget.postId);
-                        _buildReviewPopupDialog();
-                        // print(
-                        //   '%%%%\n${CachHelper.getData(key: 'userId')}\n%%%%',
-                        // );
-                      },
-                      child: Chip(
-                        label: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            AppLocalizations.of(context).rate,
-                            // 'تقييم المنشور',
-                            style: TextStyle(
-                              // color: AppColors.primary,
-                              fontSize: 10,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
+                ? Expanded(flex: 1, child: ReviewDialog(postId: widget.postId))
                 : Container(),
-
             CachHelper.getData(key: 'userId') != null &&
                     Provider.of<UserProvider>(context).userMode != 'seller'
                 ? Expanded(
@@ -247,6 +193,12 @@ class _PostFooterWidgetState extends State<PostFooterWidget> {
         ),
       ),
     );
+  }
+
+  Future<void> getSellerContactInfo() async {
+    final res =
+        await _dio.post(EndPoints.getSellerContactInfo(widget.sellerId));
+    if (res != null) {}
   }
 
   TextFormField _buildRatingTextFormField(

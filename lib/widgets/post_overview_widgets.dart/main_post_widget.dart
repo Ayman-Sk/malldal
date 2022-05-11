@@ -75,6 +75,7 @@ class _PostOverViewWidgetState extends State<PostOverViewWidget> {
                     ),
                     PostFooterWidget(
                         // avgRate: widget.avgRate,
+                        sellerId: widget.ownerUser.id,
                         postId: widget.postId,
                         isInteract: widget.isInteract,
                         toggleInteract: () => widget.toggleInteract),

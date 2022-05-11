@@ -119,6 +119,7 @@ class _FollowedPostsTapState extends State<FollowedPostsTap> {
                         owner: Seller.fromJson(item['seller']),
 
                         paths: imagePaths,
+                        isEditable: false,
                       ),
                     );
                   },

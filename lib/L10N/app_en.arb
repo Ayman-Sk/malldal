@@ -385,7 +385,11 @@
     },
     "emptyNotification": "There are no notificans",
     "@emptyNotification":{
-        "description": "Ehen there is no notification"
+        "description": "When there is no notification"
+    },
+    "editProduct": "Edit Product",
+    "@editProduct":{
+        "description": "Title of Edit Product Screen"
     },
     "delete": "Delete?",
     "yes" : "Yes",

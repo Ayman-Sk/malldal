@@ -1,3 +1,4 @@
+import 'package:dal/screens/edit_post_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../theme/app_colors.dart';
@@ -9,6 +10,7 @@ class PostHeader extends StatefulWidget {
   final String postBody;
   final String price;
   final String sellerProfileImage;
+  final bool isEditable;
 
   const PostHeader({
     Key key,
@@ -18,6 +20,7 @@ class PostHeader extends StatefulWidget {
     this.postBody,
     this.price,
     this.sellerProfileImage,
+    this.isEditable,
   }) : super(key: key);
   @override
   State<PostHeader> createState() => _PostHeaderState();
@@ -47,13 +50,54 @@ class _PostHeaderState extends State<PostHeader> {
             subtitle: Text(
               widget.createdAt.toString().substring(0, 10),
             ),
-            trailing: Text(
-              widget.price,
-              style: const TextStyle(
-                color: AppColors.focus,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            trailing: widget.isEditable
+                ? Container(
+                    width: MediaQuery.of(context).size.width / 4,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          widget.price,
+                          style: const TextStyle(
+                            color: AppColors.focus,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => EditPostScreen(
+                                  productName: widget.postTitle,
+                                  productDetails: widget.postBody,
+                                  productPrice: widget.price,
+                                ),
+                              ),
+                            );
+                          },
+                          icon: Icon(
+                            Icons.edit,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                // ? Container(
+                //     width: MediaQuery.of(context).size.width / 4,
+                //     child: Row(
+                //       children: [
+                //         IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
+                //       ],
+                //     ),
+                //   )
+                : Text(
+                    widget.price,
+                    style: const TextStyle(
+                      color: AppColors.focus,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
           ),
           Center(
             child: Text(

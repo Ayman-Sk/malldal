@@ -151,6 +151,7 @@ class _SearchResultsListViewState extends State<SearchResultsListView> {
                       priceDetails: item.priceDetails,
                       averageRate: item.avgRate,
                       owner: item.seller,
+                      isEditable: false,
                     );
                   },
                 );
@@ -178,6 +179,7 @@ class _SearchResultsListViewState extends State<SearchResultsListView> {
                   priceDetails: e.priceDetails,
                   averageRate: e.avgRate,
                   owner: e.seller,
+                  isEditable: false,
                 );
               }).toList(),
             ),
@@ -288,6 +290,7 @@ class _SearchResultsListViewState extends State<SearchResultsListView> {
                             priceDetails: item.priceDetails,
                             averageRate: item.avgRate,
                             owner: item.seller,
+                            isEditable: false,
                           ),
                         );
                       },

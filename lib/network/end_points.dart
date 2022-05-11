@@ -361,6 +361,8 @@ class EndPoints {
   // جبلي كل معلومات التواصل
   static final String getAllContactInfos = contactInfos;
 
+  static String getSellerContactInfo(int id) => contactInfos + "/$id/byseller";
+
   // جبلي كل معلومات تواصل هادالبائع
   static String getAllContactInfoOfSellerByID(int sellerId) =>
       contactInfos + '?filter[seller_id]=$sellerId';

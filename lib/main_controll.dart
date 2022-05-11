@@ -1,6 +1,7 @@
 // import 'dart:html';
 import 'package:dal/screens/category_posts_screen.dart';
 import 'package:dal/screens/customer_seller_follower.dart';
+import 'package:dal/screens/edit_post_screen.dart';
 import 'package:dal/screens/main_taps/user_profile_screen.dart';
 import 'package:dal/screens/otp_screen.dart';
 import 'package:dal/screens/splash_screen.dart';
@@ -37,7 +38,8 @@ class MainContoller extends StatefulWidget {
   State<MainContoller> createState() => _MainContollerState();
 }
 
-class _MainContollerState extends State<MainContoller> with WidgetsBindingObserver {
+class _MainContollerState extends State<MainContoller>
+    with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
@@ -76,22 +78,13 @@ class _MainContollerState extends State<MainContoller> with WidgetsBindingObserv
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.inactive || state == AppLifecycleState.detached) return;
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.detached) return;
     final isBackground = state == AppLifecycleState.paused;
     if (isBackground) {
       print('fsjkfsdgirhgre');
     }
   }
-
-  // void showNotification() {
-  //   flutterLocalNotificationsPlugin.show(
-  //       0,
-  //       'Testing',
-  //       'test test test test',
-  //       NotificationDetails(
-  //           android: AndroidNotificationDetails(channel.id, channel.name,
-  //               channelDescription: channel.description, importance: Importance.high, color: Colors.blue, playSound: true, icon: '@mimp/ic_launcher')));
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -113,32 +106,9 @@ class _MainContollerState extends State<MainContoller> with WidgetsBindingObserv
 
       // home: CustomerProfileScreen(),
       home: Scaffold(
-        // appBar: AppBar(
-        //   backgroundColor: AppColors.primary,
-        // ),
         body: SplashScreen(),
-        //  Center(
-        //     child: ElevatedButton(
-        //   child: Text('test notification'),
-        //   onPressed: showNotification,
-        // )),
       ),
 
-      // tester(),
-      // widget.token == null
-      //     ? IntroductionScreen()
-      //     : MainTabBarViewController(),
-      //  SplashScreen(),
-      //     AnimatedSplashScreen(
-      //   duration: 10000,
-
-      //   splash: SplashScreen(), //Image.asset('img/logo.jpg'),
-      //   nextScreen: widget.token == null
-      //       ? IntroductionScreen()
-      //       : MainTabBarViewController(),
-      // ),
-
-      // home:IntroductionScreen(),
       routes: {
         'MainTabBarViewController': (context) => MainTabBarViewController(),
         'IntroductionScreen': (context) => IntroductionScreen(),
@@ -153,14 +123,14 @@ class _MainContollerState extends State<MainContoller> with WidgetsBindingObserv
         'SettingsScreen': (context) => SettingsScreen(),
         'AddPostScreen': (context) => AddPostScreen(),
         'SellerAccountScreen': (context) => SellerAccountScreen(),
-        'OverviewSellerProfileScreen': (context) => OverviewSellerProfileScreen(),
+        'OverviewSellerProfileScreen': (context) =>
+            OverviewSellerProfileScreen(),
         'FilterScreen': (context) => FilterScreen(),
         'OtpScreen': (context) => OtpScreen(),
-        // 'CustomerProfileScreenV2': (context) => CustomerProfileScreenV2(),
-        // 'SellerProfileScreenV2': (context) => SellerProfileScreenV2(),
         'CategoryPostsScreen': (context) => CategoryPostsScreen(),
         'CustomerSellerFollower': (context) => CustomerSellerFollower(),
-        'UserProfileScreenRoute': (context) => UserProfileScreen()
+        'UserProfileScreenRoute': (context) => UserProfileScreen(),
+        'EditPostScreen': (context) => EditPostScreen(),
       },
     );
   }

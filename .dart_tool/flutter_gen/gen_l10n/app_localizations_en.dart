@@ -299,6 +299,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get emptyNotification => 'There are no notificans';
 
   @override
+  String get editProduct => 'Edit Product';
+
+  @override
   String get delete => 'Delete?';
 
   @override

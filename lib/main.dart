@@ -23,7 +23,8 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
   importance: Importance.high,
   playSound: true,
 );
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 Future<void> backgroundHandler(RemoteMessage message) async {
   print(message.data.toString());
@@ -38,23 +39,13 @@ Future<void> main() async {
 
   await CachHelper.init();
   DioHelper.init();
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: AppColors.primary, systemNavigationBarDividerColor: Colors.white));
-
-  // var tokenn =
-  //     'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9kYWwuY2hpLXRlYW0uY29tXC9hcGlcL2F1dGgiLCJpYXQiOjE2NDQwMTk5ODAsImV4cCI6MTY0NDAyMzU4MCwibmJmIjoxNjQ0MDE5OTgwLCJqdGkiOiJxR0dxRzRWT2F3bXZEMU1EIiwic3ViIjozOCwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.81DvxyWwFkvkdwTeADOUbiLpIhdEV1ueKLUXp51eqLE';
-  // CachHelper.removeData(key: 'user');
-  // CachHelper.removeData(key: 'token');
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: AppColors.primary,
+      systemNavigationBarDividerColor: Colors.white));
   String token = CachHelper.getData(key: 'token');
 
   runApp(MyApp(token));
 }
-
-// List<String> im = [
-//   'img/test.jpg',
-//   'img/test.jpg',
-//   'img/test.jpg',
-//   'img/test.jpg',
-// ];
 
 class MyApp extends StatelessWidget {
   final String token;
@@ -62,56 +53,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final provider = Provider.of<LocaleProvider>(context);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider()),
         ChangeNotifierProvider<SellerProvider>(create: (_) => SellerProvider()),
         ChangeNotifierProvider<LocaleProvider>(create: (_) => LocaleProvider()),
         ChangeNotifierProvider<ThemeProvider>(create: (_) => ThemeProvider()),
-        // ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider()),
-        // ChangeNotifierProvider<PostsProvider>(create: (_) => PostsProvider()),
-        ChangeNotifierProvider<PostRequestProvider>(create: (_) => PostRequestProvider()),
+        ChangeNotifierProvider<PostRequestProvider>(
+            create: (_) => PostRequestProvider()),
         ChangeNotifierProvider<AddsProvider>(create: (_) => AddsProvider()),
-        ChangeNotifierProvider<AllPostsWithCategories>(create: (_) => AllPostsWithCategories()),
+        ChangeNotifierProvider<AllPostsWithCategories>(
+            create: (_) => AllPostsWithCategories()),
       ],
       child: MainContoller(token: token),
-      // child: MaterialApp(
-      //   // locale: Provider.of<LocaleProvider>(context, listen: false).locale,
-      //   supportedLocales: L10n.all,
-      //   localizationsDelegates: [
-      //     AppLocalizations.delegate,
-      //     GlobalMaterialLocalizations.delegate,
-      //     GlobalWidgetsLocalizations.delegate,
-      //   ],
-      //   debugShowCheckedModeBanner: true,
-      //   title: 'dal',
-      //   theme: ThemeData(
-      //     fontFamily: 'QTNOWTitle',
-      //   ),
-      //   // home: CustomerProfileScreen(),
-      //   home: token == null ? IntroductionScreen() : MainTabBarViewController(),
-      //   // home:IntroductionScreen(),
-      //   routes: {
-      //     'MainTabBarViewController': (context) => MainTabBarViewController(),
-      //     'IntroductionScreen': (context) => IntroductionScreen(),
-      //     'SellerSignupScreens': (context) => SellerSignupScreens(),
-      //     'SellerProfileScreen': (context) => SellerProfileScreen(),
-      //     'CustomerSignupScreens': (context) => CustomerSignupScreens(),
-      //     'CustomerProfileScreen': (context) => CustomerProfileScreen(),
-      //     'SellerPostScreen': (context) => SellerPostScreen(),
-      //     'CustomerLoginScreen': (context) => LoginCardScreen(),
-      //     'LoginCardScreen': (context) => LoginCardScreen(),
-      //     'EditCustomerProfileScreen': (context) => EditCustomerProfileScreen(),
-      //     'EditSellerProfileScreen': (context) => EditSellerProfileScreen(),
-      //     'SettingsScreen': (context) => SettingsScreen(),
-      //     'AddPostScreen': (context) => AddPostScreen(),
-      //     'SellerAccountScreen': (context) => SellerAccountScreen(),
-      //     'OverviewSellerProfileScreen': (context) =>
-      //         OverviewSellerProfileScreen(),
-      //     'FilterScreen': (context) => FilterScreen(),
-      //   },
-      // ),
     );
   }
 }

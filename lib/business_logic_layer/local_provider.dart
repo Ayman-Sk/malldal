@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 
 class LocaleProvider extends ChangeNotifier {
-  Locale _locale;
+  Locale _locale = Locale('ar');
 
   Map<String, String> _langCode = {"en": "English", "ar": "العربية"};
 
@@ -19,6 +19,5 @@ class LocaleProvider extends ChangeNotifier {
     return _langCode[code];
   }
 
-  // Map<String, String> get getLanguage => _langCode;
   Locale get locale => _locale;
 }

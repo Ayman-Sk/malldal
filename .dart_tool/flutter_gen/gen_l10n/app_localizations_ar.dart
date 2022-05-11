@@ -299,6 +299,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get emptyNotification => 'لا يوجد إشعارات';
 
   @override
+  String get editProduct => 'تعديل ملعومات المنتج';
+
+  @override
   String get delete => 'حذف؟';
 
   @override

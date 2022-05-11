@@ -71,6 +71,16 @@ class DropDownListModel {
   //   })
   // }
 
+  static List<DropDownListModel> getTypes() {
+    return <DropDownListModel>[
+      DropDownListModel(0, 'Phone Number'),
+      DropDownListModel(1, 'WhatsApp'),
+      DropDownListModel(2, 'Telegram'),
+      DropDownListModel(3, 'Facebook'),
+      DropDownListModel(4, 'Instagram'),
+    ];
+  }
+
   static List<DropDownListModel> getgender() {
     return <DropDownListModel>[
       DropDownListModel(0, "male"),

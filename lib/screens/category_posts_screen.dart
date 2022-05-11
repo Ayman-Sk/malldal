@@ -162,6 +162,7 @@ class _CategoryPostsScreenState extends State<CategoryPostsScreen> {
                 averageRate: item['avgRate'].toString(),
                 owner: Seller.fromJson(item['seller']),
                 paths: imagePaths,
+                isEditable: false,
               ),
             );
           },

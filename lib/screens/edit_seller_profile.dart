@@ -13,7 +13,8 @@ class EditSellerProfileScreen extends StatefulWidget {
   static const routeName = 'EditSellerProfileScreen';
 
   @override
-  _EditSellerProfileScreenState createState() => _EditSellerProfileScreenState();
+  _EditSellerProfileScreenState createState() =>
+      _EditSellerProfileScreenState();
 }
 
 enum AuthMode { Login, SignUp }
@@ -41,7 +42,8 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
   bool loading = false;
   bool pickImage = false;
 
-  Future<bool> _submit(String name, String gender, String bio, String phoneNumber, String imagePath
+  Future<bool> _submit(String name, String gender, String bio,
+      String phoneNumber, String imagePath
       //{String name, String email} في حال بدي
       ) async {
     if (!imageselected) {
@@ -58,7 +60,8 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
       print(imagePath);
       // imagePath =
       //     '/data/user/0/com.example.dal/cache/file_picker/IMG_20220204_193454.jpg';
-      return await Provider.of<UserProvider>(context, listen: false).updateSellerInfo(
+      return await Provider.of<UserProvider>(context, listen: false)
+          .updateSellerInfo(
         name,
         gender,
         bio,
@@ -78,8 +81,11 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
     phonenumbercontroller = TextEditingController(text: userInfo.phoneNumber);
     biocontroller = TextEditingController(text: userInfo.biography);
 
-    _genderdropDownMenueItems = DropDownListModel.buildDropDownMenuItem(_genders);
-    _selectedgender = userInfo.gender == 'male' ? _genderdropDownMenueItems[0].value : _genderdropDownMenueItems[1].value;
+    _genderdropDownMenueItems =
+        DropDownListModel.buildDropDownMenuItem(_genders);
+    _selectedgender = userInfo.gender == 'male'
+        ? _genderdropDownMenueItems[0].value
+        : _genderdropDownMenueItems[1].value;
     file = File(Provider.of<UserProvider>(context, listen: false).profileImage);
     // _citiesdropDownMenueItems =
     //     DropDownListModel.buildDropDownMenuItem(_cities);
@@ -150,9 +156,12 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return AppLocalizations.of(context).enterName; //'أدخل الاسم';
+                      return AppLocalizations.of(context)
+                          .enterName; //'أدخل الاسم';
                     }
-                    if (value.length <= 2) return AppLocalizations.of(context).shortName; //'الاسم قصير جدا"';
+                    if (value.length <= 2)
+                      return AppLocalizations.of(context)
+                          .shortName; //'الاسم قصير جدا"';
                     return null;
                   },
                   onSaved: (value) {
@@ -181,7 +190,8 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
                   controller: phonenumbercontroller,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context).phoneNumber, //'الرقم الشخصي',
+                    labelText: AppLocalizations.of(context)
+                        .phoneNumber, //'الرقم الشخصي',
                     labelStyle: TextStyle(color: AppColors.primary),
                     fillColor: Colors.white,
                     focusedBorder: OutlineInputBorder(
@@ -200,9 +210,12 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return AppLocalizations.of(context).enterNumber; //'أدخل الرقم الشخصي';
+                      return AppLocalizations.of(context)
+                          .enterNumber; //'أدخل الرقم الشخصي';
                     }
-                    if (value.length != 10) return AppLocalizations.of(context).wrongNumber; //'الرقم غير صحيح';
+                    if (value.length != 10)
+                      return AppLocalizations.of(context)
+                          .wrongNumber; //'الرقم غير صحيح';
                     return null;
                   },
                   focusNode: _numberFocusNode,
@@ -230,7 +243,8 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
                   controller: biocontroller,
                   keyboardType: TextInputType.multiline,
                   decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context).biography, //'السيرة الشخصية',
+                    labelText: AppLocalizations.of(context)
+                        .biography, //'السيرة الشخصية',
                     labelStyle: TextStyle(color: AppColors.primary),
                     fillColor: Colors.white,
                     focusedBorder: OutlineInputBorder(
@@ -252,7 +266,8 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
                   },
                   validator: (value) {
                     if (value.length > 100) {
-                      return AppLocalizations.of(context).longBio; //'يجب أن تكون السيرة الشخصية مختصرة"';
+                      return AppLocalizations.of(context)
+                          .longBio; //'يجب أن تكون السيرة الشخصية مختصرة"';
                     }
                     return null;
                   },
@@ -421,28 +436,16 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
                           maxRadius: 130,
                           backgroundColor: AppColors.primary,
                           child: CircleAvatar(
-                            // backgroundColor: Colors.grey,
                             maxRadius: 125,
-                            // backgroundImage: FileImage(
-                            //   File(Provider.of<SellerProvider>(context,
-                            //           listen: false)
-                            //       .profileImageOfCustomer),
-                            // ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(200),
-                              child:
-                                  // Image.file(File(
-                                  //   provider.profileImageOfCustomer,
-                                  // ))
-                                  // Image.network(
-                                  //     http://dal.chi-team.com/api/provider.profileImageOfCustomer)
-                                  //for test
-
-                                  Image.file(
-                                file,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                            backgroundColor:
+                                Theme.of(context).colorScheme.background,
+                            backgroundImage: !pickImage
+                                ? NetworkImage(
+                                    'http://malldal.com/dal/' +
+                                        provider.profileImage,
+                                  )
+                                : FileImage(file),
+                            // child: ImageCache(),
                           ),
                         ),
                       ),
@@ -460,7 +463,8 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
                           backgroundColor: AppColors.primary.withOpacity(0.2),
                           child: Container(
                             child: IconButton(
-                              icon: Icon(Icons.add, color: AppColors.primary, size: 30),
+                              icon: Icon(Icons.add,
+                                  color: AppColors.primary, size: 30),
                               onPressed: () {
                                 setState(() {
                                   selectImage(context);
@@ -528,14 +532,17 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
                     );
                     if (res) {
                       Utils.showToast(
-                        message: AppLocalizations.of(context).editSuccessfully, //'تم تعديل المعلومات بنجاح',
+                        message: AppLocalizations.of(context)
+                            .editSuccessfully, //'تم تعديل المعلومات بنجاح',
                         backgroundColor: AppColors.primary,
                         textColor: Theme.of(context).textTheme.bodyText1.color,
                       );
-                      Navigator.of(context).pushNamedAndRemoveUntil('MainTabBarViewController', (route) => false);
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          'MainTabBarViewController', (route) => false);
                     } else {
                       Utils.showToast(
-                        message: AppLocalizations.of(context).editError, //'تعذرت عملية تعديل المعلومات',
+                        message: AppLocalizations.of(context)
+                            .editError, //'تعذرت عملية تعديل المعلومات',
                         backgroundColor: AppColors.primary,
                         textColor: Theme.of(context).textTheme.bodyText1.color,
                       );
@@ -562,7 +569,8 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
     final path = result.files.single.path;
     provider.setImageOfSeller(path);
     print('bllllllla');
-    print(Provider.of<SellerProvider>(context, listen: false).getImagePathOfSeller);
+    print(Provider.of<SellerProvider>(context, listen: false)
+        .getImagePathOfSeller);
     setState(() {
       provider.setImageOfSeller(path);
       file = File(path);

@@ -71,11 +71,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   items: L10n.all.map((locale) {
                     return DropdownMenuItem(
                       value: locale,
-                      child: Text(localeProvider.getLanguage(locale.languageCode)),
+                      child:
+                          Text(localeProvider.getLanguage(locale.languageCode)),
                       onTap: () {
                         localeProvider.setLocale(locale);
                         setState(() {
-                          language += localeProvider.getLanguage(locale.languageCode);
+                          language +=
+                              localeProvider.getLanguage(locale.languageCode);
                         });
                         // Navigator.of(context).pushNamedAndRemoveUntil(
                         //     MainTabBarViewController.routeName,
@@ -92,7 +94,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ),
               ListTile(
-                leading: Icon(themeProvider.isDarkMode ? Icons.brightness_2 : Icons.wb_sunny),
+                leading: Icon(themeProvider.isDarkMode
+                    ? Icons.brightness_2
+                    : Icons.wb_sunny),
                 title: Text(AppLocalizations.of(context).theme),
                 trailing: Switch.adaptive(
                   value: themeProvider.isDarkMode,
@@ -101,19 +105,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   },
                 ),
               )
-
-              // buildSettingCard(
-              //   Icon(Icons.language),
-              //   textValue,
-              //   Switch(
-              //     onChanged: toggleSwitch,
-              //     value: isSwitched,
-              //     activeColor: Colors.blue,
-              //     activeTrackColor: Colors.blue[200],
-              //     inactiveThumbColor: Colors.blue,
-              //     inactiveTrackColor: Colors.blue[200],
-              //   ),
-              // )
             ],
           ),
         ),
@@ -121,7 +112,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  Widget buildDropDownList({String title, List<String> listOfItems, Function() func, List<DropdownMenuItem<DropDownListModel>> items, bool isCities}) {
+  Widget buildDropDownList(
+      {String title,
+      List<String> listOfItems,
+      Function() func,
+      List<DropdownMenuItem<DropDownListModel>> items,
+      bool isCities}) {
     print('aaaaaaaaaaaaassssssddddddd');
     print(isCities);
     return Column(
@@ -170,7 +166,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   // await _deleteCacheDir();
 
                   // Navigator.of(context).pop();
-                  bool response = await Provider.of<UserProvider>(context, listen: false).deleteUser();
+                  bool response =
+                      await Provider.of<UserProvider>(context, listen: false)
+                          .deleteUser();
                   if (response == true) {
                     CachHelper.removeData(key: 'token');
                     CachHelper.removeData(key: 'user');
@@ -178,7 +176,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     CachHelper.removeData(key: 'posts');
                     await _deleteCacheDir();
                     Navigator.of(context).pop();
-                    Navigator.of(context).pushReplacementNamed(IntroductionScreen.routeName);
+                    Navigator.of(context)
+                        .pushReplacementNamed(IntroductionScreen.routeName);
                   }
                 },
                 child: Text(

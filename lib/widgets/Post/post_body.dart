@@ -22,9 +22,9 @@ class _PostBodyState extends State<PostBody> {
       autoplay: false,
       itemBuilder: (context, index) {
         final path = widget.imagesPath[index];
-        return SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height / 2,
+        return Expanded(
+          // width: MediaQuery.of(context).size.width,
+          // height: MediaQuery.of(context).size.height / 2,
           child: Image.network(path, fit: BoxFit.fill),
         );
       },

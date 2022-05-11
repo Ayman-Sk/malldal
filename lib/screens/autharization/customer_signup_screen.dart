@@ -33,6 +33,10 @@ class _CustomerSignupScreensState extends State<CustomerSignupScreens> {
   List<DropdownMenuItem<DropDownListModel>> _genderdropDownMenueItems;
   DropDownListModel _selectedgender;
 
+  List<DropDownListModel> _types = DropDownListModel.getTypes();
+  List<DropdownMenuItem<DropDownListModel>> _typesDropDownMenueItems;
+  DropDownListModel _selectedTypes;
+
   //customer city
   List<DropDownListModel> _cities = DropDownListModel.getcities();
   List<DropdownMenuItem<DropDownListModel>> _citiesdropDownMenueItems;
@@ -109,6 +113,9 @@ class _CustomerSignupScreensState extends State<CustomerSignupScreens> {
     _genderdropDownMenueItems =
         DropDownListModel.buildDropDownMenuItem(_genders);
     _selectedgender = _genderdropDownMenueItems[0].value;
+
+    _typesDropDownMenueItems = DropDownListModel.buildDropDownMenuItem(_types);
+    _selectedTypes = _typesDropDownMenueItems[0].value;
 
     _citiesdropDownMenueItems =
         DropDownListModel.buildDropDownMenuItem(_cities);
@@ -261,6 +268,50 @@ class _CustomerSignupScreensState extends State<CustomerSignupScreens> {
                         },
                       ),
                     ),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(8.0),
+                    //   child: Text(
+                    //     AppLocalizations.of(context).contactInfo,
+                    //     style: TextStyle(
+                    //       fontSize: 20,
+                    //     ),
+                    //   ),
+                    // ),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(8.0),
+                    //   child: Container(
+                    //     decoration: BoxDecoration(
+                    //       border: Border.all(
+                    //         color: AppColors.primary,
+                    //         width: 2,
+                    //       ),
+                    //       borderRadius: BorderRadius.circular(7),
+                    //     ),
+                    //     child: DropdownButtonHideUnderline(
+                    //       child: ButtonTheme(
+                    //         alignedDropdown: true,
+                    //         child: DropdownButton(
+                    //           underline: Divider(
+                    //             thickness: 2,
+                    //             color: AppColors.primary,
+                    //           ),
+                    //           isExpanded: true,
+                    //           value: _selectedTypes,
+                    //           items: _typesDropDownMenueItems,
+                    //           onChanged: (val) {
+                    //             setState(
+                    //               () {
+                    //                 _selectedTypes = val;
+                    //                 // customerProvider
+                    //                 //     .setGender(_selectedgender.name);
+                    //               },
+                    //             );
+                    //           },
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                     //gender
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -487,6 +538,7 @@ class _CustomerSignupScreensState extends State<CustomerSignupScreens> {
                         },
                       ),
                     ),
+
                     Padding(
                       padding: const EdgeInsets.all(15.0),
                       child: ElevatedButton(
