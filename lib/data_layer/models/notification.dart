@@ -109,7 +109,7 @@ class Data {
     title = json['title'];
     body = json['body'];
     image = json['image'];
-    adminId = json['admin_id'];
+    adminId = int.parse(json['admin_id']);
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
   }

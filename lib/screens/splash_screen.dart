@@ -39,12 +39,15 @@ class _SplashScreenState extends State<SplashScreen> {
   _navigateToHome() async {
     await Future.delayed(Duration(seconds: 6), () {});
     CachHelper.getData(key: 'token') == null
-        ? Navigator.of(context).pushReplacementNamed(IntroductionScreen.routeName)
-        : Navigator.of(context).pushReplacementNamed(MainTabBarViewController.routeName);
+        ? Navigator.of(context)
+            .pushReplacementNamed(IntroductionScreen.routeName)
+        : Navigator.of(context)
+            .pushReplacementNamed(MainTabBarViewController.routeName);
   }
 
   Future<void> getData() async {
-    GetData getInitData = GetData(context: context, postPageSize: 2, categoriesPageSize: 8);
+    GetData getInitData =
+        GetData(context: context, postPageSize: 7, categoriesPageSize: 8);
     await getInitData.getPostData();
     await getInitData.getCategoriesData();
   }
@@ -54,7 +57,11 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
-        children: [Expanded(flex: 1, child: Container()), Expanded(flex: 1, child: VideoPlayer(controller)), Expanded(flex: 1, child: Container())],
+        children: [
+          Expanded(flex: 1, child: Container()),
+          Expanded(flex: 1, child: VideoPlayer(controller)),
+          Expanded(flex: 1, child: Container())
+        ],
       ),
     );
   }

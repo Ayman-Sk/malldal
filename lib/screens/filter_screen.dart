@@ -49,7 +49,7 @@ class _FilterScreenState extends State<FilterScreen> {
   PostsRepositoryImp postsRepositoryImp = PostsRepositoryImp();
 
   int pageNumber = 1;
-  int pageSize = 6;
+  int pageSize = 7;
   @override
   void initState() {
     _catRepo
@@ -86,7 +86,7 @@ class _FilterScreenState extends State<FilterScreen> {
     RefreshController _refreshController =
         RefreshController(initialRefresh: false);
     int pageNumebr = 1;
-    int pageSize = 50;
+    int pageSize = 7;
     Future<Widget> getPostData(int id) async {
       allPostsData = await postsRepositoryImp.getAllPostsByCategoryId(
           id, pageNumebr, pageSize);
@@ -150,6 +150,7 @@ class _FilterScreenState extends State<FilterScreen> {
                     averageRate: item.avgRate,
                     owner: item.seller,
                     isEditable: false,
+                    isRequest: false,
                   );
                 },
               );

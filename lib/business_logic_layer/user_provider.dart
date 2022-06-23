@@ -12,13 +12,8 @@ class UserProvider with ChangeNotifier {
 
   int index = -1;
 
-  // String name;
-  // String number;
-  // String gender = 'male' ;
-  // int city = 0;
-  // String imagePath;
   MyUser _myUser = MyUser(
-      gender: 'male', cityId: 0, userMode: 'customer', followSellers: []);
+      gender: 'male', cityId: '0', userMode: 'customer', followSellers: []);
   Locale local;
 
   void setID(int userid) {
@@ -36,7 +31,7 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setCityId(int cityId) {
+  void setCityId(String cityId) {
     _myUser.cityId = cityId;
     notifyListeners();
   }
@@ -107,6 +102,11 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void setAddsEmpty() {
+    _myUser.adds = [];
+    notifyListeners();
+  }
+
   void addAdds(String data) {
     if (!_myUser.adds.contains(data)) _myUser.adds.add(data);
   }
@@ -128,7 +128,7 @@ class UserProvider with ChangeNotifier {
 
   String get gender => _myUser.gender;
 
-  int get cityId => _myUser.cityId;
+  String get cityId => _myUser.cityId;
 
   String get cityName => _myUser.cityName;
 
@@ -321,7 +321,7 @@ class UserProvider with ChangeNotifier {
     print(userId);
     dynamic response = await DioHelper.updateUserData(
       url: EndPoints.updateSellerByID(userId),
-      isFormData: true,
+      isFormData: false,
       lang: 'en',
       data: {
         'name': name,
@@ -367,7 +367,7 @@ class UserProvider with ChangeNotifier {
   Future<bool> updateCustomerInfo(
     String name,
     String gender,
-    int cityId,
+    String cityId,
     String imagePath,
     String phoneNumber,
   ) async {
@@ -420,7 +420,7 @@ class UserProvider with ChangeNotifier {
           modeOfuser: _myUser.userMode,
           phoneNumber: phoneNumber,
           profileImage: _myUser.profileImage,
-          cityId: cityId,
+          cityId: cityId.toString(),
           followers: _myUser.followSellers);
       return true;
     } else {
@@ -481,7 +481,7 @@ class UserProvider with ChangeNotifier {
   Future<bool> register(
     String name,
     String gender,
-    int cityId,
+    String cityId,
     String imagePath,
     String phoneNumber,
   ) async {
@@ -514,46 +514,40 @@ class UserProvider with ChangeNotifier {
     // }
   }
 
-  Future<bool> login(
-    String phoneNumber,
-  ) async {
+  Future<bool> facebookLogin(Map<String, String> data) async {
     try {
-      dynamic response = await DioHelper.loginOfCustomer(
-        url: EndPoints.userLogin,
-        lang: 'en',
-        data: {
-          'phoneNumber': phoneNumber,
-        },
-      );
-      print(response);
+      dynamic response = await DioHelper.loginOfFacebookCustomer(
+          url: EndPoints.facebookLogin, data: data);
+
       if (response.data['token'] != null) {
         print('\nResponse : ${response.data}');
         String token = response.data['token'];
         CachHelper.saveData(key: 'token', value: token);
-        String userMode = response.data['user'][0].keys.elementAt(3);
+        String userMode =
+            'customer'; //response.data['user'][0].keys.elementAt(3);
 
         CachHelper.saveData(
-            key: 'userId', value: response.data['user'][0][userMode]['id']);
+            key: 'userId', value: response.data['user'][userMode]['id']);
         CachHelper.saveData(key: 'userMode', value: userMode);
         print(userMode);
 
         print('mooooooooooooooooode');
         print(userMode);
-        print(response.data['user'][0][userMode]['city_id']);
+        // print(response.data['user'][userMode]['city_id']);
         print('iddddddddddddddddddddddddddd');
-        print(response.data['user'][0][userMode]['bio']);
-        print(response.data['user'][0][userMode]['id']);
+        // print(response.data['user'][0][userMode]['bio']);
+        // print(response.data['user'][0][userMode]['id']);
         saveUserinApp(
-          idOfUser: response.data['user'][0][userMode]['id'],
-          userName: response.data['user'][0]['name'],
-          gender: response.data['user'][0]['gender'],
-          cityId: response.data['user'][0][userMode]['city_id'],
+          idOfUser: response.data['user'][userMode]['id'],
+          userName: response.data['user']['name'],
+          gender: '', // response.data['user'][0]['gender'],
+          cityId: '', // response.data['user'][0][userMode]['city_id'],
           cityName: userMode == 'customer'
-              ? response.data['user'][0][userMode]['city']['cityName']
+              ? '' //response.data['user'][0][userMode]['city']['cityName']
               : '',
-          biography: response.data['user'][0][userMode]['bio'],
-          profileImage: response.data['user'][0][userMode]['profile_image'],
-          phoneNumber: response.data['user'][0]['phone'],
+          biography: '', //response.data['user'][0][userMode]['bio'],
+          profileImage: response.data['user'][userMode]['profile_image'],
+          phoneNumber: '', //response.data['user'][0]['phone'],
           modeOfuser: userMode,
           followers: _myUser.followSellers == null ? [] : _myUser.followSellers,
         );
@@ -563,10 +557,66 @@ class UserProvider with ChangeNotifier {
         print('Error in Login');
         return false;
       }
+      // return false;
     } catch (e) {
-      print('Login error is $e');
-      return Future.value(false);
+      print('Error in facebook log in ' + e.toString());
+      return false;
     }
+  }
+
+  Future<bool> login(
+    String phoneNumber,
+  ) async {
+    // try {
+    dynamic response = await DioHelper.loginOfCustomer(
+      url: EndPoints.userLogin,
+      lang: 'en',
+      data: {
+        'phoneNumber': phoneNumber,
+      },
+    );
+    print(response);
+    if (response.data['token'] != null) {
+      print('\nResponse : ${response.data}');
+      String token = response.data['token'];
+      CachHelper.saveData(key: 'token', value: token);
+      String userMode = response.data['user'][0].keys.elementAt(3);
+
+      CachHelper.saveData(
+          key: 'userId', value: response.data['user'][0][userMode]['id']);
+      CachHelper.saveData(key: 'userMode', value: userMode);
+      print(userMode);
+
+      print('mooooooooooooooooode');
+      print(userMode);
+      print(response.data['user'][0][userMode]['city_id']);
+      print('iddddddddddddddddddddddddddd');
+      print(response.data['user'][0][userMode]['bio']);
+      print(response.data['user'][0][userMode]['id']);
+      saveUserinApp(
+        idOfUser: response.data['user'][0][userMode]['id'],
+        userName: response.data['user'][0]['name'],
+        gender: response.data['user'][0]['gender'],
+        cityId: response.data['user'][0][userMode]['city_id'],
+        cityName: userMode == 'customer'
+            ? response.data['user'][0][userMode]['city']['cityName']
+            : '',
+        biography: response.data['user'][0][userMode]['bio'],
+        profileImage: response.data['user'][0][userMode]['profile_image'],
+        phoneNumber: response.data['user'][0]['phone'],
+        modeOfuser: userMode,
+        followers: _myUser.followSellers == null ? [] : _myUser.followSellers,
+      );
+
+      return true;
+    } else {
+      print('Error in Login');
+      return false;
+    }
+    // } catch (e) {
+    //   print('Login error is $e');
+    //   return Future.value(false);
+    // }
   }
 
   void getUserToApp() {
@@ -580,7 +630,7 @@ class UserProvider with ChangeNotifier {
           id: int.parse(hashedUser['id'].toString()),
           name: hashedUser['name'],
           gender: hashedUser['gender'],
-          cityId: int.parse(hashedUser['city_id'].toString()),
+          cityId: hashedUser['city_id'].toString(),
           cityName: hashedUser['city_name'],
           biography: hashedUser['biography'],
           profileImage: hashedUser['profile_image'],
@@ -598,7 +648,7 @@ class UserProvider with ChangeNotifier {
       @required String phoneNumber,
       @required String modeOfuser,
       @required List<int> followers,
-      int cityId = 0,
+      String cityId = '0',
       String cityName = '',
       String biography = ''}) {
     // print('-->name OfCustomer : $nameOfCustomer\n');
@@ -612,7 +662,7 @@ class UserProvider with ChangeNotifier {
         id: idOfUser,
         name: userName,
         gender: gender,
-        cityId: cityId == null ? 0 : cityId,
+        cityId: cityId == null ? '0' : cityId,
         cityName: cityName == null ? '' : cityName,
         biography: biography == null ? ' ' : biography,
         profileImage: profileImage,

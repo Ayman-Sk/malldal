@@ -17,16 +17,6 @@ class CustomerProfileScreen extends StatefulWidget {
 
 class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
   File file;
-  // Future selectFile(BuildContext context) async {
-  //   var userProvider = Provider.of<UserProvider>(context, listen: false);
-  //   final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-  //   if (result == null) return;
-  //   final path = result.files.single.path;
-  //   setState(() {
-  //     file = File(path);
-  //   });
-  //   userProvider.setProfileImage(path);
-  // }
 
   @override
   Widget build(BuildContext context) {

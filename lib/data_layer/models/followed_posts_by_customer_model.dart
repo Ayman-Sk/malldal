@@ -68,13 +68,13 @@ class Datum {
 
   int id;
   String profileImage;
-  int cityId;
-  int userId;
-  int verification;
+  String cityId;
+  String userId;
+  String verification;
   dynamic deletedAt;
   DateTime createdAt;
   DateTime updatedAt;
-  int userCount;
+  String userCount;
   User user;
   List<dynamic> posts;
   List<dynamic> categories;

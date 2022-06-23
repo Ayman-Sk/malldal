@@ -44,7 +44,7 @@ class _EditCustomerProfileScreenState extends State<EditCustomerProfileScreen> {
   bool loading = false;
   bool pickImage = false;
 
-  Future<bool> _submit(String name, String gender, int cityId,
+  Future<bool> _submit(String name, String gender, String cityId,
       String phoneNumber, String imagePath
       //{String name, String email} في حال بدي
       ) async {
@@ -137,7 +137,9 @@ class _EditCustomerProfileScreenState extends State<EditCustomerProfileScreen> {
   Widget build(BuildContext context) {
     var provider = Provider.of<UserProvider>(context, listen: false);
     // var provider = Provider.of<SellerProvider>(context, listen: false);
-
+    // print('cheack data');
+    // print(_selectedcity.id);
+    // print(_selectedgender.name);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -343,7 +345,8 @@ class _EditCustomerProfileScreenState extends State<EditCustomerProfileScreen> {
                             () {
                               _selectedcity = val;
                               provider.setCityId(
-                                  citiesList.indexOf(_selectedcity.name) + 1);
+                                  (citiesList.indexOf(_selectedcity.name) + 1)
+                                      .toString());
                             },
                           );
                         },
@@ -425,7 +428,7 @@ class _EditCustomerProfileScreenState extends State<EditCustomerProfileScreen> {
                   style: ElevatedButton.styleFrom(primary: AppColors.accent),
                   child: Center(
                     child: Text(
-                      AppLocalizations.of(context).addPhoto,
+                      AppLocalizations.of(context).editPhoto,
                       // 'إضافة صورة',
                     ),
                   ),
@@ -463,7 +466,7 @@ class _EditCustomerProfileScreenState extends State<EditCustomerProfileScreen> {
                     res = await _submit(
                       namecontroller.text,
                       _selectedgender.name,
-                      _selectedcity.id,
+                      _selectedcity.id == 0 ? '1' : _selectedcity.id.toString(),
                       phonenumbercontroller.text,
                       file == null ? '' : file.path,
 

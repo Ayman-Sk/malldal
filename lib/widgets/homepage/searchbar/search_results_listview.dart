@@ -34,6 +34,7 @@ class _SearchResultsListViewState extends State<SearchResultsListView> {
 
   bool isRefreshed = true;
   int currentPage = 1;
+  int postSize = 7;
   List<dynamic> gatAllMatchedProducts(
       String searchTerm, List<PostModel> posts) {
     List<PostModel> matchedProducts = [];
@@ -66,7 +67,7 @@ class _SearchResultsListViewState extends State<SearchResultsListView> {
       }
       allPostsData = await postsRepositoryImp.getAllPostsIncludeCategories(
         currentPage,
-        3,
+        postSize,
         '',
       );
       if (!isAnonymous && !isSeller) {
@@ -152,6 +153,7 @@ class _SearchResultsListViewState extends State<SearchResultsListView> {
                       averageRate: item.avgRate,
                       owner: item.seller,
                       isEditable: false,
+                      isRequest: false,
                     );
                   },
                 );
@@ -180,6 +182,7 @@ class _SearchResultsListViewState extends State<SearchResultsListView> {
                   averageRate: e.avgRate,
                   owner: e.seller,
                   isEditable: false,
+                  isRequest: false,
                 );
               }).toList(),
             ),
@@ -291,6 +294,7 @@ class _SearchResultsListViewState extends State<SearchResultsListView> {
                             averageRate: item.avgRate,
                             owner: item.seller,
                             isEditable: false,
+                            isRequest: false,
                           ),
                         );
                       },

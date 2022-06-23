@@ -15,19 +15,37 @@ class _PostBodyState extends State<PostBody> {
   Widget build(BuildContext context) {
     return Swiper(
       loop: false,
-      itemCount: widget.imagesPath.length,
+      itemCount: widget.imagesPath.length, // images.length,
       pagination: const SwiperPagination(),
       control: const SwiperControl(),
-      indicatorLayout: PageIndicatorLayout.COLOR,
+      // indicatorLayout: PageIndicatorLayout.COLOR,
+
       autoplay: false,
       itemBuilder: (context, index) {
-        final path = widget.imagesPath[index];
-        return Expanded(
-          // width: MediaQuery.of(context).size.width,
-          // height: MediaQuery.of(context).size.height / 2,
-          child: Image.network(path, fit: BoxFit.fill),
-        );
+        final path = widget.imagesPath[index]; //images[index];
+        return Container(
+            height: MediaQuery.of(context).size.height / 3,
+            child: Image.network(
+              path,
+              fit: BoxFit.fill,
+            ));
       },
     );
+    // Swiper(
+    //   loop: false,
+    //   itemCount: widget.imagesPath.length,
+    //   pagination: const SwiperPagination(),
+    //   control: const SwiperControl(),
+    //   indicatorLayout: PageIndicatorLayout.COLOR,
+    //   autoplay: false,
+    //   itemBuilder: (context, index) {
+    //     final path = widget.imagesPath[index];
+    //     return Expanded(
+    //       // width: MediaQuery.of(context).size.width,
+    //       // height: MediaQuery.of(context).size.height / 2,
+    //       child: Image.network(path, fit: BoxFit.cover),
+    //     );
+    //   },
+    // );
   }
 }

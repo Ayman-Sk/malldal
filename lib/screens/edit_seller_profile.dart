@@ -1,13 +1,19 @@
 import 'dart:io';
 import 'package:dal/business_logic_layer/seller_provider.dart';
+import 'package:dal/network/end_points.dart';
+import 'package:dal/network/local_host.dart';
 import 'package:dal/widgets/dropdown_model.dart';
 import 'package:dal/business_logic_layer/user_provider.dart';
 import 'package:dal/theme/app_colors.dart';
 import 'package:dal/utils/utils.dart';
+import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../widgets/repeater/text_field_repeater.dart';
 
 class EditSellerProfileScreen extends StatefulWidget {
   static const routeName = 'EditSellerProfileScreen';
@@ -17,7 +23,7 @@ class EditSellerProfileScreen extends StatefulWidget {
       _EditSellerProfileScreenState();
 }
 
-enum AuthMode { Login, SignUp }
+// enum AuthMode { Login, SignUp }
 
 class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
   final GlobalKey<FormState> _formkey = GlobalKey();
@@ -58,6 +64,11 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
       });
       print('tttttttttttttttttttttttttt');
       print(imagePath);
+      print(name);
+      print(gender);
+      print(bio);
+      print(phoneNumber);
+
       // imagePath =
       //     '/data/user/0/com.example.dal/cache/file_picker/IMG_20220204_193454.jpg';
       return await Provider.of<UserProvider>(context, listen: false)
@@ -72,8 +83,19 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
     return false;
   }
 
+  List<Icon> icons = [
+    Icon(FontAwesomeIcons.phone, color: AppColors.primary),
+    Icon(FontAwesomeIcons.whatsapp, color: Color(0xFF25D366)),
+    Icon(FontAwesomeIcons.telegram, color: Color(0xFF229ED9)),
+    Icon(FontAwesomeIcons.facebook, color: Color(0xFF4267B2)),
+    Icon(FontAwesomeIcons.instagram, color: Color(0xFFE1306C))
+  ];
+
+  TextFieldRepeater textFieldRepeater;
   @override
   void initState() {
+    textFieldRepeater = TextFieldRepeater();
+    // textFieldRepeater.clearAllAccounts();
     final userInfo = Provider.of<UserProvider>(context, listen: false);
 
     imageselected = userInfo.profileImage.isEmpty ? false : true;
@@ -87,9 +109,6 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
         ? _genderdropDownMenueItems[0].value
         : _genderdropDownMenueItems[1].value;
     file = File(Provider.of<UserProvider>(context, listen: false).profileImage);
-    // _citiesdropDownMenueItems =
-    //     DropDownListModel.buildDropDownMenuItem(_cities);
-    // _selectedcity = _citiesdropDownMenueItems[userInfo.cityIdOfCustomer].value;
 
     super.initState();
   }
@@ -101,8 +120,17 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
     super.dispose();
   }
 
+  // static List<Icon> icons = [
+  //   const Icon(Icons.facebook),
+  //   const Icon(Icons.whatsapp),
+  //   const Icon(Icons.install_desktop),
+  //   const Icon(Icons.telegram)
+  // ];
+
   @override
   Widget build(BuildContext context) {
+    // textFieldRepeater = TextFieldRepeater(icons);
+
     var provider = Provider.of<UserProvider>(context, listen: false);
 
     return Scaffold(
@@ -276,6 +304,23 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
                   },
                 ),
               ),
+//////////////////////////////////////////////////////////////////////////////////////////dropdownData////
+              ///
+              ///
+              ///
+              ///
+              textFieldRepeater.getTexts.isEmpty
+                  ? ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          textFieldRepeater.addNewAccount();
+                        });
+                      },
+                      child: Text('Add Accounts'),
+                      style:
+                          ElevatedButton.styleFrom(primary: AppColors.primary),
+                    )
+                  : textFieldRepeater.repeaterWidgets,
               //gender
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -323,93 +368,6 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
                 ),
               ),
 
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: TextFormField(
-              //     controller: _biocontroller,
-              //     keyboardType: TextInputType.multiline,
-              //     decoration: InputDecoration(
-              //       labelText: 'السيرة الشخصية',
-              //       labelStyle: TextStyle(color: AppColors.primary),
-              //       fillColor: Colors.white,
-              //       focusedBorder: OutlineInputBorder(
-              //         borderRadius: BorderRadius.circular(10.0),
-              //         borderSide: BorderSide(
-              //           color: AppColors.primary,
-              //         ),
-              //       ),
-              //       enabledBorder: OutlineInputBorder(
-              //         borderRadius: BorderRadius.circular(10.0),
-              //         borderSide: BorderSide(
-              //           color: AppColors.primary,
-              //           width: 2.0,
-              //         ),
-              //       ),
-              //     ),
-              //     onFieldSubmitted: (_) {
-              //       FocusScope.of(context).requestFocus(_numbersFocusNode);
-              //     },
-              //     validator: (value) {
-              //       if (value.length > 100) {
-              //         return 'يجب أن تكون السيرة الشخصية مختصرة"';
-              //       }
-              //       return null;
-              //     },
-              //     onSaved: (value) {
-              //       sellerProvider.setBiographyOfSeller(_biocontroller.text);
-              //     },
-              //   ),
-              // ),
-              //city
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: Directionality(
-              //     textDirection: TextDirection.rtl,
-              //     child: Text(
-              //       'المدينة:',
-              //       style: TextStyle(
-              //         color: AppColors.primary,
-              //         fontSize: 20,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: Container(
-              //     decoration: BoxDecoration(
-              //       border: Border.all(
-              //         color: AppColors.primary,
-              //         width: 2,
-              //       ),
-              //       borderRadius: BorderRadius.circular(7),
-              //     ),
-              //     child: DropdownButtonHideUnderline(
-              //       child: ButtonTheme(
-              //         alignedDropdown: true,
-              //         child: DropdownButton(
-              //           underline: Divider(
-              //             thickness: 2,
-              //             color: AppColors.primary,
-              //           ),
-              //           isExpanded: true,
-              //           value: _selectedcity,
-              //           items: _citiesdropDownMenueItems,
-              //           onChanged: (val) {
-              //             setState(
-              //               () {
-              //                 _selectedcity = val;
-              //                 provider.setc(_selectedcity.id);
-              //               },
-              //             );
-              //           },
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-
-              ///
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
@@ -482,7 +440,7 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
                   style: ElevatedButton.styleFrom(primary: AppColors.accent),
                   child: Center(
                     child: Text(
-                      AppLocalizations.of(context).addPhoto,
+                      AppLocalizations.of(context).editPhoto,
                       // 'إضافة صورة',
                     ),
                   ),
@@ -510,6 +468,8 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
                           ),
                   ),
                   onPressed: () async {
+                    //TODO wait Alissar TODO
+
                     if (!_formkey.currentState.validate()) {
                       setState(() {
                         loading = false;
@@ -517,39 +477,76 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
                       return Future.value(false);
                     }
                     _formkey.currentState.save();
-                    bool res;
-                    res = await _submit(
-                      namecontroller.text,
-                      _selectedgender.name,
-                      biocontroller.text,
-                      phonenumbercontroller.text,
-                      // provider.userName,
-                      // provider.gender,
-                      // // provider.cityIdOfCustomer,
-                      // provider.biography,
-                      // provider.phoneNumber.toString(),
-                      file.path,
+                    print('RRRRREPEEATERRRR');
+                    print(textFieldRepeater.getDropdownData);
+                    Map data = textFieldRepeater.getDropdownData;
+                    // String phone = data[icons[0]].toString();
+                    // String whatsapp = data[icons[1]].toString();
+                    // String telegram = data[icons[2]].toString();
+                    // String facebook = data[icons[3]].toString();
+                    // String instagram = data[icons[4]].toString();
+                    print('Phone : ' + textFieldRepeater.getPhone);
+                    print('Whatsapp : ' + textFieldRepeater.getWhatsapp);
+                    print('telegram : ' + textFieldRepeater.getTelegram);
+                    print('facebook : ' + textFieldRepeater.getFacebook);
+                    print('instagram : ' + textFieldRepeater.getInstagram);
+                    //TODO
+                    Dio dio = Dio();
+                    Map contactInfoData = getAccountsMap(
+                      textFieldRepeater.getPhone,
+                      textFieldRepeater.getWhatsapp,
+                      textFieldRepeater.getTelegram,
+                      textFieldRepeater.getFacebook,
+                      textFieldRepeater.getInstagram,
+                      provider.userId,
                     );
-                    if (res) {
-                      Utils.showToast(
-                        message: AppLocalizations.of(context)
-                            .editSuccessfully, //'تم تعديل المعلومات بنجاح',
-                        backgroundColor: AppColors.primary,
-                        textColor: Theme.of(context).textTheme.bodyText1.color,
-                      );
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                          'MainTabBarViewController', (route) => false);
-                    } else {
-                      Utils.showToast(
-                        message: AppLocalizations.of(context)
-                            .editError, //'تعذرت عملية تعديل المعلومات',
-                        backgroundColor: AppColors.primary,
-                        textColor: Theme.of(context).textTheme.bodyText1.color,
-                      );
-                      setState(() {
-                        loading = false;
-                      });
-                    }
+                    var accountsRes;
+                    print(contactInfoData);
+                    accountsRes = await dio.post(EndPoints.contactInfos,
+                        options: Options(
+                          headers: {
+                            'Authorization':
+                                'Bearer' + CachHelper.getData(key: 'token'),
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                          },
+                        ),
+                        data: contactInfoData);
+                    print('accountsRes');
+                    print(accountsRes);
+                    // bool res;
+                    // res = await _submit(
+                    //   namecontroller.text,
+                    //   _selectedgender.name,
+                    //   biocontroller.text,
+                    //   phonenumbercontroller.text,
+                    //   // provider.userName,
+                    //   // provider.gender,
+                    //   // // provider.cityIdOfCustomer,
+                    //   // provider.biography,
+                    //   // provider.phoneNumber.toString(),
+                    //   file.path,
+                    // );
+                    // if (res) {
+                    //   Utils.showToast(
+                    //     message: AppLocalizations.of(context)
+                    //         .editSuccessfully, //'تم تعديل المعلومات بنجاح',
+                    //     backgroundColor: AppColors.primary,
+                    //     textColor: Theme.of(context).textTheme.bodyText1.color,
+                    //   );
+                    //   Navigator.of(context).pushNamedAndRemoveUntil(
+                    //       'MainTabBarViewController', (route) => false);
+                    // } else {
+                    //   Utils.showToast(
+                    //     message: AppLocalizations.of(context)
+                    //         .editError, //'تعذرت عملية تعديل المعلومات',
+                    //     backgroundColor: AppColors.primary,
+                    //     textColor: Theme.of(context).textTheme.bodyText1.color,
+                    //   );
+                    //   setState(() {
+                    //     loading = false;
+                    //   });
+                    // }
                   },
                 ),
               ),
@@ -558,6 +555,49 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
         ),
       ),
     );
+  }
+
+  Map getAccountsMap(String phone, String whatsapp, String telegram,
+      String facebook, String instagram, int sellerId) {
+    Map data = {};
+    List<Map<String, String>> listOfAccounts = [];
+    if (phone != 'null') {
+      listOfAccounts.add({
+        'contact_info_type_id': '1',
+        'info': phone,
+        'seller_id': sellerId.toString(),
+      });
+    }
+    if (whatsapp != 'null') {
+      listOfAccounts.add({
+        'contact_info_type_id': '2',
+        'info': whatsapp,
+        'seller_id': sellerId.toString(),
+      });
+    }
+    if (telegram != 'null') {
+      listOfAccounts.add({
+        'contact_info_type_id': '3',
+        'info': telegram,
+        'seller_id': sellerId.toString(),
+      });
+    }
+    if (facebook != 'null') {
+      listOfAccounts.add({
+        'contact_info_type_id': '4',
+        'info': facebook,
+        'seller_id': sellerId.toString(),
+      });
+    }
+    if (instagram != 'null') {
+      listOfAccounts.add({
+        'contact_info_type_id': '5',
+        'info': instagram,
+        'seller_id': sellerId.toString(),
+      });
+    }
+    data['contactinfos'] = listOfAccounts;
+    return data;
   }
 
   Future selectImage(BuildContext context) async {
@@ -575,6 +615,7 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
       provider.setImageOfSeller(path);
       file = File(path);
       imageselected = true;
+      pickImage = true;
     });
     //طريقة طارق
 

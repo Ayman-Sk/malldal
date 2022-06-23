@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dal/business_logic_layer/adds_provider.dart';
 import 'package:dal/business_logic_layer/all_posts_with_categories.dart';
 import 'package:dal/business_logic_layer/user_provider.dart';
@@ -31,7 +32,7 @@ class _HomePageTapState extends State<HomePageTap> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   int currentPage = 2;
-  int pageSize = 2;
+  int pageSize = 7;
   int totalPageNumber = 3;
 
   PostsWithSellerModel allPostsData = PostsWithSellerModel();
@@ -591,7 +592,7 @@ class _HomePageTapState extends State<HomePageTap> {
       // int currentPage,
       int categoryFilter}) async {
     var addsData = await Provider.of<AddsProvider>(context, listen: false)
-        .getAdds(2, currentPage);
+        .getAdds(pageSize ~/ 4, currentPage);
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     bool isSeller = userProvider.userMode == 'seller';
     bool isAnonymous = CachHelper.getData(key: 'userId') == null;
@@ -655,6 +656,10 @@ class _HomePageTapState extends State<HomePageTap> {
     print('adddds');
     print(addsData['data']['data']);
     addsData['data']['data'].forEach((element) {
+      if (refreshed) {
+        userProvider.setAddsEmpty();
+      }
+
       userProvider.addAdds(element['url']);
     });
     // print(userProvider.get)
@@ -726,9 +731,43 @@ class _HomePageTapState extends State<HomePageTap> {
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height / 3,
                   color: Theme.of(context).colorScheme.background,
-                  child: Image.network(
+                  child:
+                      // CachedNetworkImage(
+                      //   imageUrl: 'http://malldal.com/dal/' + path,
+                      //   fit: BoxFit.fill,
+                      //   placeholder: (context, url) => Padding(
+                      //     padding: EdgeInsets.all(18.0),
+                      //     child: CircularProgressIndicator(
+                      //         strokeWidth: 2, color: AppColors.primary),
+                      //   ),
+                      //   errorWidget: (context, url, error) =>
+                      //       Icon(Icons.person, color: Colors.grey),
+                      // )
+
+                      // CachedNetworkImage(
+                      //   imageUrl: 'http://malldal.com/dal/' + path,
+                      //   placeholder: (context, url) =>
+                      //       new CircularProgressIndicator(),
+                      //   errorWidget: (context, url, error) => Image.asset(
+                      //     'img/logo.png',
+                      //     fit: BoxFit.contain,
+                      //   ),
+                      // ),
+
+                      Image.network(
+                    // errorBuilder: (context, error, stackTrace) {
+
+                    // },
+
                     'http://malldal.com/dal/' + path,
                     fit: BoxFit.fill,
+                    errorBuilder: (BuildContext context, Object exception,
+                        StackTrace stackTrace) {
+                      return Container(
+                          width: 100,
+                          height: 100,
+                          child: Center(child: Text('Your error widget...')));
+                    },
                   ),
                 );
               }
@@ -754,6 +793,7 @@ class _HomePageTapState extends State<HomePageTap> {
                   owner: item.seller,
                   paths: imagePaths,
                   isEditable: false,
+                  isRequest: false,
                 );
               },
             );
@@ -981,6 +1021,7 @@ class _HomePageTapState extends State<HomePageTap> {
                               owner: item.seller,
                               paths: imagePaths,
                               isEditable: false,
+                              isRequest: false,
                             ),
                           );
                         },

@@ -391,6 +391,10 @@
     "@editProduct":{
         "description": "Title of Edit Product Screen"
     },
+    "editPhoto": "Edit Photo",
+    "@editPhoto": {
+        "description": "Edit User Photo"
+    },
     "delete": "Delete?",
     "yes" : "Yes",
     "no": "No"

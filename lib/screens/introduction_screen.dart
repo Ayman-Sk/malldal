@@ -166,24 +166,25 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                 ),
               ),
               Center(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: TextButton(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Powerd by ',
-                            style: TextStyle(color: Colors.black)),
-                        Text(
-                          "CHI",
-                          style: TextStyle(color: Color(0XFFF05F23)),
-                        )
-                      ],
+                child: TextButton(
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Directionality(
+                      textDirection: TextDirection.ltr,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Powerd by ',
+                              style: TextStyle(color: Colors.black)),
+                          Text("CHI",
+                              style: TextStyle(color: Color(0XFFF05F23)))
+                        ],
+                      ),
                     ),
-                    onPressed: _launchURL,
                   ),
+                  onPressed: _launchURL,
                 ),
-              ),
+              )
             ],
           ),
         ),

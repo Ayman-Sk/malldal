@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 
 class EndPoints {
   // static final String baseUrl = 'http://dal.chi-team.com/api';
-  static final String baseUrl = 'http://malldal.com/dal/api';
+  static final String baseUrl = 'https://malldal.com/dal/api';
 
   //refresh Token
   static final String refreshToken = baseUrl + '/auth/refresh';
@@ -164,6 +164,9 @@ class EndPoints {
   //create customer DOOONE
   static final String customerSignUp = baseUrl + '/customers';
   static final String userLogin = baseUrl + '/auth';
+
+  static final String facebookLogin = baseUrl + '/auth/facebook';
+
   // static String saveFcmToken(int id) => baseUrl + '/auth/saveFcm/$id';
 
   // static String saveSellerFcmToken(int id) =>
@@ -357,6 +360,13 @@ class EndPoints {
 
   //  contact_infos
   static final String contactInfos = baseUrl + '/contact_infos';
+
+  static String visitContactInfo(int sellerId) =>
+      contactInfos + '/$sellerId/visit';
+
+  // static String addNewContactInfo() =>
+
+  // static String updateContactInfo()=>
 
   // جبلي كل معلومات التواصل
   static final String getAllContactInfos = contactInfos;

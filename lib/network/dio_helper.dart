@@ -10,7 +10,7 @@ class DioHelper {
   static init() {
     dio = Dio(
       BaseOptions(
-        baseUrl: 'http://malldal.com/dal/api',
+        baseUrl: 'https://malldal.com/dal/api',
         receiveDataWhenStatusError: true,
       ),
     );
@@ -204,6 +204,26 @@ class DioHelper {
     }
   }
 
+  static Future<dynamic> loginOfFacebookCustomer({
+    @required String url,
+    @required Map<String, dynamic> data,
+  }) async {
+    dio.options.headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    };
+    Response response = await dio.post(url, data: data);
+    if (response.statusCode != 200) {
+      print('RES:$response');
+      print('status code is ${response.statusCode}');
+      return false;
+    } else {
+      print('RES:$response');
+      print('status code is ${response.statusCode}');
+      return response;
+    }
+  }
+
   static Future<dynamic> loginOfCustomer({
     @required String url,
     // Map<String, dynamic> query,
@@ -320,7 +340,7 @@ class DioHelper {
       'Content-Type': 'application/json',
       // 'Authorization': "Bearer " + accessToken.toString(),
     };
-    dio.options.headers["Authorization"] = "Bearer " + accessToken.toString();
+    dio.options.headers["Authorization"] = "Bearer " + accessToken;
     print('EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE');
 
     //eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9kYWwuY2hpLXRlYW

@@ -6,6 +6,9 @@ import 'package:dal/widgets/post_overview_widgets.dart/post_body.dart';
 import 'package:dal/widgets/post_overview_widgets.dart/post_footer.dart';
 import 'package:dal/widgets/post_overview_widgets.dart/post_header.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../business_logic_layer/user_provider.dart';
 
 // ignore: must_be_immutable
 class PostOverViewWidget extends StatefulWidget {
@@ -20,6 +23,7 @@ class PostOverViewWidget extends StatefulWidget {
   final Seller ownerUser;
   final bool isInteract;
   List<String> postImages;
+  final bool isRequest;
   // SellerModel seller;
   final Function toggleInteract;
   PostOverViewWidget({
@@ -34,6 +38,7 @@ class PostOverViewWidget extends StatefulWidget {
     this.isInteract,
     this.toggleInteract,
     this.postImages,
+    this.isRequest,
   });
 
   @override
@@ -61,11 +66,14 @@ class _PostOverViewWidgetState extends State<PostOverViewWidget> {
               title: widget.title,
               body: widget.body,
               bio: widget.ownerUser.bio,
+              ownerId: widget.ownerUser.id,
               postImagePaths: widget.postImages,
               phoneNumber: widget.ownerUser.user.phone,
             ),
           ),
-          CachHelper.getData(key: 'userId') == null
+          CachHelper.getData(key: 'userId') == null ||
+                  widget.isRequest ||
+                  Provider.of<UserProvider>(context).userMode == 'seller'
               ? Container()
               : Column(
                   children: [
@@ -75,9 +83,12 @@ class _PostOverViewWidgetState extends State<PostOverViewWidget> {
                     ),
                     PostFooterWidget(
                         // avgRate: widget.avgRate,
+
                         sellerId: widget.ownerUser.id,
                         postId: widget.postId,
-                        isInteract: widget.isInteract,
+                        isInteract: Provider.of<UserProvider>(context)
+                            .savedPosts
+                            .contains(widget.postId),
                         toggleInteract: () => widget.toggleInteract),
                   ],
                 ),

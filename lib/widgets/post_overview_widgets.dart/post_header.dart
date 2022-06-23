@@ -15,7 +15,6 @@ class PostHeaderWidget extends StatefulWidget {
   final String createdAt;
   final Seller ownerUser;
   PostHeaderWidget({
-    // @required this.imgUrl,
     @required this.sellerName,
     @required this.createdAt,
     @required this.ownerUser,

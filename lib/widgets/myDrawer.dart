@@ -95,10 +95,10 @@ class _MyDrawerState extends State<MyDrawer> {
                   buildDrawerItem(AppLocalizations.of(context).logout,
                       Icons.logout, LoginCardScreen.routeName, true, 1),
                 ]),
-                powerdByCHI(),
+                // powerdByCHI(),
 
                 // Expanded(child: powerdByCHI()),
-                // powerdByCHI(),
+                powerdByCHI(),
               ],
             )
           : Column(

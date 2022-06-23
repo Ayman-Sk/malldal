@@ -302,6 +302,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get editProduct => 'تعديل ملعومات المنتج';
 
   @override
+  String get editPhoto => 'تعديل الصورة';
+
+  @override
   String get delete => 'حذف؟';
 
   @override

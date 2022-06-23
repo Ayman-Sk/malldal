@@ -1,8 +1,13 @@
 import 'package:card_swiper/card_swiper.dart';
+import 'package:dal/network/end_points.dart';
 import 'package:dal/network/local_host.dart';
 import 'package:dal/theme/app_colors.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import '../../data_layer/models/account_type.dart';
 
 class PostBodyWidget extends StatefulWidget {
   final String title;
@@ -10,10 +15,12 @@ class PostBodyWidget extends StatefulWidget {
   final String bio;
   final String phoneNumber;
   final List<String> postImagePaths;
+  final int ownerId;
   PostBodyWidget({
     @required this.title,
     @required this.body,
     @required this.postImagePaths,
+    this.ownerId,
     this.phoneNumber,
     this.bio,
   });
@@ -23,6 +30,32 @@ class PostBodyWidget extends StatefulWidget {
 }
 
 class _PostBodyWidgetState extends State<PostBodyWidget> {
+  Dio _dio = Dio();
+  List<Widget> displayedAccounts = [];
+
+  Map<int, Icon> types = {
+    1: Icon(FontAwesomeIcons.phone, color: AppColors.primary),
+    2: Icon(FontAwesomeIcons.whatsapp, color: Color(0xFF25D366)),
+    3: Icon(FontAwesomeIcons.telegram, color: Color(0xFF229ED9)),
+    4: Icon(FontAwesomeIcons.facebook, color: Color(0xFF4267B2)),
+    5: Icon(FontAwesomeIcons.instagram, color: Color(0xFFE1306C))
+  };
+  AccountType accountType;
+  @override
+  void initState() {
+    super.initState();
+    _dio.post(EndPoints.getSellerContactInfo(widget.ownerId)).then((value) {
+      accountType = AccountType.fromJson(value.data);
+      setState(() {
+        accountType.accounts.forEach(
+          (element) =>
+              displayedAccounts.add(_buildsellerAccountWidget(element)),
+        );
+      });
+      print(accountType);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // List<String> images = ['img/1.jpg', 'img/2.jpg', 'img/3.jpg'];
@@ -42,13 +75,17 @@ class _PostBodyWidgetState extends State<PostBodyWidget> {
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: IconButton(
-                      onPressed: () {
-                        _buildUseriformationDialog();
-                      },
                       icon: Icon(
                         Icons.info_outline,
                         color: AppColors.primary,
                       ),
+                      onPressed: () {
+                        Dio dio = Dio();
+                        dio
+                            .post(EndPoints.visitContactInfo(widget.ownerId))
+                            .then((value) => print(value));
+                        _buildUseriformationDialog();
+                      },
                     ),
                   ),
                 ),
@@ -147,56 +184,91 @@ class _PostBodyWidgetState extends State<PostBodyWidget> {
         child: Dialog(
           backgroundColor: Colors.transparent,
           insetPadding: const EdgeInsets.all(10),
-          child: Stack(
-            clipBehavior: Clip.none,
-            alignment: Alignment.center,
-            children: <Widget>[
-              Container(
-                height: MediaQuery.of(context).size.height / 2,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Theme.of(context).cardColor),
-                padding: const EdgeInsets.all(4),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Text(
-                          AppLocalizations.of(context).contactNumber,
-                          style: TextStyle(
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.bold),
-                        ),
+          child: Container(
+            height: MediaQuery.of(context).size.height / 2,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Theme.of(context).cardColor),
+            padding: const EdgeInsets.all(4),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      AppLocalizations.of(context).additionalInformation,
+                      style: TextStyle(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.bold,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Text(widget.phoneNumber),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Text(
-                          AppLocalizations.of(context).additionalInformation,
-                          style: TextStyle(
-                            color: AppColors.primary,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Text(widget.bio),
-                      )
-                    ],
+                    ),
                   ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(widget.bio),
+                  ),
+                  Column(
+                    children: displayedAccounts,
+                  ),
+
+                  // ListView.separated(
+                  //   shrinkWrap: true,
+                  //   itemCount: accountType.accounts.length,
+                  //   itemBuilder: (context, index) =>
+                  //       _buildsellerAccountWidget(accountType.accounts[index]),
+                  //   separatorBuilder: (context, _) => Divider(),
+                  // ),
+                ],
               ),
-            ],
+            ),
+
+            // SingleChildScrollView(
+
+            // child: Column(
+            //   children: [
+            //     accountType.accounts.
+            //     // Padding(
+            //     //   padding: const EdgeInsets.only(top: 8.0),
+            //     //   child: Text(
+            //     //     AppLocalizations.of(context).contactNumber,
+            //     //     style: TextStyle(
+            //     //         color: AppColors.primary,
+            //     //         fontWeight: FontWeight.bold),
+            //     //   ),
+            //     // ),
+            //     // Padding(
+            //     //   padding: const EdgeInsets.only(top: 8.0),
+            //     //   child: Text(widget.phoneNumber),
+            //     // ),
+            //     // Padding(
+            //     //   padding: const EdgeInsets.only(top: 8.0),
+            //     //   child: Text(
+            //     //     AppLocalizations.of(context).additionalInformation,
+            //     //     style: TextStyle(
+            //     //       color: AppColors.primary,
+            //     //       fontWeight: FontWeight.bold,
+            //     //     ),
+            //     //   ),
+            //     // ),
+            //     // Padding(
+            //     //   padding: const EdgeInsets.only(top: 8.0),
+            //     //   child: Text(widget.bio),
+            //     // )
+            //   ],
+            // ),
+            // ),
           ),
         ),
       ),
       // ),
+    );
+  }
+
+  Widget _buildsellerAccountWidget(Account account) {
+    return ListTile(
+      leading: types[account.contactInfoTypeId],
+      title: Text(account.info),
     );
   }
 }

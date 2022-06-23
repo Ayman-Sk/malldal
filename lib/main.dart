@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dal/business_logic_layer/adds_provider.dart';
 import 'package:dal/business_logic_layer/all_posts_with_categories.dart';
 import 'package:dal/business_logic_layer/local_provider.dart';
@@ -31,6 +33,15 @@ Future<void> backgroundHandler(RemoteMessage message) async {
   print(message.notification.title);
 }
 
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
+
 Future<void> main() async {
   Provider.debugCheckInvalidValueType = null;
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,7 +54,7 @@ Future<void> main() async {
       statusBarColor: AppColors.primary,
       systemNavigationBarDividerColor: Colors.white));
   String token = CachHelper.getData(key: 'token');
-
+  HttpOverrides.global = new MyHttpOverrides();
   runApp(MyApp(token));
 }
 

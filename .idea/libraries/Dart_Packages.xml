@@ -254,6 +254,27 @@
             </list>
           </value>
         </entry>
+        <entry key="flutter_facebook_auth">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../Program/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_facebook_auth-4.3.4/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="flutter_facebook_auth_platform_interface">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../Program/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_facebook_auth_platform_interface-3.1.2/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="flutter_facebook_auth_web">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../Program/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_facebook_auth_web-3.1.2/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="flutter_launcher_icons">
           <value>
             <list>
@@ -335,6 +356,13 @@
           <value>
             <list>
               <option value="$PROJECT_DIR$/../../Program/flutter/.pub-cache/hosted/pub.dartlang.org/fluttertoast-8.0.8/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="font_awesome_flutter">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../Program/flutter/.pub-cache/hosted/pub.dartlang.org/font_awesome_flutter-10.1.0/lib" />
             </list>
           </value>
         </entry>
@@ -922,6 +950,9 @@
       <root url="file://$PROJECT_DIR$/../../Program/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging_web-2.2.10/lib" />
       <root url="file://$PROJECT_DIR$/../../Program/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_blurhash-0.6.4/lib" />
       <root url="file://$PROJECT_DIR$/../../Program/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_cache_manager-3.3.0/lib" />
+      <root url="file://$PROJECT_DIR$/../../Program/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_facebook_auth-4.3.4/lib" />
+      <root url="file://$PROJECT_DIR$/../../Program/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_facebook_auth_platform_interface-3.1.2/lib" />
+      <root url="file://$PROJECT_DIR$/../../Program/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_facebook_auth_web-3.1.2/lib" />
       <root url="file://$PROJECT_DIR$/../../Program/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_launcher_icons-0.9.2/lib" />
       <root url="file://$PROJECT_DIR$/../../Program/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_local_notifications-9.4.0/lib" />
       <root url="file://$PROJECT_DIR$/../../Program/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_local_notifications_linux-0.4.1+1/lib" />
@@ -931,6 +962,7 @@
       <root url="file://$PROJECT_DIR$/../../Program/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_search_bar-2.1.0/lib" />
       <root url="file://$PROJECT_DIR$/../../Program/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_svg-0.22.0/lib" />
       <root url="file://$PROJECT_DIR$/../../Program/flutter/.pub-cache/hosted/pub.dartlang.org/fluttertoast-8.0.8/lib" />
+      <root url="file://$PROJECT_DIR$/../../Program/flutter/.pub-cache/hosted/pub.dartlang.org/font_awesome_flutter-10.1.0/lib" />
       <root url="file://$PROJECT_DIR$/../../Program/flutter/.pub-cache/hosted/pub.dartlang.org/gson-0.1.4/lib" />
       <root url="file://$PROJECT_DIR$/../../Program/flutter/.pub-cache/hosted/pub.dartlang.org/html-0.15.0/lib" />
       <root url="file://$PROJECT_DIR$/../../Program/flutter/.pub-cache/hosted/pub.dartlang.org/http-0.13.3/lib" />

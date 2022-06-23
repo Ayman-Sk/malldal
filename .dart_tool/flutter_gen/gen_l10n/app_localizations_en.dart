@@ -302,6 +302,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get editProduct => 'Edit Product';
 
   @override
+  String get editPhoto => 'Edit Photo';
+
+  @override
   String get delete => 'Delete?';
 
   @override

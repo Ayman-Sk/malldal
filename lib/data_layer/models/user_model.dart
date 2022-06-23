@@ -29,7 +29,7 @@ class MyUser {
   //in both
   int id;
   String profileImage;
-  int cityId = 0;
+  String cityId = '0';
   int userId;
   String name;
   String phoneNumber;

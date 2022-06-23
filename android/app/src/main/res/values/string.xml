@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MallDal</string>
+    <string name="facebook_app_id">555543352677090</string>
+    <string name="fb_login_protocol_scheme">fb555543352677090</string>
+    <string name="facebook_client_token">83eb1262ef5b21769379e3579e634f47</string>
+</resources>

@@ -11,6 +11,7 @@ class OverviewSinglePostScreen extends StatefulWidget {
   final String createdAt;
   final Seller ownerUser;
   final List<String> postImagePaths;
+  final bool isRequest;
   // final bool isInteract;
   // Function toggleInteract;
   OverviewSinglePostScreen({
@@ -21,6 +22,7 @@ class OverviewSinglePostScreen extends StatefulWidget {
     @required this.createdAt,
     @required this.ownerUser,
     @required this.postImagePaths,
+    @required this.isRequest,
     // @required this.isInteract,
     // @required this.toggleInteract,
   });
@@ -62,6 +64,7 @@ class _OverviewSinglePostScreenState extends State<OverviewSinglePostScreen> {
               // avgRate: widget.avgRate,
               ownerUser: widget.ownerUser,
               postImages: widget.postImagePaths,
+              isRequest: widget.isRequest,
               // isInteract: widget.isInteract,
               // toggleInteract: () => widget.toggleInteract,
             ),

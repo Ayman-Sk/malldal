@@ -17,16 +17,20 @@ class CustomerSellerFollower extends StatefulWidget {
 
 class _CustomerSellerFollowerState extends State<CustomerSellerFollower> {
   int currentPage = 1;
-  int pageNumber = 2;
+  int pageNumber = 7;
   List<Seller> displayedSellers = [];
   RefreshController _refreshController =
       RefreshController(initialRefresh: true);
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     Map<String, dynamic> followersData = {};
-
     Future<bool> getFollowerData({
       bool refreshed = false,
     }) async {
@@ -45,6 +49,7 @@ class _CustomerSellerFollowerState extends State<CustomerSellerFollower> {
               print('dio element');
               print(element['user']);
               displayedSellers.add(Seller.fromJson(element));
+              currentPage++;
             });
           },
         );
@@ -69,27 +74,27 @@ class _CustomerSellerFollowerState extends State<CustomerSellerFollower> {
           var widget = await getFollowerData(refreshed: true);
           if (widget != null) {
             userProvider.index = -1;
-            setState(() {
-              currentPage++;
-            });
+            // setState(() {
+            //   currentPage++;
+            // });
             _refreshController.refreshCompleted();
           } else {
             _refreshController.refreshFailed();
           }
         },
         onLoading: () {
-          var widget = getFollowerData();
-          print(widget.toString());
-          if (widget == null) {
-            print('no data under');
-            _refreshController.loadNoData();
-          }
-          if (widget != null) {
-            setState(() {
-              currentPage++;
-            });
-            _refreshController.loadComplete();
-          }
+          // var widget = getFollowerData();
+          // print(widget.toString());
+          // if (widget == null) {
+          //   print('no data under');
+          //   _refreshController.loadNoData();
+          // }
+          // if (widget != null) {
+          //   // setState(() {
+          //   //   currentPage++;
+          //   // });
+          //   _refreshController.loadComplete();
+          // }
         },
         child: ListView.builder(
             itemCount: displayedSellers.length,

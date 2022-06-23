@@ -52,7 +52,7 @@ class _PostHeaderState extends State<PostHeader> {
             ),
             trailing: widget.isEditable
                 ? Container(
-                    width: MediaQuery.of(context).size.width / 4,
+                    width: MediaQuery.of(context).size.width / 3,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -83,14 +83,6 @@ class _PostHeaderState extends State<PostHeader> {
                       ],
                     ),
                   )
-                // ? Container(
-                //     width: MediaQuery.of(context).size.width / 4,
-                //     child: Row(
-                //       children: [
-                //         IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
-                //       ],
-                //     ),
-                //   )
                 : Text(
                     widget.price,
                     style: const TextStyle(

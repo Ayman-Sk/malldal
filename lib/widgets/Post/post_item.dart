@@ -20,6 +20,7 @@ class PostItem extends StatefulWidget {
   final List<String> paths;
   final Seller owner;
   final bool isEditable;
+  final bool isRequest;
   const PostItem({
     Key key,
     this.postId,
@@ -31,6 +32,7 @@ class PostItem extends StatefulWidget {
     this.paths,
     this.owner,
     this.isEditable,
+    this.isRequest,
   }) : super(key: key);
 
   @override
@@ -40,7 +42,6 @@ class PostItem extends StatefulWidget {
 class _PostItemState extends State<PostItem> {
   final token = CachHelper.getData(key: 'token');
   bool isSaved = false;
-
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
@@ -61,6 +62,7 @@ class _PostItemState extends State<PostItem> {
 
               ownerUser: widget.owner,
               postImagePaths: widget.paths,
+              isRequest: widget.isRequest,
               // isInteract: widget.isInteract,
               // toggleInteract: () => toggleInteract,
             ),
@@ -111,7 +113,9 @@ class _PostItemState extends State<PostItem> {
                     ),
                   ),
                   Expanded(flex: 4, child: PostBody(imagesPath: widget.paths)),
-                  CachHelper.getData(key: 'userId') == null
+                  CachHelper.getData(key: 'userId') == null || widget.isRequest
+                      // ||
+                      // userProvider.userMode == 'seller'
                       ? Container()
                       : Expanded(
                           flex: 1,

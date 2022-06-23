@@ -120,6 +120,7 @@ class _FollowedPostsTapState extends State<FollowedPostsTap> {
 
                         paths: imagePaths,
                         isEditable: false,
+                        isRequest: false,
                       ),
                     );
                   },

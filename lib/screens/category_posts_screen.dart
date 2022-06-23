@@ -26,7 +26,7 @@ class _CategoryPostsScreenState extends State<CategoryPostsScreen> {
   PostsRepositoryImp postsRepositoryImp = PostsRepositoryImp();
   final _refreshController = RefreshController(initialRefresh: true);
   int totalPages = 2;
-  int pageSize = 5;
+  int pageSize = 7;
   int currentPage = 1;
   List<dynamic> posts = [];
 
@@ -163,6 +163,7 @@ class _CategoryPostsScreenState extends State<CategoryPostsScreen> {
                 owner: Seller.fromJson(item['seller']),
                 paths: imagePaths,
                 isEditable: false,
+                isRequest: false,
               ),
             );
           },

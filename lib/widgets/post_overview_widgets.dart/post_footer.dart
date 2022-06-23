@@ -35,7 +35,6 @@ class PostFooterWidget extends StatefulWidget {
 class _PostFooterWidgetState extends State<PostFooterWidget> {
   double rating = 0;
   bool isFav = false;
-  // bool isInteract = false;
   String token = CachHelper.getData(key: 'token');
   PostsRepositoryImp postsRepositoryImp = PostsRepositoryImp();
   Dio _dio = Dio();
@@ -48,25 +47,13 @@ class _PostFooterWidgetState extends State<PostFooterWidget> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-    if (userProvider.savedPosts != null) {
-      widget.isInteract = userProvider.savedPosts.contains(widget.postId);
-    }
+    print('isInteract');
+    print(widget.isInteract);
 
     return Container(
       padding: EdgeInsets.only(bottom: 10),
-      // margin: EdgeInsets.only(right: 10, left: 10),
       child: Container(
         padding: EdgeInsets.all(10),
-        // decoration: BoxDecoration(
-        //   color: Theme.of(context).cardColor,
-        //   // color: Colors.white,
-        //   borderRadius: BorderRadius.only(
-        //     bottomLeft: Radius.circular(20),
-        //     bottomRight: Radius.circular(20),
-        //   ),
-        //   border:
-        //       Border.all(color: AppColors.primary.withOpacity(0.1), width: 1),
-        // ),
         child: Row(
           children: [
             CachHelper.getData(key: 'userId') != null

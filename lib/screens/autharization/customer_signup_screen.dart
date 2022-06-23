@@ -58,7 +58,7 @@ class _CustomerSignupScreensState extends State<CustomerSignupScreens> {
     return file;
   }
 
-  Future<bool> _submit(String name, String gender, int cityId,
+  Future<bool> _submit(String name, String gender, String cityId,
       String phoneNumber, String imagePath) async {
     {
       setState(() {
@@ -397,9 +397,10 @@ class _CustomerSignupScreensState extends State<CustomerSignupScreens> {
                                   () {
                                     _selectedCity = val;
 
-                                    customerProvider.setCityId(
-                                        citiesList.indexOf(_selectedCity.name) +
-                                            1);
+                                    customerProvider.setCityId((citiesList
+                                                .indexOf(_selectedCity.name) +
+                                            1)
+                                        .toString());
                                   },
                                 );
                               },

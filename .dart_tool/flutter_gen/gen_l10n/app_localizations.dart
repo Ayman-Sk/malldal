@@ -682,6 +682,12 @@ abstract class AppLocalizations {
   /// **'Edit Product'**
   String get editProduct;
 
+  /// Edit User Photo
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Photo'**
+  String get editPhoto;
+
   /// No description provided for @delete.
   ///
   /// In en, this message translates to:

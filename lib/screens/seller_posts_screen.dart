@@ -23,7 +23,7 @@ class _SellerPostScreenState extends State<SellerPostScreen> {
   // bool isRequest = false;
   int currentPageNumber = 1;
   int totalPageNumber = 2;
-  int pageSize = 1;
+  int pageSize = 7;
   List<PostModel> posts = [];
   // bool isLoading = true;
   RefreshController _refreshController =
@@ -178,7 +178,12 @@ class _SellerPostScreenState extends State<SellerPostScreen> {
                       averageRate: item.avgRate,
                       owner: item.seller,
                       paths: paths,
-                      isEditable: arguments['isRequest'] ? false : true,
+                      isEditable:
+                          //  arguments['isRequest']
+                          //  ?
+                          false,
+                      // : true,
+                      isRequest: arguments['isRequest'],
                     );
                   },
                 )

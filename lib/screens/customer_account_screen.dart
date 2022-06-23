@@ -66,7 +66,8 @@ class _CustomerAccountScreenState extends State<CustomerAccountScreen> {
             buildTop(coverHeight, imageHeight, sellerProvider.profileImage),
             GridView.count(
               crossAxisCount: 3,
-              physics: NeverScrollableScrollPhysics(), // to disable GridView's scrolling
+              physics:
+                  NeverScrollableScrollPhysics(), // to disable GridView's scrolling
               shrinkWrap: true,
 
               children: List.generate(
@@ -87,7 +88,8 @@ Widget gridViewItem(Map<String, dynamic> item, BuildContext context) {
   return GestureDetector(
     onTap: () {
       if (item.keys.contains('Argument')) {
-        Navigator.pushNamed(context, item['Route'], arguments: item['Argument']);
+        Navigator.pushNamed(context, item['Route'],
+            arguments: item['Argument']);
       } else
         Navigator.pushNamed(context, item['Route']);
     },
@@ -130,7 +132,9 @@ Widget gridViewItem(Map<String, dynamic> item, BuildContext context) {
 
 Widget buildTop(double coverHeight, imageHeight, String profileImagePath) {
   return Stack(clipBehavior: Clip.none, alignment: Alignment.center, children: [
-    Container(margin: EdgeInsets.only(bottom: coverHeight / 2), child: buildCoverImage(coverHeight)),
+    Container(
+        margin: EdgeInsets.only(bottom: coverHeight / 2),
+        child: buildCoverImage(coverHeight)),
     Positioned(
       child: buildProfileImage(imageHeight, profileImagePath),
       top: coverHeight - imageHeight / 2,
@@ -140,7 +144,8 @@ Widget buildTop(double coverHeight, imageHeight, String profileImagePath) {
 }
 
 Widget buildCoverImage(double coverHeight) => Container(
-      decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey))),
+      decoration:
+          BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey))),
       // color: Colors.white,
       child: Image.asset(
         'img/logo.png',
@@ -150,7 +155,8 @@ Widget buildCoverImage(double coverHeight) => Container(
       ),
     );
 
-Widget buildProfileImage(double imageHeight, String profileImagePath) => CircleAvatar(
+Widget buildProfileImage(double imageHeight, String profileImagePath) =>
+    CircleAvatar(
       radius: imageHeight / 2,
       backgroundImage: NetworkImage(
         'http://malldal.com/dal/' + profileImagePath,
@@ -166,12 +172,14 @@ Widget accountInfoCard({IconData icon, String title, String subTitle}) {
     title: Text(
       title,
       textAlign: TextAlign.left,
-      style: TextStyle(fontSize: 25, color: AppColors.primary, fontWeight: FontWeight.w600),
+      style: TextStyle(
+          fontSize: 25, color: AppColors.primary, fontWeight: FontWeight.w600),
     ),
     subtitle: Text(
       subTitle,
       textAlign: TextAlign.left,
-      style: TextStyle(fontSize: 15, color: Colors.grey, fontWeight: FontWeight.w600),
+      style: TextStyle(
+          fontSize: 15, color: Colors.grey, fontWeight: FontWeight.w600),
     ),
   );
 }
