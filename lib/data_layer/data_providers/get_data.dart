@@ -22,12 +22,16 @@ class GetData {
 
   GetData({this.context, this.postPageSize, this.categoriesPageSize});
 
-  int userId = CachHelper.getData(key: 'userId') == null ? -1 : CachHelper.getData(key: 'userId');
+  int userId = CachHelper.getData(key: 'userId') == null
+      ? -1
+      : CachHelper.getData(key: 'userId');
 
   Future<bool> getCategoriesData() async {
     CategoriesRepositoryImp _catRepo = CategoriesRepositoryImp();
-    final postsProvider = Provider.of<AllPostsWithCategories>(context, listen: false);
-    final categories = await _catRepo.getAllCategories(refreshed: true, pageNumber: 1, pageSize: categoriesPageSize);
+    final postsProvider =
+        Provider.of<AllPostsWithCategories>(context, listen: false);
+    final categories = await _catRepo.getAllCategories(
+        refreshed: true, pageNumber: 1, pageSize: categoriesPageSize);
     print('alallllllll categoriessss');
     print(categories.data.categories);
     if (categories != null) {
@@ -86,20 +90,23 @@ class GetData {
     FollowedPostsByCustomerModel followedRes = FollowedPostsByCustomerModel();
 
     final userProvider = Provider.of<UserProvider>(context, listen: false);
-    final postsProvider = Provider.of<AllPostsWithCategories>(context, listen: false);
+    final postsProvider =
+        Provider.of<AllPostsWithCategories>(context, listen: false);
     userProvider.getUserToApp();
 
     bool isSeller = CachHelper.getData(key: 'userMode') == 'seller';
     bool isAnonymous = userId == -1;
     print(isSeller);
     print(isAnonymous);
-    var addsData = await Provider.of<AddsProvider>(context, listen: false).getAdds(2,1);
+    var addsData =
+        await Provider.of<AddsProvider>(context, listen: false).getAdds(2, 1);
 
     print('asdafasfdgkfdvkfdnviuabfvuadvf');
     print('getttDataa');
 //    print(searchTerm);
     print('paaaggggeee');
-    allPostsData = await postsRepositoryImp.getAllPostsIncludeCategories(1, postPageSize, '');
+    allPostsData = await postsRepositoryImp.getAllPostsIncludeCategories(
+        1, postPageSize, '');
 
     print('adddds');
     print(addsData['data']['data']);
@@ -109,8 +116,10 @@ class GetData {
 
     if (!isAnonymous && !isSeller) {
       print('weeee areeee innnnnnn');
-      followedRes = await postsRepositoryImp.getFollowedPostsOfCustomerByCustomerID(id: userId);
-      sellerFollower = await userProvider.getFollowedSellersByCustomerID(userId);
+      followedRes = await postsRepositoryImp
+          .getFollowedPostsOfCustomerByCustomerID(id: userId);
+      sellerFollower =
+          await userProvider.getFollowedSellersByCustomerID(userId);
       var followedPosts = followedRes.data[0].posts;
       List<int> ids = [];
       print('ffollowww');
@@ -133,7 +142,8 @@ class GetData {
     }
   }
 
-  Future<Map<String, dynamic>> getFollowedSellersByCustomerID(int userId) async {
+  Future<Map<String, dynamic>> getFollowedSellersByCustomerID(
+      int userId) async {
     try {
       dynamic response = await DioHelper.getFollowedSeller(
         url: EndPoints.getFollowedSellersByCustomerByID(userId),

@@ -13,6 +13,8 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../business_logic_layer/user_provider.dart';
+import '../network/dio_helper.dart';
+import '../network/end_points.dart';
 
 class MyDrawer extends StatefulWidget {
   @override
@@ -148,13 +150,18 @@ class _MyDrawerState extends State<MyDrawer> {
             actions: <Widget>[
               TextButton(
                 onPressed: () async {
-                  CachHelper.removeData(key: 'token');
-                  CachHelper.removeData(key: 'user');
-                  CachHelper.removeData(key: 'userId');
-                  CachHelper.removeData(key: 'posts');
-                  await _deleteCacheDir();
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pushReplacementNamed(route);
+                  await _facebookLogout().then((res) async {
+                    if (res) {
+                      CachHelper.removeData(key: 'token');
+                      CachHelper.removeData(key: 'user');
+                      CachHelper.removeData(key: 'userId');
+                      CachHelper.removeData(key: 'posts');
+                      await _deleteCacheDir();
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pushReplacementNamed(route);
+                    }
+                  });
+
                   // Navigator.of(context).pop();
                 },
                 child: Text(
@@ -281,4 +288,11 @@ class _MyDrawerState extends State<MyDrawer> {
   //     print('delete app memory done');
   //   }
   // }
+
+  Future<bool> _facebookLogout() async {
+    // _formkey.currentState.save();
+    dynamic response = await DioHelper.logout(url: EndPoints.customerLogout);
+    print(response);
+    return response;
+  }
 }

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
+// import 'package:url_launcher/url_launcher.dart';
 // import 'package:intl/intl.dart';
 
 import '../../business_logic_layer/user_provider.dart';
@@ -150,11 +150,8 @@ class _LoginCardScreenState extends State<LoginCardScreen>
             ? SingleChildScrollView(
                 child: Padding(
                 padding: const EdgeInsets.all(30.0),
-                child: Directionality(
-                  // textDirection: TextDirection.ltr,
-                  child: Text(
-                    _usrObj.toString(),
-                  ),
+                child: Text(
+                  _usrObj.toString(),
                 ),
               ))
             : Center(

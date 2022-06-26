@@ -204,6 +204,31 @@ class DioHelper {
     }
   }
 
+  static Future<bool> logout({
+    @required String url,
+  }) async {
+    final token = CachHelper.getData(key: 'token');
+    dio.options.headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer' + token,
+    };
+    Response response = await dio.post(url);
+    if (response.statusCode != 200) {
+      print('RES:$response');
+      print('status code is ${response.statusCode}');
+      return false;
+    } else if (response.data['code'] == '401') {
+      await refreshToken();
+      logout(url: url);
+    } else {
+      print('RES:$response');
+      print('status code is ${response.statusCode}');
+      return true;
+    }
+    return false;
+  }
+
   static Future<dynamic> loginOfFacebookCustomer({
     @required String url,
     @required Map<String, dynamic> data,

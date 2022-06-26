@@ -167,6 +167,8 @@ class EndPoints {
 
   static final String facebookLogin = baseUrl + '/auth/facebook';
 
+  static final String customerLogout = baseUrl + '/auth/facebook/logout';
+
   // static String saveFcmToken(int id) => baseUrl + '/auth/saveFcm/$id';
 
   // static String saveSellerFcmToken(int id) =>

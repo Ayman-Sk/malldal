@@ -3,13 +3,22 @@ class Seller {
   String profileImage;
   String bio;
   String deletedAt;
-  int userId;
+  String userId;
   String createdAt;
   String updatedAt;
   int userCount;
   User user;
 
-  Seller({this.id, this.profileImage, this.bio, this.deletedAt, this.userId, this.createdAt, this.updatedAt, this.userCount, this.user});
+  Seller(
+      {this.id,
+      this.profileImage,
+      this.bio,
+      this.deletedAt,
+      this.userId,
+      this.createdAt,
+      this.updatedAt,
+      this.userCount,
+      this.user});
 
   Seller.fromJson(Map<String, dynamic> json) {
     id = json['id'];
