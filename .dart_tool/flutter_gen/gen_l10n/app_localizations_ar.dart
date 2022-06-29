@@ -305,6 +305,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get editPhoto => 'تعديل الصورة';
 
   @override
+  String get loginWithFacebook => 'تسجيل الدخول باستخدام الفيس بوك';
+
+  @override
+  String get email => 'البريد الكتروني';
+
+  @override
+  String get loginAsCustomer => 'تسجيل الدخول كمشتري';
+
+  @override
+  String get loginAsSeller => 'تسجيل الدخول كبائع';
+
+  @override
   String get delete => 'حذف؟';
 
   @override

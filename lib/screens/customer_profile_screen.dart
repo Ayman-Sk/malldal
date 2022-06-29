@@ -64,21 +64,21 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                ElevatedButton.icon(
-                  onPressed: () => Navigator.of(context)
-                      .pushNamed(EditCustomerProfileScreen.routeName),
-                  icon: Icon(Icons.edit),
-                  label: Text(
-                    AppLocalizations.of(context).edit,
-                    // 'تعديل'
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: AppColors.primary,
-                    shape: new RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(30.0),
-                    ),
-                  ),
-                ),
+                // ElevatedButton.icon(
+                //   onPressed: () => Navigator.of(context)
+                //       .pushNamed(EditCustomerProfileScreen.routeName),
+                //   icon: Icon(Icons.edit),
+                //   label: Text(
+                //     AppLocalizations.of(context).edit,
+                //     // 'تعديل'
+                //   ),
+                //   style: ElevatedButton.styleFrom(
+                //     primary: AppColors.primary,
+                //     shape: new RoundedRectangleBorder(
+                //       borderRadius: new BorderRadius.circular(30.0),
+                //     ),
+                //   ),
+                // ),
                 Text(
                   AppLocalizations.of(context).accountInfo,
                   // 'معلومات الحساب',
@@ -95,21 +95,26 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                 title: AppLocalizations.of(context).name, // "الاسم",
                 subTitle: customerProvider.user.name),
             accountInfoCard(
-                icon: Icons.phone,
-                title: AppLocalizations.of(context).phoneNumber, //"الرقم",
-                subTitle: customerProvider.user.phoneNumber),
-            accountInfoCard(
-                icon: Icons.location_on,
-                title: AppLocalizations.of(context).city, // 'المدينة',
-                subTitle: customerProvider.cityName),
-            accountInfoCard(
-              icon:
-                  customerProvider.gender == 'male' ? Icons.male : Icons.female,
-              title: AppLocalizations.of(context).gender, // "الجنس",
-              subTitle: customerProvider.gender == 'male'
-                  ? AppLocalizations.of(context).male //'ذكر'
-                  : AppLocalizations.of(context).female, //'أنثى',
+              icon: Icons.email,
+              title: AppLocalizations.of(context).email,
+              subTitle: customerProvider.user.phoneNumber,
             ),
+            // accountInfoCard(
+            //     icon: Icons.phone,
+            //     title: AppLocalizations.of(context).phoneNumber, //"الرقم",
+            //     subTitle: customerProvider.user.phoneNumber),
+            // accountInfoCard(
+            //     icon: Icons.location_on,
+            //     title: AppLocalizations.of(context).city, // 'المدينة',
+            //     subTitle: customerProvider.cityName),
+            // accountInfoCard(
+            //   icon:
+            //       customerProvider.gender == 'male' ? Icons.male : Icons.female,
+            //   title: AppLocalizations.of(context).gender, // "الجنس",
+            //   subTitle: customerProvider.gender == 'male'
+            //       ? AppLocalizations.of(context).male //'ذكر'
+            //       : AppLocalizations.of(context).female, //'أنثى',
+            // ),
             accountInfoCard(
               icon: userMode == 'customer'
                   ? Icons.attach_money

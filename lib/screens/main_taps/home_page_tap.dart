@@ -73,8 +73,11 @@ class _HomePageTapState extends State<HomePageTap> {
   Widget buildNotificationPopupMenuItem() {
     return IconButton(
       icon: Icon(Icons.notifications),
-      onPressed: () {
-        _buildNotificationPopupDialog();
+      onPressed: () async {
+        var notiData = await getAllNotification();
+        if (notiData != null) {
+          _buildNotificationPopupDialog();
+        }
       },
     );
   }
@@ -137,7 +140,7 @@ class _HomePageTapState extends State<HomePageTap> {
     }
   }
 
-  Future<void> getAllNotification() async {
+  Future<bool> getAllNotification() async {
     _dio = Dio();
 
     final token = CachHelper.getData(key: 'token');
@@ -154,7 +157,9 @@ class _HomePageTapState extends State<HomePageTap> {
       setState(() {
         notificationData = NotificationData.fromJson(response.data);
       });
-      return response.data;
+      // return response.data;
+      return true;
+
       // setState(() {
 
       // });
@@ -168,6 +173,7 @@ class _HomePageTapState extends State<HomePageTap> {
       print('coooode uuut o');
       print(response.data['code'].runtimeType);
     }
+    return false;
   }
 
   Future<void> refreshToken() async {
@@ -899,6 +905,7 @@ class _HomePageTapState extends State<HomePageTap> {
               searchTerm: search,
               categoryFilter: categoryFilter,
               cityFilter: cityFilter);
+
           if (widget != null) {
             userProvider.index = -1;
             setState(() {

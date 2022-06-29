@@ -100,7 +100,11 @@
     "delete": "حذف؟",
     "yes" : "نعم",
     "no": "لا",
-    "editPhoto": "تعديل الصورة"
+    "editPhoto": "تعديل الصورة",
+    "loginWithFacebook" : "تسجيل الدخول باستخدام الفيس بوك",
+    "email": "البريد الكتروني",
+    "loginAsCustomer" : "تسجيل الدخول كمشتري",
+    "loginAsSeller" : "تسجيل الدخول كبائع"
     
 }
 

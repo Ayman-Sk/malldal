@@ -547,7 +547,7 @@ class UserProvider with ChangeNotifier {
               : '',
           biography: '', //response.data['user'][0][userMode]['bio'],
           profileImage: response.data['user'][userMode]['profile_image'],
-          phoneNumber: '', //response.data['user'][0]['phone'],
+          phoneNumber: response.data['user']['customer']['email'],
           modeOfuser: userMode,
           followers: _myUser.followSellers == null ? [] : _myUser.followSellers,
         );

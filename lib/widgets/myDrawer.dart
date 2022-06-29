@@ -2,6 +2,7 @@ import 'package:dal/network/local_host.dart';
 import 'package:dal/screens/add_post_screen.dart';
 import 'package:dal/screens/autharization/login_card_screen.dart';
 import 'package:dal/screens/customer_seller_follower.dart';
+import 'package:dal/screens/introduction_screen.dart';
 import 'package:dal/screens/main_taps/user_profile_screen.dart';
 import 'package:dal/screens/seller_posts_screen.dart';
 import 'package:dal/screens/settings_screen.dart';
@@ -58,7 +59,7 @@ class _MyDrawerState extends State<MyDrawer> {
         {
           'Icon': Icons.logout,
           'Title': AppLocalizations.of(context).logout, //'إضافة منتج',
-          'Route': LoginCardScreen.routeName,
+          'Route': IntroductionScreen.routeName,
           'Replace': true,
         },
       ];
@@ -81,7 +82,7 @@ class _MyDrawerState extends State<MyDrawer> {
         {
           'Icon': Icons.logout,
           'Title': AppLocalizations.of(context).logout, //'إضافة منتج',
-          'Route': LoginCardScreen.routeName,
+          'Route': IntroductionScreen.routeName,
           'Replace': true,
         }
       ];
@@ -95,7 +96,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 Column(children: [
                   buildDrawerHeader(),
                   buildDrawerItem(AppLocalizations.of(context).logout,
-                      Icons.logout, LoginCardScreen.routeName, true, 1),
+                      Icons.logout, IntroductionScreen.routeName, true, 1),
                 ]),
                 // powerdByCHI(),
 

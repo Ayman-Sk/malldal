@@ -395,6 +395,16 @@
     "@editPhoto": {
         "description": "Edit User Photo"
     },
+    "loginWithFacebook" : "Login With Facebook",
+    "@loginWithFacebook" : {
+        "description": "Customer Login"
+    },
+    "email": "email",
+    "@email" : {
+        "description": "Email"
+    },
+    "loginAsCustomer" : "Login As Customer",
+    "loginAsSeller" : "Login As Seller",
     "delete": "Delete?",
     "yes" : "Yes",
     "no": "No"

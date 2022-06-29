@@ -305,6 +305,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get editPhoto => 'Edit Photo';
 
   @override
+  String get loginWithFacebook => 'Login With Facebook';
+
+  @override
+  String get email => 'email';
+
+  @override
+  String get loginAsCustomer => 'Login As Customer';
+
+  @override
+  String get loginAsSeller => 'Login As Seller';
+
+  @override
   String get delete => 'Delete?';
 
   @override

@@ -84,7 +84,7 @@ class _LoginCardScreenState extends State<LoginCardScreen>
     // data['profile_image'] = profileImage;
     // data['customer_session_expiration_date'] =
     //     this.customerSessionExpirationDate;
-    Map<String, String> data_facebook = {
+    Map<String, String> facebookData = {
       'facebook_id': facebookId,
       'name': name,
       'email': email,
@@ -93,7 +93,7 @@ class _LoginCardScreenState extends State<LoginCardScreen>
     };
     // _formkey.currentState.save();
     return await Provider.of<UserProvider>(context, listen: false)
-        .facebookLogin(data_facebook);
+        .facebookLogin(facebookData);
   }
 
   @override
@@ -309,278 +309,198 @@ class _LoginCardScreenState extends State<LoginCardScreen>
                                                 },
                                               ),
                                             ),
-
                                       SingleChildScrollView(
                                         child: Container(
-                                            child: _isLoggedIn
-                                                ? Column(
-                                                    children: [
-                                                      Text(_usrObj.toString()),
-                                                      Image.network(
-                                                          _usrObj['Pictures']
-                                                              ['data']['url']),
-                                                      Text(_usrObj['name']),
-                                                      Text(_usrObj['email']),
-                                                    ],
-                                                  )
-                                                : ElevatedButton(
-                                                    onPressed: () async {
-                                                      FacebookAuth.instance.login(
-                                                          permissions: [
-                                                            'email',
-                                                            'public_profile',
-                                                            // "user_birthday",
-                                                            // "user_gender",
-                                                            // "user_link",
-                                                            // "user_photos",
-                                                            // 'pages_user_gender'
-                                                          ],
-                                                          loginBehavior:
-                                                              LoginBehavior
-                                                                  .dialogOnly).then(
-                                                          (value) async {
-                                                        // LoginResult()
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              primary: AppColors.primary,
+                                            ),
+                                            onPressed: () async {
+                                              FacebookAuth.instance.login(
+                                                  permissions: [
+                                                    'email',
+                                                    'public_profile',
+                                                    // "user_birthday",
+                                                    // "user_gender",
+                                                    // "user_link",
+                                                    // "user_photos",
+                                                    // 'pages_user_gender'
+                                                  ],
+                                                  loginBehavior: LoginBehavior
+                                                      .dialogOnly).then(
+                                                  (value) async {
+                                                // LoginResult()
 
-                                                        print(
-                                                            'facebook result');
-                                                        print(value.message);
-                                                        print(
-                                                            value.runtimeType);
+                                                print('facebook result');
+                                                print(value.message);
+                                                print(value.runtimeType);
 
-                                                        if (value.status ==
-                                                            LoginStatus
-                                                                .success) {
-                                                          // you are logged
+                                                if (value.status ==
+                                                    LoginStatus.success) {
+                                                  // you are logged
 
-                                                          accessToken =
-                                                              value.accessToken;
+                                                  accessToken =
+                                                      value.accessToken;
 
-                                                          print(dateFormat
-                                                              .format(accessToken
+                                                  print(dateFormat.format(
+                                                      accessToken.expires));
+                                                  facebookUser
+                                                      .setCustomerSessionExpirationDate(
+                                                          dateFormat.format(
+                                                              accessToken
                                                                   .expires));
-                                                          facebookUser.setCustomerSessionExpirationDate(
+
+                                                  // Name email id , image ,yyyy-MM-dd ,
+                                                  print('access Token ');
+                                                  print(accessToken.token);
+                                                  print('expires');
+                                                  print(accessToken.expires);
+                                                  print(dateFormat.format(
+                                                      accessToken
+                                                          .expires)); //Converting DateTime object to String
+
+                                                  print(
+                                                      accessToken.runtimeType);
+                                                } else {
+                                                  print(value);
+                                                  print(value.status);
+                                                  print(value.message);
+                                                }
+                                                FacebookAuth.instance
+                                                    .getUserData()
+                                                    .then(
+                                                  (userData) {
+                                                    setState(
+                                                      () {
+                                                        // _isLoggedIn =
+                                                        //     true;
+                                                        _usrObj = userData;
+                                                        facebookUser
+                                                            .setFacebookId(
+                                                                userData['id']);
+                                                        facebookUser.setName(
+                                                            userData['name']);
+                                                        facebookUser.setEamil(
+                                                            userData['email']);
+                                                        facebookUser
+                                                            .setProfileImage(
+                                                                userData['picture']
+                                                                        ['data']
+                                                                    ['url']);
+
+                                                        // facebookUser = FacebookUser(
+                                                        //     facebookId:
+                                                        //         userData[
+                                                        //             'id'],
+                                                        //     name: userData[
+                                                        //         'name'],
+                                                        //     email: userData[
+                                                        //         'email'],
+                                                        //     profileImage:
+                                                        //         userData['picture']['data']
+                                                        //             [
+                                                        //             'url']);
+
+                                                        print(
+                                                            'facebook usr data');
+                                                        print(userData);
+                                                        FacebookAuth.instance
+                                                            .getUserData(
+                                                                fields:
+                                                                    'gender')
+                                                            .then(
+                                                          (value) async {
+                                                            print('ge');
+                                                            print(value
+                                                                .toString());
+                                                            print('sss');
+                                                            print(value
+                                                                .runtimeType);
+                                                            print('gender');
+
+                                                            print(facebookUser
+                                                                .toJson()
+                                                                .runtimeType);
+
+                                                            var res =
+                                                                await _facebookSubmit(
+                                                              userData['id'],
+                                                              userData['name'],
+                                                              userData['email'],
+                                                              userData['picture']
+                                                                      ['data']
+                                                                  ['url'],
                                                               dateFormat.format(
                                                                   accessToken
-                                                                      .expires));
-
-                                                          // Name email id , image ,yyyy-MM-dd ,
-                                                          print(
-                                                              'access Token ');
-                                                          print(accessToken
-                                                              .token);
-                                                          print('expires');
-                                                          print(accessToken
-                                                              .expires);
-                                                          print(dateFormat
-                                                              .format(accessToken
-                                                                  .expires)); //Converting DateTime object to String
-
-                                                          print(accessToken
-                                                              .runtimeType);
-                                                        } else {
-                                                          print(value);
-                                                          print(value.status);
-                                                          print(value.message);
-                                                        }
-                                                        FacebookAuth.instance
-                                                            .getUserData()
-                                                            .then(
-                                                          (userData) {
-                                                            setState(
-                                                              () {
-                                                                // _isLoggedIn =
-                                                                //     true;
-                                                                _usrObj =
-                                                                    userData;
-                                                                facebookUser
-                                                                    .setFacebookId(
-                                                                        userData[
-                                                                            'id']);
-                                                                facebookUser.setName(
-                                                                    userData[
-                                                                        'name']);
-                                                                facebookUser
-                                                                    .setEamil(
-                                                                        userData[
-                                                                            'email']);
-                                                                facebookUser.setProfileImage(
-                                                                    userData['picture']
-                                                                            [
-                                                                            'data']
-                                                                        [
-                                                                        'url']);
-
-                                                                // facebookUser = FacebookUser(
-                                                                //     facebookId:
-                                                                //         userData[
-                                                                //             'id'],
-                                                                //     name: userData[
-                                                                //         'name'],
-                                                                //     email: userData[
-                                                                //         'email'],
-                                                                //     profileImage:
-                                                                //         userData['picture']['data']
-                                                                //             [
-                                                                //             'url']);
-
-                                                                print(
-                                                                    'facebook usr data');
-                                                                print(userData);
-                                                                FacebookAuth
-                                                                    .instance
-                                                                    .getUserData(
-                                                                        fields:
-                                                                            'gender')
-                                                                    .then(
-                                                                  (value) async {
-                                                                    print('ge');
-                                                                    print(value
-                                                                        .toString());
-                                                                    print(
-                                                                        'sss');
-                                                                    print(value
-                                                                        .runtimeType);
-                                                                    print(
-                                                                        'gender');
-
-                                                                    print(facebookUser
-                                                                        .toJson()
-                                                                        .runtimeType);
-
-                                                                    var res =
-                                                                        await _facebookSubmit(
-                                                                      userData[
-                                                                          'id'],
-                                                                      userData[
-                                                                          'name'],
-                                                                      userData[
-                                                                          'email'],
-                                                                      userData['picture']
-                                                                              [
-                                                                              'data']
-                                                                          [
-                                                                          'url'],
-                                                                      dateFormat
-                                                                          .format(
-                                                                              accessToken.expires),
-                                                                    );
-                                                                    if (res) {
-                                                                      Utils
-                                                                          .showToast(
-                                                                        message:
-                                                                            AppLocalizations.of(context).logedin,
-                                                                        // 'أنت الان مسجل في التطبيق',
-                                                                        backgroundColor:
-                                                                            AppColors.primary,
-                                                                        textColor: Theme.of(context)
-                                                                            .textTheme
-                                                                            .bodyText1
-                                                                            .color,
-                                                                      );
-                                                                      // var myUser = Provider.of<CustomerProvider>(context,listen: false).user;
-                                                                      //   CachHelper.saveData(
-                                                                      //         key: 'user', value: myUser,);
-
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pushReplacementNamed(
-                                                                        // OtpScreen.routeName
-                                                                        MainTabBarViewController
-                                                                            .routeName,
-                                                                      );
-
-                                                                      // if (_authMode == AuthMode.Login) {
-
-                                                                      //   Navigator.of(context)
-                                                                      //       .pushReplacementNamed(
-                                                                      //           HomePageScreen.routeName);
-                                                                      // }
-
-                                                                    } else {
-                                                                      Utils
-                                                                          .showToast(
-                                                                        message:
-                                                                            AppLocalizations.of(context).loginRefused,
-                                                                        // 'تعذرت عملية التسجيل',
-                                                                        backgroundColor:
-                                                                            AppColors.primary,
-                                                                        textColor: Theme.of(context)
-                                                                            .textTheme
-                                                                            .bodyText1
-                                                                            .color,
-                                                                      );
-                                                                      setState(
-                                                                          () {
-                                                                        loading =
-                                                                            false;
-                                                                      });
-                                                                    }
-                                                                  },
-                                                                );
-                                                              },
+                                                                      .expires),
                                                             );
+                                                            if (res) {
+                                                              Utils.showToast(
+                                                                message: AppLocalizations.of(
+                                                                        context)
+                                                                    .logedin,
+                                                                // 'أنت الان مسجل في التطبيق',
+                                                                backgroundColor:
+                                                                    AppColors
+                                                                        .primary,
+                                                                textColor: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyText1
+                                                                    .color,
+                                                              );
+                                                              // var myUser = Provider.of<CustomerProvider>(context,listen: false).user;
+                                                              //   CachHelper.saveData(
+                                                              //         key: 'user', value: myUser,);
+
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pushReplacementNamed(
+                                                                // OtpScreen.routeName
+                                                                MainTabBarViewController
+                                                                    .routeName,
+                                                              );
+
+                                                              // if (_authMode == AuthMode.Login) {
+
+                                                              //   Navigator.of(context)
+                                                              //       .pushReplacementNamed(
+                                                              //           HomePageScreen.routeName);
+                                                              // }
+
+                                                            } else {
+                                                              Utils.showToast(
+                                                                message: AppLocalizations.of(
+                                                                        context)
+                                                                    .loginRefused,
+                                                                // 'تعذرت عملية التسجيل',
+                                                                backgroundColor:
+                                                                    AppColors
+                                                                        .primary,
+                                                                textColor: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyText1
+                                                                    .color,
+                                                              );
+                                                              setState(() {
+                                                                loading = false;
+                                                              });
+                                                            }
                                                           },
                                                         );
-                                                      }
-//                                                         .then(
-//                                                           (values) => FacebookAuth
-//                                                               .instance
-//                                                               .login(
-//                                                                   permissions: [
-//                                                                 'email, public_profile'
-//                                                               ]).then(
-//                                                             (value) {
-// //                                                                   print(
-// //                                                                       'facebook result');
-// //                                                                   print(value);
-// //                                                                   print(value
-// //                                                                       .runtimeType);
-
-// //                                                                   if (value
-// //                                                                           .status ==
-// //                                                                       LoginStatus
-// //                                                                           .success) {
-// //                                                                     // you are logged
-// //                                                                     final AccessToken
-// //                                                                         accessToken =
-// //                                                                         value
-// //                                                                             .accessToken;
-// //                                                                     DateFormat
-// //                                                                         dateFormat =
-// //                                                                         DateFormat(
-// //                                                                             "yyyy-MM-dd HH:mm:ss");
-// // // Name email id , image ,yyyy-MM-dd ,
-// //                                                                     print(
-// //                                                                         'access Token ');
-// //                                                                     print(accessToken
-// //                                                                         .token);
-// //                                                                     print(
-// //                                                                         'expires');
-// //                                                                     print(accessToken
-// //                                                                         .expires);
-// //                                                                     print(dateFormat
-// //                                                                         .format(
-// //                                                                             accessToken.expires)); //Converting DateTime object to String
-
-// //                                                                     print(accessToken
-// //                                                                         .runtimeType);
-// //                                                                   } else {
-// //                                                                     print(
-// //                                                                         value);
-// //                                                                     print(value
-// //                                                                         .status);
-// //                                                                     print(value
-// //                                                                         .message);
-// //                                                                   }
-//                                                             },
-//                                                           ),
-//                                                         ),
-                                                          );
-                                                    },
-                                                    child: Text(
-                                                        'Login With Facebook'))),
+                                                      },
+                                                    );
+                                                  },
+                                                );
+                                              });
+                                            },
+                                            child: Text(
+                                                AppLocalizations.of(context)
+                                                    .loginWithFacebook),
+                                          ),
+                                        ),
                                       ),
-
                                       Padding(
                                         padding: const EdgeInsets.only(
                                             top: 0, bottom: 8),
@@ -597,28 +517,6 @@ class _LoginCardScreenState extends State<LoginCardScreen>
                                           ),
                                         ),
                                       ),
-                                      // Padding(
-                                      //   padding:
-                                      //       const EdgeInsets.only(top: 0, bottom: 8),
-                                      //   child: ElevatedButton(
-                                      //     style: ElevatedButton.styleFrom(
-                                      //       primary: AppColors.primary,
-                                      //     ),
-                                      //     onPressed: () {
-                                      //       Navigator.of(context).pushNamed(
-                                      //         CustomerSignupScreens.routeName,
-                                      //       );
-                                      //     },
-                                      //     child: Directionality(
-                                      //       textDirection: TextDirection.rtl,
-                                      //       child: Text(
-                                      //         AppLocalizations.of(context).signup,
-                                      //         style: TextStyle(
-                                      //             color: AppColors.background),
-                                      //       ),
-                                      //     ),
-                                      //   ),
-                                      // ),
                                       Padding(
                                         padding: const EdgeInsets.only(
                                             top: 4, bottom: 16),

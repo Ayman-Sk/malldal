@@ -688,6 +688,30 @@ abstract class AppLocalizations {
   /// **'Edit Photo'**
   String get editPhoto;
 
+  /// Customer Login
+  ///
+  /// In en, this message translates to:
+  /// **'Login With Facebook'**
+  String get loginWithFacebook;
+
+  /// Email
+  ///
+  /// In en, this message translates to:
+  /// **'email'**
+  String get email;
+
+  /// No description provided for @loginAsCustomer.
+  ///
+  /// In en, this message translates to:
+  /// **'Login As Customer'**
+  String get loginAsCustomer;
+
+  /// No description provided for @loginAsSeller.
+  ///
+  /// In en, this message translates to:
+  /// **'Login As Seller'**
+  String get loginAsSeller;
+
   /// No description provided for @delete.
   ///
   /// In en, this message translates to:
