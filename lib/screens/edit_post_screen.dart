@@ -46,8 +46,8 @@ class _EditPostScreenState extends State<EditPostScreen> {
   bool loading = false;
   List<String> categoryList = [];
   List<String> citiesList = [];
-  List<int> listOfCities = [];
-  List<int> listOfCategories = [];
+  List<String> listOfCities = [];
+  List<String> listOfCategories = [];
   List<DropdownMenuItem<DropDownListModel>> _citiesdropDownMenueItems;
   List<DropdownMenuItem<DropDownListModel>> _categorydropDownMenueItems;
   CategoriesAPIs catAPI = CategoriesAPIs();
@@ -334,7 +334,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                       return Future.value(false);
                     }
                     _formkey.currentState.save();
-                    bool res;
+                    // bool res;
                   },
                 ),
               ),
@@ -345,12 +345,12 @@ class _EditPostScreenState extends State<EditPostScreen> {
     );
   }
 
-  void addCityFunction(List<int> listOfItems) {
+  void addCityFunction(List<String> listOfItems) {
     listOfCities = listOfItems;
     print('Cities' + listOfCities.toString());
   }
 
-  void addCategoryFunction(List<int> listOfItems) {
+  void addCategoryFunction(List<String> listOfItems) {
     listOfCategories = listOfItems;
     print('Categories' + listOfCategories.toString());
   }

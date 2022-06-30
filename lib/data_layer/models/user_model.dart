@@ -27,29 +27,29 @@ class UserModel {
 
 class MyUser {
   //in both
-  int id;
+  String id;
   String profileImage;
   String cityId = '0';
-  int userId;
+  String userId;
   String name;
   String phoneNumber;
   String gender;
-  int verification;
+  String verification;
   String createdAt;
   String updatedAt;
   String deletedAt;
   String userMode;
   //in customer
-  // int city = 0;
+  // String city = 0;
   //in seller
   String biography = ' ';
   String numbers = ' ';
   String contactInfo = ' ';
   List<PostModel> posts = [];
   List<PostModel> postRequest = [];
-  List<int> followSellers = [];
-  List<int> savedSellers = [];
-  List<int> savedPosts = [];
+  List<String> followSellers = [];
+  List<String> savedSellers = [];
+  List<String> savedPosts = [];
   List<String> favoriteCategory = [];
   List<String> adds = [];
   // List<PostsWithSellerModel>

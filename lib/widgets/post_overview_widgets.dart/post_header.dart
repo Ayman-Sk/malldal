@@ -159,9 +159,11 @@ class _PostHeaderWidgetState extends State<PostHeaderWidget> {
             .pushNamed(OverviewSellerProfileScreen.routeName,
                 arguments: widget.ownerUser)
             .then((_) {
-          setState(() {
-            userProvider.user.followSellers.contains(widget.ownerUser.id);
-          });
+          if (userProvider.user.userMode == 'customer') {
+            setState(() {
+              userProvider.user.followSellers.contains(widget.ownerUser.id);
+            });
+          }
         });
       },
     );

@@ -36,7 +36,7 @@ class PostsAPIs {
   }
 
   Future<dynamic> getRowPostsByCategoryId(
-      int id, int pageNumber, int pageSize) async {
+      String id, int pageNumber, int pageSize) async {
     final response = await _dio
         .get(EndPoints.getPostsByCategoryId(id, pageNumber, pageSize));
     print('resss :$response');
@@ -50,7 +50,7 @@ class PostsAPIs {
   }
 
   Future<dynamic> getRowPostsByCategoryIdAndCityId(
-      int categoryId, int cityId, int pageNumber, int pageSize) async {
+      String categoryId, String cityId, int pageNumber, int pageSize) async {
     final response = await _dio.get(EndPoints.getPostsByCategoryIdAndCityID(
         categoryId, cityId, pageNumber, pageSize));
     print('resss :$response');
@@ -63,7 +63,7 @@ class PostsAPIs {
     }
   }
 
-  Future<dynamic> getSingleRowPostByID({@required int postId}) async {
+  Future<dynamic> getSingleRowPostByID({@required String postId}) async {
     final response = await _dio.get(EndPoints.getSinglePostById(postId));
     if (response.statusCode == 200) {
       print('\n1-${response.data}');
@@ -85,7 +85,7 @@ class PostsAPIs {
   }
 
   Future<dynamic> getRowFollowedPostsOfCustomerByCustomerID(
-      {@required int id}) async {
+      {@required String id}) async {
     final response =
         await _dio.get(EndPoints.getFollowedPostsOfCustomerByCustomerID(id));
     if (response.statusCode == 200) {
@@ -111,8 +111,8 @@ class PostsAPIs {
   // }
 
   Future<bool> addPostTofollowedPostsOfCustomer({
-    @required int cutomerId,
-    @required int postId,
+    @required String cutomerId,
+    @required String postId,
     @required String token,
   }) async {
     final response = await _dio.post(
@@ -146,8 +146,8 @@ class PostsAPIs {
   }
 
   Future<bool> removePostFromfollowedPostsOfCustomer({
-    @required int cutomerId,
-    @required int postId,
+    @required String cutomerId,
+    @required String postId,
     @required String token,
   }) async {
     print(cutomerId);

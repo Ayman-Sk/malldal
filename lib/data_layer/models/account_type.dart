@@ -35,9 +35,9 @@ class AccountType {
 }
 
 class Account {
-  int id;
-  int sellerId;
-  int contactInfoTypeId;
+  String id;
+  String sellerId;
+  String contactInfoTypeId;
   String info;
   // Null deletedAt;
   String createdAt;

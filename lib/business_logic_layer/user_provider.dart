@@ -3,6 +3,7 @@ import 'package:dal/data_layer/models/user_model.dart';
 import 'package:dal/network/dio_helper.dart';
 import 'package:dal/network/end_points.dart';
 import 'package:dal/network/local_host.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:gson/gson.dart';
 
@@ -16,7 +17,7 @@ class UserProvider with ChangeNotifier {
       gender: 'male', cityId: '0', userMode: 'customer', followSellers: []);
   Locale local;
 
-  void setID(int userid) {
+  void setID(String userid) {
     _myUser.id = userid;
     notifyListeners();
   }
@@ -61,33 +62,33 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setFollowers(List<int> followers) {
+  void setFollowers(List<String> followers) {
     _myUser.followSellers = followers;
     notifyListeners();
   }
 
-  void addFolower(int id) {
+  void addFolower(String id) {
     _myUser.followSellers.add(id);
     notifyListeners();
   }
 
-  void removeFollower(int id) {
+  void removeFollower(String id) {
     _myUser.followSellers.remove(id);
     notifyListeners();
   }
 
-  void setSavedPosts(List<int> savedPosts) {
+  void setSavedPosts(List<String> savedPosts) {
     _myUser.savedPosts = [];
     _myUser.savedPosts.addAll(savedPosts);
     notifyListeners();
   }
 
-  void addPostToSavedPost(int id) {
+  void addPostToSavedPost(String id) {
     _myUser.savedSellers.add(id);
     notifyListeners();
   }
 
-  void removePostFromSavedPost(int id) {
+  void removePostFromSavedPost(String id) {
     _myUser.savedPosts.remove(id);
     notifyListeners();
   }
@@ -120,7 +121,7 @@ class UserProvider with ChangeNotifier {
   MyUser get user => _myUser;
 
   // get
-  int get userId => _myUser.id;
+  String get userId => _myUser.id;
 
   String get userName => _myUser.name;
 
@@ -142,9 +143,9 @@ class UserProvider with ChangeNotifier {
 
   List<PostModel> get postRequest => _myUser.postRequest;
 
-  List<int> get followers => _myUser.followSellers;
+  List<String> get followers => _myUser.followSellers;
 
-  List<int> get savedPosts => _myUser.savedPosts;
+  List<String> get savedPosts => _myUser.savedPosts;
 
   List<String> get favoriteCategories => _myUser.favoriteCategory;
 
@@ -160,9 +161,9 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  // List<int>
+  // List<String>
   // UserMode get modeOfUserAsString =>
-  // int get userIdOfCustomer => _myUser.userId;
+  // String get userIdOfCustomer => _myUser.userId;
 
   void printUser() {
     print(
@@ -187,7 +188,7 @@ class UserProvider with ChangeNotifier {
     // }
   }
 
-  Future<bool> removeCateogryFromCustomerFavorite(int categoryId) async {
+  Future<bool> removeCateogryFromCustomerFavorite(String categoryId) async {
     // try {
     dynamic response = await DioHelper.deleteCategoryFromFavorite(
       url: EndPoints.removeCategoryFromCustomerFavList(
@@ -207,14 +208,14 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<Map<String, dynamic>> getFollowedSellersByCustomerID(
-      int userId) async {
+      String userId) async {
     try {
       dynamic response = await DioHelper.getFollowedSeller(
         url: EndPoints.getFollowedSellersByCustomerByID(userId),
       );
       print('\nget Followed Response : ${response.data}\n');
       if (response.data['data'] != null) {
-        int postId = response.data['data'][0]['id'];
+        String postId = response.data['data'][0]['id'];
         print('\nuser Id : $postId\n');
         // CachHelper.saveData(key: 'userId', value: userId);
         return response.data;
@@ -235,7 +236,7 @@ class UserProvider with ChangeNotifier {
       );
       print('\nget Followed Categories Response : ${response.data}\n');
       if (response.data['data'] != null) {
-        int postId = response.data['data'][0]['id'];
+        String postId = response.data['data'][0]['id'];
         print('\nuser Id : $postId\n');
         response.data['data'][0]['categories'].forEach((element) {
           addCategoryToFavorite(element['id'].toString());
@@ -262,7 +263,7 @@ class UserProvider with ChangeNotifier {
         data: data);
     print('\nResponse : ${response.data}\n');
     if (response.data['data'] != null) {
-      int postId = response.data['data'][0]['id'];
+      String postId = response.data['data'][0]['id'];
       print('\nuser Id : $postId\n');
       // CachHelper.saveData(key: 'userId', value: userId);
       return true;
@@ -277,7 +278,7 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<bool> getSellerPosts(
-      bool isRequest, int id, int pageNumber, int pageSize) async {
+      bool isRequest, String id, int pageNumber, int pageSize) async {
     // try {
     dynamic response = isRequest
         ? await DioHelper.sellerPosts(
@@ -315,6 +316,15 @@ class UserProvider with ChangeNotifier {
     // }
   }
 
+  Future<bool> updateSellerContactinfo(Map<String, dynamic> data) async {
+    dynamic response = await DioHelper.updateUserAccounts(
+      url: EndPoints.contactInfos,
+      data: data,
+    );
+    if (response['status'] == 'true') return true;
+    return false;
+  }
+
   Future<bool> updateSellerInfo(String name, String gender, String bio,
       String imagePath, String phoneNumber) async {
     print('seeeeend iddddd');
@@ -339,7 +349,7 @@ class UserProvider with ChangeNotifier {
       _myUser.biography = bio;
       _myUser.profileImage = imagePath;
       _myUser.phoneNumber = phoneNumber;
-      int userId = response.data['data']['id'];
+      String userId = response.data['data']['id'];
       print('\nuser Id : $userId\n');
       CachHelper.saveData(key: 'userId', value: userId);
       CachHelper.removeData(key: 'user');
@@ -409,7 +419,7 @@ class UserProvider with ChangeNotifier {
       _myUser.cityId = cityId;
       _myUser.profileImage = response.data['data']['profile_image'];
       _myUser.phoneNumber = phoneNumber;
-      int userId = response.data['data']['id'];
+      String userId = response.data['data']['id'];
       print('\nuser Id : $userId\n');
       CachHelper.saveData(key: 'userId', value: userId);
       CachHelper.removeData(key: 'user');
@@ -500,7 +510,7 @@ class UserProvider with ChangeNotifier {
     );
     print('\nResponse : ${response.data}\n');
     if (response.data['data'] != null) {
-      int userId = response.data['data'][0]['id'];
+      String userId = response.data['data'][0]['id'];
       print('\nuser Id : $userId\n');
       CachHelper.saveData(key: 'userId', value: userId);
       return true;
@@ -628,7 +638,7 @@ class UserProvider with ChangeNotifier {
       print('pppppppppppppppppppppppppppp');
       print(hashedUser);
       _myUser = MyUser(
-          id: int.parse(hashedUser['id'].toString()),
+          id: hashedUser['id'].toString(),
           name: hashedUser['name'],
           gender: hashedUser['gender'],
           cityId: hashedUser['city_id'].toString(),
@@ -642,13 +652,13 @@ class UserProvider with ChangeNotifier {
   }
 
   void saveUserinApp(
-      {@required int idOfUser,
+      {@required String idOfUser,
       @required String userName,
       @required String gender,
       @required String profileImage,
       @required String phoneNumber,
       @required String modeOfuser,
-      @required List<int> followers,
+      @required List<String> followers,
       String cityId = '0',
       String cityName = '',
       String biography = ''}) {

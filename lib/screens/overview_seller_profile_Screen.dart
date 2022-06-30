@@ -14,10 +14,12 @@ class OverviewSellerProfileScreen extends StatefulWidget {
   static const routeName = 'OverviewSellerProfileScreen';
 
   @override
-  _OverviewSellerProfileScreenState createState() => _OverviewSellerProfileScreenState();
+  _OverviewSellerProfileScreenState createState() =>
+      _OverviewSellerProfileScreenState();
 }
 
-class _OverviewSellerProfileScreenState extends State<OverviewSellerProfileScreen> {
+class _OverviewSellerProfileScreenState
+    extends State<OverviewSellerProfileScreen> {
   File file;
   Future selectFile(BuildContext context) async {
     var sellerProvider = Provider.of<UserProvider>(context, listen: false);
@@ -41,7 +43,8 @@ class _OverviewSellerProfileScreenState extends State<OverviewSellerProfileScree
     // final fileName = file != null ? basename(file.path) : 'لم تختر صورة بعد';
     // bool upLoadedImage = sellerProvider.profileImage == null ? false : true;
     setState(() {
-      if (CachHelper.getData(key: 'userId') != null)
+      if (CachHelper.getData(key: 'userId') != null &&
+          sellerProvider.user.userMode == 'customer')
         isFollowed = sellerProvider.user.followSellers.contains(ownerUser.id);
       else
         isFollowed = false;
@@ -90,7 +93,8 @@ class _OverviewSellerProfileScreenState extends State<OverviewSellerProfileScree
                   top: coverHeight - imageHeight / 2,
                   // left: MediaQuery.of(context).size.width / 2.5,
                 ),
-                CachHelper.getData(key: 'userId') != null && sellerProvider.userMode != 'seller'
+                CachHelper.getData(key: 'userId') != null &&
+                        sellerProvider.userMode != 'seller'
                     ? Positioned(
                         // child: buildFollowButton(
                         //     sellerProvider.userId, ownerUser.userId),
@@ -98,30 +102,40 @@ class _OverviewSellerProfileScreenState extends State<OverviewSellerProfileScree
                           onPressed: () async {
                             CustomerApis apis = CustomerApis();
                             if (!isFollowed) {
-                              bool res = await apis.addSellerTofollowedUserOfCustomer(
-                                  customerId: sellerProvider.userId, sellerId: ownerUser.userId, token: CachHelper.getData(key: 'token'));
+                              bool res =
+                                  await apis.addSellerTofollowedUserOfCustomer(
+                                      customerId: sellerProvider.userId,
+                                      sellerId: ownerUser.userId,
+                                      token: CachHelper.getData(key: 'token'));
                               print(res);
                               if (res == true) {
                                 setState(() {
                                   isFollowed = true;
                                 });
-                                sellerProvider.user.followSellers.add(ownerUser.id);
+                                sellerProvider.user.followSellers
+                                    .add(ownerUser.id);
                               }
                               return res;
                             } else {
-                              bool res = await apis.removeSellerTofollowedUserOfCustomer(
-                                  customerId: sellerProvider.userId, sellerId: ownerUser.userId, token: CachHelper.getData(key: 'token'));
+                              bool res = await apis
+                                  .removeSellerTofollowedUserOfCustomer(
+                                      customerId: sellerProvider.userId,
+                                      sellerId: ownerUser.userId,
+                                      token: CachHelper.getData(key: 'token'));
                               print(res);
                               if (res == true) {
                                 setState(() {
                                   isFollowed = false;
                                 });
-                                sellerProvider.user.followSellers.remove(ownerUser.id);
+                                sellerProvider.user.followSellers
+                                    .remove(ownerUser.id);
                               }
                               return res;
                             }
                           },
-                          icon: isFollowed ? Icon(Icons.person_add_disabled) : Icon(Icons.person_add_alt),
+                          icon: isFollowed
+                              ? Icon(Icons.person_add_disabled)
+                              : Icon(Icons.person_add_alt),
                           label: isFollowed
                               ? Text(
                                   AppLocalizations.of(context).unfollow,
@@ -154,7 +168,10 @@ class _OverviewSellerProfileScreenState extends State<OverviewSellerProfileScree
                       AppLocalizations.of(context).accountInfo,
                       // 'معلومات الحساب',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 30, color: AppColors.primary, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                          fontSize: 30,
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w600),
                     ),
                   ],
                 ),
@@ -200,7 +217,8 @@ class _OverviewSellerProfileScreenState extends State<OverviewSellerProfileScree
                 ),
                 accountInfoCard(
                   icon: Icons.sell_outlined,
-                  title: AppLocalizations.of(context).accountType, //'نوع الحساب',
+                  title:
+                      AppLocalizations.of(context).accountType, //'نوع الحساب',
                   subTitle: AppLocalizations.of(context).seller,
                   // 'بائع',
                 )
@@ -212,12 +230,15 @@ class _OverviewSellerProfileScreenState extends State<OverviewSellerProfileScree
     );
   }
 
-  Widget buildTop(double coverHeight, imageHeight, coverwidth, int userId, int ownerId, bool isSeller, String profielImagePath) {
+  Widget buildTop(double coverHeight, imageHeight, coverwidth, String userId,
+      String ownerId, bool isSeller, String profielImagePath) {
     return Stack(
       clipBehavior: Clip.none,
       alignment: Alignment.center,
       children: [
-        Container(margin: EdgeInsets.only(bottom: coverHeight / 2), child: buildCoverImage(coverHeight)),
+        Container(
+            margin: EdgeInsets.only(bottom: coverHeight / 2),
+            child: buildCoverImage(coverHeight)),
         Positioned(
           child: buildProfileImage(imageHeight, profielImagePath),
           top: coverHeight - imageHeight / 2,
@@ -234,11 +255,15 @@ class _OverviewSellerProfileScreenState extends State<OverviewSellerProfileScree
     );
   }
 
-  Widget buildFollowButton(int userId, int ownerId) => ElevatedButton.icon(
+  Widget buildFollowButton(String userId, String ownerId) =>
+      ElevatedButton.icon(
         onPressed: () async {
           CustomerApis apis = CustomerApis();
           if (!isFollowed) {
-            bool res = await apis.addSellerTofollowedUserOfCustomer(customerId: userId, sellerId: ownerId, token: CachHelper.getData(key: 'token'));
+            bool res = await apis.addSellerTofollowedUserOfCustomer(
+                customerId: userId,
+                sellerId: ownerId,
+                token: CachHelper.getData(key: 'token'));
             print(res);
             if (res == true) {
               setState(() {
@@ -248,7 +273,10 @@ class _OverviewSellerProfileScreenState extends State<OverviewSellerProfileScree
             }
             return res;
           } else {
-            bool res = await apis.removeSellerTofollowedUserOfCustomer(customerId: userId, sellerId: ownerId, token: CachHelper.getData(key: 'token'));
+            bool res = await apis.removeSellerTofollowedUserOfCustomer(
+                customerId: userId,
+                sellerId: ownerId,
+                token: CachHelper.getData(key: 'token'));
             print(res);
             if (res == true) {
               setState(() {
@@ -259,7 +287,9 @@ class _OverviewSellerProfileScreenState extends State<OverviewSellerProfileScree
             return res;
           }
         },
-        icon: isFollowed ? Icon(Icons.person_add_disabled) : Icon(Icons.person_add_alt),
+        icon: isFollowed
+            ? Icon(Icons.person_add_disabled)
+            : Icon(Icons.person_add_alt),
         label: isFollowed
             ? Text(AppLocalizations.of(context).unfollow)
             : //'إلغاء المتابعة') :
@@ -279,8 +309,10 @@ class _OverviewSellerProfileScreenState extends State<OverviewSellerProfileScree
         height: coverHeight,
         fit: BoxFit.contain,
       ),
-      decoration: BoxDecoration(border: Border.all(width: 1, color: Colors.grey)));
-  Widget buildProfileImage(double imageHeight, String profileImagePath) => CircleAvatar(
+      decoration:
+          BoxDecoration(border: Border.all(width: 1, color: Colors.grey)));
+  Widget buildProfileImage(double imageHeight, String profileImagePath) =>
+      CircleAvatar(
         radius: imageHeight / 2,
         backgroundColor: Theme.of(context).colorScheme.background,
         backgroundImage: NetworkImage(
@@ -298,12 +330,16 @@ class _OverviewSellerProfileScreenState extends State<OverviewSellerProfileScree
         title: Text(
           title,
           textAlign: TextAlign.left,
-          style: TextStyle(fontSize: 25, color: AppColors.primary, fontWeight: FontWeight.w600),
+          style: TextStyle(
+              fontSize: 25,
+              color: AppColors.primary,
+              fontWeight: FontWeight.w600),
         ),
         subtitle: Text(
           subTitle,
           textAlign: TextAlign.left,
-          style: TextStyle(fontSize: 15, color: Colors.grey, fontWeight: FontWeight.w600),
+          style: TextStyle(
+              fontSize: 15, color: Colors.grey, fontWeight: FontWeight.w600),
         ),
       ),
     );

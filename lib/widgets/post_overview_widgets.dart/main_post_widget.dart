@@ -12,7 +12,7 @@ import '../../business_logic_layer/user_provider.dart';
 
 // ignore: must_be_immutable
 class PostOverViewWidget extends StatefulWidget {
-  final int postId;
+  final String postId;
   final String title;
   final String nameOfSeller;
   final String body;

@@ -1,5 +1,5 @@
 class Seller {
-  int id;
+  String id;
   String profileImage;
   String bio;
   String deletedAt;

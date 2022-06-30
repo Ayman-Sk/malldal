@@ -12,7 +12,7 @@ import '../../utils/utils.dart';
 // ignore: must_be_immutable
 class PostFooter extends StatefulWidget {
   bool isSave;
-  final int postId;
+  final String postId;
 
   PostFooter({Key key, this.isSave, this.postId}) : super(key: key);
 
@@ -38,7 +38,10 @@ class _PostFooterState extends State<PostFooter> {
                 ? [
                     ReviewDialog(postId: widget.postId),
                   ]
-                : [ReviewDialog(postId: widget.postId), buildSaveButton(userProvider)],
+                : [
+                    ReviewDialog(postId: widget.postId),
+                    buildSaveButton(userProvider)
+                  ],
           ),
         ),
       ],
@@ -91,7 +94,7 @@ class _PostFooterState extends State<PostFooter> {
     );
   }
 
-  Future<void> removePostFromFavorite(int postId) async {
+  Future<void> removePostFromFavorite(String postId) async {
     bool res;
     res = await postsRepositoryImp.removePostFromFollowedPostsOfCustomer(
       cutomerId: CachHelper.getData(
@@ -118,7 +121,7 @@ class _PostFooterState extends State<PostFooter> {
     }
   }
 
-  Future<void> addPostToFavorite(int postId) async {
+  Future<void> addPostToFavorite(String postId) async {
     bool res;
     res = await postsRepositoryImp.addPostTofollowedPostsOfCustomer(
       cutomerId: CachHelper.getData(

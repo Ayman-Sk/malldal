@@ -86,11 +86,11 @@ class PageData {
 }
 
 class Data {
-  int id;
+  String id;
   String title;
   String body;
   String image;
-  int adminId;
+  String userId;
   String createdAt;
   String updatedAt;
 
@@ -99,7 +99,7 @@ class Data {
       this.title,
       this.body,
       this.image,
-      this.adminId,
+      this.userId,
       this.createdAt,
       this.updatedAt});
 
@@ -109,7 +109,7 @@ class Data {
     title = json['title'];
     body = json['body'];
     image = json['image'];
-    adminId = int.parse(json['admin_id']);
+    userId = json['user_id'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
   }
@@ -120,7 +120,7 @@ class Data {
     data['title'] = this.title;
     data['body'] = this.body;
     data['image'] = this.image;
-    data['admin_id'] = this.adminId;
+    data['user_id'] = this.userId;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     return data;

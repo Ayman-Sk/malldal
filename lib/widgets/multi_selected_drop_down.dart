@@ -2,7 +2,7 @@ import 'package:dal/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomMultiselectDropDown extends StatefulWidget {
-  final Function(List<int>) selectedList;
+  final Function(List<String>) selectedList;
   final List<String> listOFStrings;
 
   CustomMultiselectDropDown(
@@ -16,7 +16,7 @@ class CustomMultiselectDropDown extends StatefulWidget {
 
 class _CustomMultiselectDropDownState extends State<CustomMultiselectDropDown> {
   List<String> listOFSelectedItem = [];
-  List<int> listOfIdsSelectedItem = [];
+  List<String> listOfIdsSelectedItem = [];
   String selectedText = "";
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class _CustomMultiselectDropDownState extends State<CustomMultiselectDropDown> {
                       } else {
                         listOFSelectedItem.add(val);
                         listOfIdsSelectedItem
-                            .add(widget.listOFStrings.indexOf(val));
+                            .add(widget.listOFStrings.indexOf(val).toString());
                       }
                       widget.selectedList(listOfIdsSelectedItem);
                       setState(() {});

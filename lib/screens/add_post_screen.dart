@@ -68,10 +68,10 @@ class _AddPostScreenState extends State<AddPostScreen> {
       {String title,
       String body,
       String priceDetails,
-      int sellerId,
+      String sellerId,
       List<String> imagesPath,
-      List<int> categories,
-      List<int> cities}
+      List<String> categories,
+      List<String> cities}
       //{String name, String email} في حال بدي
       ) async {
     // if (!imageselected) {
@@ -100,10 +100,10 @@ class _AddPostScreenState extends State<AddPostScreen> {
         // 'cities[0]': cities[1].toString()
       };
       for (int i = 0; i < cities.length; i++) {
-        data['cities[$i]'] = cities[i] + 1;
+        data['cities[$i]'] = (int.parse(cities[i]) + 1).toString();
       }
       for (int i = 0; i < categories.length; i++) {
-        data['categories[$i]'] = categories[i] + 1;
+        data['categories[$i]'] = (int.parse(categories[i]) + 1).toString();
       }
       print("Sent create Product Data");
       print(data);
@@ -182,8 +182,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
   //   return jsonData;
   // }
 
-  List<int> listOfCities = [];
-  List<int> listOfCategories = [];
+  List<String> listOfCities = [];
+  List<String> listOfCategories = [];
   @override
   void initState() {
     // _genderdropDownMenueItems =
@@ -581,12 +581,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
     );
   }
 
-  void addCityFunction(List<int> listOfItems) {
+  void addCityFunction(List<String> listOfItems) {
     listOfCities = listOfItems;
     print('Cities' + listOfCities.toString());
   }
 
-  void addCategoryFunction(List<int> listOfItems) {
+  void addCategoryFunction(List<String> listOfItems) {
     listOfCategories = listOfItems;
     print('Categories' + listOfCategories.toString());
   }

@@ -1,12 +1,9 @@
 import 'dart:io';
 import 'package:dal/business_logic_layer/seller_provider.dart';
-import 'package:dal/network/end_points.dart';
-import 'package:dal/network/local_host.dart';
 import 'package:dal/widgets/dropdown_model.dart';
 import 'package:dal/business_logic_layer/user_provider.dart';
 import 'package:dal/theme/app_colors.dart';
 import 'package:dal/utils/utils.dart';
-import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -48,8 +45,13 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
   bool loading = false;
   bool pickImage = false;
 
-  Future<bool> _submit(String name, String gender, String bio,
-      String phoneNumber, String imagePath
+  Future<bool> _submit(
+      String name,
+      String gender,
+      String bio,
+      String phoneNumber,
+      String imagePath,
+      Map<String, List<Map<String, String>>> accountsData
       //{String name, String email} في حال بدي
       ) async {
     if (!imageselected) {
@@ -71,7 +73,7 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
 
       // imagePath =
       //     '/data/user/0/com.example.dal/cache/file_picker/IMG_20220204_193454.jpg';
-      return await Provider.of<UserProvider>(context, listen: false)
+      bool res = await Provider.of<UserProvider>(context, listen: false)
           .updateSellerInfo(
         name,
         gender,
@@ -79,6 +81,9 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
         imagePath,
         phoneNumber,
       );
+      bool res2 = await Provider.of<UserProvider>(context, listen: false)
+          .updateSellerContactinfo(accountsData);
+      return res && res2;
     }
     return false;
   }
@@ -468,8 +473,6 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
                           ),
                   ),
                   onPressed: () async {
-                    //TODO wait Alissar TODO
-
                     if (!_formkey.currentState.validate()) {
                       setState(() {
                         loading = false;
@@ -479,7 +482,7 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
                     _formkey.currentState.save();
                     print('RRRRREPEEATERRRR');
                     print(textFieldRepeater.getDropdownData);
-                    Map data = textFieldRepeater.getDropdownData;
+                    // Map data = textFieldRepeater.getDropdownData;
                     // String phone = data[icons[0]].toString();
                     // String whatsapp = data[icons[1]].toString();
                     // String telegram = data[icons[2]].toString();
@@ -490,9 +493,9 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
                     print('telegram : ' + textFieldRepeater.getTelegram);
                     print('facebook : ' + textFieldRepeater.getFacebook);
                     print('instagram : ' + textFieldRepeater.getInstagram);
-                    //TODO
-                    Dio dio = Dio();
-                    Map contactInfoData = getAccountsMap(
+                    // Dio dio = Dio();
+                    Map<String, List<Map<String, String>>> contactInfoData =
+                        getAccountsMap(
                       textFieldRepeater.getPhone,
                       textFieldRepeater.getWhatsapp,
                       textFieldRepeater.getTelegram,
@@ -500,53 +503,53 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
                       textFieldRepeater.getInstagram,
                       provider.userId,
                     );
-                    var accountsRes;
-                    print(contactInfoData);
-                    accountsRes = await dio.post(EndPoints.contactInfos,
-                        options: Options(
-                          headers: {
-                            'Authorization':
-                                'Bearer' + CachHelper.getData(key: 'token'),
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json',
-                          },
-                        ),
-                        data: contactInfoData);
-                    print('accountsRes');
-                    print(accountsRes);
-                    // bool res;
-                    // res = await _submit(
-                    //   namecontroller.text,
-                    //   _selectedgender.name,
-                    //   biocontroller.text,
-                    //   phonenumbercontroller.text,
-                    //   // provider.userName,
-                    //   // provider.gender,
-                    //   // // provider.cityIdOfCustomer,
-                    //   // provider.biography,
-                    //   // provider.phoneNumber.toString(),
-                    //   file.path,
-                    // );
-                    // if (res) {
-                    //   Utils.showToast(
-                    //     message: AppLocalizations.of(context)
-                    //         .editSuccessfully, //'تم تعديل المعلومات بنجاح',
-                    //     backgroundColor: AppColors.primary,
-                    //     textColor: Theme.of(context).textTheme.bodyText1.color,
-                    //   );
-                    //   Navigator.of(context).pushNamedAndRemoveUntil(
-                    //       'MainTabBarViewController', (route) => false);
-                    // } else {
-                    //   Utils.showToast(
-                    //     message: AppLocalizations.of(context)
-                    //         .editError, //'تعذرت عملية تعديل المعلومات',
-                    //     backgroundColor: AppColors.primary,
-                    //     textColor: Theme.of(context).textTheme.bodyText1.color,
-                    //   );
-                    //   setState(() {
-                    //     loading = false;
-                    //   });
-                    // }
+                    // var accountsRes;
+                    // print(contactInfoData);
+                    // accountsRes = await dio.post(EndPoints.contactInfos,
+                    //     options: Options(
+                    //       headers: {
+                    //         'Authorization':
+                    //             'Bearer' + CachHelper.getData(key: 'token'),
+                    //         'Content-Type': 'application/json',
+                    //         'Accept': 'application/json',
+                    //       },
+                    //     ),
+                    //     data: contactInfoData);
+                    // print('accountsRes');
+                    // print(accountsRes);
+                    bool res;
+                    res = await _submit(
+                        namecontroller.text,
+                        _selectedgender.name,
+                        biocontroller.text,
+                        phonenumbercontroller.text,
+                        // provider.userName,
+                        // provider.gender,
+                        // // provider.cityIdOfCustomer,
+                        // provider.biography,
+                        // provider.phoneNumber.toString(),
+                        file.path,
+                        contactInfoData);
+                    if (res) {
+                      Utils.showToast(
+                        message: AppLocalizations.of(context)
+                            .editSuccessfully, //'تم تعديل المعلومات بنجاح',
+                        backgroundColor: AppColors.primary,
+                        textColor: Theme.of(context).textTheme.bodyText1.color,
+                      );
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          'MainTabBarViewController', (route) => false);
+                    } else {
+                      Utils.showToast(
+                        message: AppLocalizations.of(context)
+                            .editError, //'تعذرت عملية تعديل المعلومات',
+                        backgroundColor: AppColors.primary,
+                        textColor: Theme.of(context).textTheme.bodyText1.color,
+                      );
+                      setState(() {
+                        loading = false;
+                      });
+                    }
                   },
                 ),
               ),
@@ -557,9 +560,14 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
     );
   }
 
-  Map getAccountsMap(String phone, String whatsapp, String telegram,
-      String facebook, String instagram, int sellerId) {
-    Map data = {};
+  Map<String, List<Map<String, String>>> getAccountsMap(
+      String phone,
+      String whatsapp,
+      String telegram,
+      String facebook,
+      String instagram,
+      String sellerId) {
+    Map<String, List<Map<String, String>>> data = {};
     List<Map<String, String>> listOfAccounts = [];
     if (phone != 'null') {
       listOfAccounts.add({

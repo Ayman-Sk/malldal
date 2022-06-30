@@ -87,7 +87,7 @@ class _FilterScreenState extends State<FilterScreen> {
         RefreshController(initialRefresh: false);
     int pageNumebr = 1;
     int pageSize = 7;
-    Future<Widget> getPostData(int id) async {
+    Future<Widget> getPostData(String id) async {
       allPostsData = await postsRepositoryImp.getAllPostsByCategoryId(
           id, pageNumebr, pageSize);
 
@@ -309,14 +309,14 @@ class _FilterScreenState extends State<FilterScreen> {
                               : provider.removeCategoryFilter();
                           checked = false;
                         } else {
-                          getPostData(index);
+                          getPostData(index.toString());
                           // chekedIndexes.add(index);
                           filterType == 'City'
                               ? provider.setCityFilter((index + 1).toString())
                               : provider
                                   .setCategoryFilter((index + 1).toString());
 
-                          provider.setIndexOfCategory(index + 1);
+                          provider.setIndexOfCategory((index + 1).toString());
                         }
                       });
                     },
@@ -356,7 +356,7 @@ class _FilterScreenState extends State<FilterScreen> {
                                     (index + 1).toString())) {
                                   if (userPrvider
                                           .removeCateogryFromCustomerFavorite(
-                                              (index + 1)) !=
+                                              (index + 1).toString()) !=
                                       null) {
                                     Utils.showToast(
                                       message: AppLocalizations.of(context)

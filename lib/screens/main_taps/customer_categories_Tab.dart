@@ -63,7 +63,8 @@ class _CustomerCategoriesTapState extends State<CustomerCategoriesTap> {
     final postProvider = Provider.of<AllPostsWithCategories>(context);
     final userProvider = Provider.of<UserProvider>(context);
 
-    RefreshController _refreshController = RefreshController(initialRefresh: false);
+    RefreshController _refreshController =
+        RefreshController(initialRefresh: false);
 
     return Scaffold(
       drawer: MyDrawer(),
@@ -159,37 +160,48 @@ class _CustomerCategoriesTapState extends State<CustomerCategoriesTap> {
               },
               child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: filterType == 'City' ? citiesList.length : postProvider.getCategories.length,
+                itemCount: filterType == 'City'
+                    ? citiesList.length
+                    : postProvider.getCategories.length,
                 // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 //     childAspectRatio: 3 / 3,
                 //     crossAxisCount: 2,
                 //     crossAxisSpacing: 3.0,
                 //     mainAxisSpacing: 5.0),
                 itemBuilder: (context, index) {
-                  bool isFavorite = userProvider.isFavoriteCategoryContain((index + 1).toString());
+                  bool isFavorite = userProvider
+                      .isFavoriteCategoryContain((index + 1).toString());
                   // bool checked = chekedIndexes.contains(index);
                   // Color itemColor = AppColors.primary;
 
-                  if (postProvider.getCategoryFilter.contains((index + 1).toString())) {
+                  if (postProvider.getCategoryFilter
+                      .contains((index + 1).toString())) {
                     // itemColor = AppColors.primary;
                     // checked = true;
                   }
 
-                  return buildListViewItem(context, postProvider.getCategories[index], index, isFavorite, userProvider);
+                  return buildListViewItem(
+                      context,
+                      postProvider.getCategories[index],
+                      index,
+                      isFavorite,
+                      userProvider);
                 },
               ),
             ),
     );
   }
 
-  Stack buildListViewItem(BuildContext context, String title, int index, bool isFavorite, UserProvider userPrvider) {
+  Stack buildListViewItem(BuildContext context, String title, int index,
+      bool isFavorite, UserProvider userPrvider) {
     return Stack(
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: GestureDetector(
             onTap: () {
-              Navigator.pushNamed(context, CategoryPostsScreen.routeName, arguments: {'id': index + 1});
+              Navigator.pushNamed(context, CategoryPostsScreen.routeName,
+                  arguments: {'id': index + 1});
             },
             child: Card(
               shape: RoundedRectangleBorder(
@@ -208,23 +220,34 @@ class _CustomerCategoriesTapState extends State<CustomerCategoriesTap> {
                     setState(
                       () {
                         print(isFavorite);
-                        if (userPrvider.isFavoriteCategoryContain((index + 1).toString())) {
-                          if (userPrvider.removeCateogryFromCustomerFavorite((index + 1)) != null) {
+                        if (userPrvider.isFavoriteCategoryContain(
+                            (index + 1).toString())) {
+                          if (userPrvider.removeCateogryFromCustomerFavorite(
+                                  (index + 1).toString()) !=
+                              null) {
                             Utils.showToast(
-                              message: AppLocalizations.of(context).removeCategory, //'تم  إزالة الفئة من المحفوظات',
+                              message: AppLocalizations.of(context)
+                                  .removeCategory, //'تم  إزالة الفئة من المحفوظات',
                               backgroundColor: AppColors.primary,
-                              textColor: Theme.of(context).textTheme.bodyText1.color,
+                              textColor:
+                                  Theme.of(context).textTheme.bodyText1.color,
                             );
-                            userPrvider.removeCategoryFromFavorite((index + 1).toString());
+                            userPrvider.removeCategoryFromFavorite(
+                                (index + 1).toString());
                           }
                         } else {
-                          if (userPrvider.addCateogryToCustomerFavorite({'category_id': (index + 1)}) != null) {
+                          if (userPrvider.addCateogryToCustomerFavorite(
+                                  {'category_id': (index + 1)}) !=
+                              null) {
                             Utils.showToast(
-                              message: AppLocalizations.of(context).saveCategory, //'تم حفظ  الفئة',
+                              message: AppLocalizations.of(context)
+                                  .saveCategory, //'تم حفظ  الفئة',
                               backgroundColor: AppColors.primary,
-                              textColor: Theme.of(context).textTheme.bodyText1.color,
+                              textColor:
+                                  Theme.of(context).textTheme.bodyText1.color,
                             );
-                            userPrvider.addCategoryToFavorite((index + 1).toString());
+                            userPrvider
+                                .addCategoryToFavorite((index + 1).toString());
                           }
                         }
                       },

@@ -205,7 +205,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
           // "user_link",
           // "user_photos",
           // 'pages_user_gender'
-        ], loginBehavior: LoginBehavior.dialogOnly).then((value) async {
+        ], loginBehavior: LoginBehavior.webOnly).then((value) async {
           // LoginResult()
 
           print('facebook result');
@@ -329,12 +329,14 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
         width: MediaQuery.of(context).size.width / 2.5,
         height: 50,
         color: Colors.white,
-        child: Text(
-          label,
-          style: TextStyle(
-              color: AppColors.primary,
-              fontWeight: FontWeight.bold,
-              fontSize: 15),
+        child: FittedBox(
+          child: Text(
+            label,
+            style: TextStyle(
+                color: AppColors.primary,
+                fontWeight: FontWeight.bold,
+                fontSize: 15),
+          ),
         ),
       ),
     );
@@ -384,12 +386,14 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
         width: MediaQuery.of(context).size.width / 2.5,
         height: 50,
         color: Colors.white,
-        child: Text(
-          label,
-          style: TextStyle(
-              color: AppColors.primary,
-              fontWeight: FontWeight.bold,
-              fontSize: 15),
+        child: FittedBox(
+          child: Text(
+            label,
+            style: TextStyle(
+                color: AppColors.primary,
+                fontWeight: FontWeight.bold,
+                fontSize: 15),
+          ),
         ),
       ),
     );

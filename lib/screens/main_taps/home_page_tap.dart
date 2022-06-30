@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dal/business_logic_layer/adds_provider.dart';
 import 'package:dal/business_logic_layer/all_posts_with_categories.dart';
 import 'package:dal/business_logic_layer/user_provider.dart';
@@ -39,8 +38,8 @@ class _HomePageTapState extends State<HomePageTap> {
   FollowedPostsByCustomerModel followedRes = FollowedPostsByCustomerModel();
   Map<String, dynamic> sellerFollower = {};
   PostsRepositoryImp postsRepositoryImp = PostsRepositoryImp();
-  List<int> listOfCities = [];
-  List<int> listOfCategories = [];
+  List<String> listOfCities = [];
+  List<String> listOfCategories = [];
   int categoryFilter = -1;
   int cityFilter = -1;
   List<String> categoryList = [];
@@ -517,12 +516,12 @@ class _HomePageTapState extends State<HomePageTap> {
     );
   }
 
-  void addCityFunction(List<int> listOfItems) {
+  void addCityFunction(List<String> listOfItems) {
     listOfCities = listOfItems;
     print('Cities' + listOfCities.toString());
   }
 
-  void addCategoryFunction(List<int> listOfItems) {
+  void addCategoryFunction(List<String> listOfItems) {
     listOfCategories = listOfItems;
     print('Categories' + listOfCategories.toString());
   }
@@ -546,19 +545,18 @@ class _HomePageTapState extends State<HomePageTap> {
   String search = '';
   bool isChange = false;
 
-  void onSubmitted(String value) {
-    setState(() async {
-      search = value;
-      setState(() {
-        isChange = true;
-      });
-      print(isChange);
-      await getPostData(
-          refreshed: true, searchTerm: search, categoryFilter: -1);
-      print('ayman Skhni');
-      currentPage++;
-      print(currentPage);
+  Future<void> onSubmitted(String value) async {
+    // setState(() async {
+    search = value;
+    setState(() {
+      isChange = true;
     });
+    print(isChange);
+    await getPostData(refreshed: true, searchTerm: search, categoryFilter: -1);
+    print('ayman Skhni');
+    currentPage++;
+    print(currentPage);
+    // });
   }
 
   _HomePageTapState() {
@@ -626,12 +624,15 @@ class _HomePageTapState extends State<HomePageTap> {
     }
     if (categoryFilter != -1 && cityFilter != -1) {
       var data = await postsRepositoryImp.getAllpostsByCategoryIdAndCityId(
-          categoryFilter, cityFilter, currentPage, pageSize);
+          categoryFilter.toString(),
+          cityFilter.toString(),
+          currentPage,
+          pageSize);
       print(data);
       allPostsData = PostsWithSellerModel.fromJson(data, false);
     } else if (categoryFilter != -1) {
       var data = await postsRepositoryImp.getAllPostsByCategoryId(
-          categoryFilter, currentPage, pageSize);
+          categoryFilter.toString(), currentPage, pageSize);
       print('fffffffffffffffffffffffffffff dataaaaaa');
       print(data);
       allPostsData = PostsWithSellerModel.fromJson(data, false);
@@ -676,7 +677,7 @@ class _HomePageTapState extends State<HomePageTap> {
       sellerFollower = await userProvider
           .getFollowedSellersByCustomerID(userProvider.userId);
       var followedPosts = followedRes.data[0].posts;
-      List<int> ids = [];
+      List<String> ids = [];
       followedPosts.forEach((element) {
         ids.add(element['id']);
       });
@@ -855,6 +856,7 @@ class _HomePageTapState extends State<HomePageTap> {
 
     setState(() {
       print('inside');
+      print('search');
       print(search);
     });
 

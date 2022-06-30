@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:http_parser/http_parser.dart';
 
 import 'end_points.dart';
 import 'local_host.dart';
@@ -349,6 +350,32 @@ class DioHelper {
     }
   }
 
+  static Future<dynamic> updateUserAccounts(
+      {@required String url, @required Map<String, dynamic> data}) async {
+    String accessToken = CachHelper.getData(key: 'token');
+    print('Access Token');
+    print(accessToken);
+    dio.options.headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      // 'Authorization': "Bearer " + accessToken.toString(),
+    };
+    dio.options.headers["Authorization"] = "Bearer " + accessToken;
+    Response response = await dio.post(url, data: data);
+    if (response.data['data'] == null) {
+      print('RES:$response');
+      print('status code is ${response.statusCode}');
+      return false;
+    } else if (response.data['code'] == '401') {
+      await refreshToken();
+      updateUserData(url: url, data: data);
+    } else {
+      print('RES:$response');
+      print('status code is ${response.statusCode}');
+      return response;
+    }
+  }
+
   static Future<dynamic> updateUserData({
     @required String url,
     // Map<String, dynamic> query,
@@ -378,6 +405,8 @@ class DioHelper {
     print(data);
     if (data['profile_image'] != null) {
       String fileName = data['profile_image'].split('/').last;
+      print(fileName);
+
       data['profile_image'] = await MultipartFile.fromFile(
         data['profile_image'],
         filename: fileName,

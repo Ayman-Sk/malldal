@@ -8,10 +8,10 @@ class ReviewsAPIs {
   Dio _dio = Dio();
 
   Future<bool> addReviewToPost({
-    @required int rate,
+    @required String rate,
     @required String notes,
-    @required int postId,
-    @required int customerId,
+    @required String postId,
+    @required String customerId,
     @required String token,
   }) async {
     print('rate');

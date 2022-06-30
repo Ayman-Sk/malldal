@@ -11,7 +11,7 @@ import '../../screens/overview_single_post_screen.dart';
 import '../../theme/app_colors.dart';
 
 class PostItem extends StatefulWidget {
-  final int postId;
+  final String postId;
   final String title;
   final String body;
   final String priceDetails;
@@ -77,7 +77,7 @@ class _PostItemState extends State<PostItem> {
       },
       child: Container(
         padding: const EdgeInsets.only(top: 10, left: 5, right: 5),
-        height: MediaQuery.of(context).size.height / 2,
+        height: MediaQuery.of(context).size.height / 1.7,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30.0),
           // color: Colors.grey,

@@ -9,15 +9,15 @@ class EndPoints {
   static final String refreshToken = baseUrl + '/auth/refresh';
   //Notification
 
-  static String getNotification(int id) =>
+  static String getNotification(String id) =>
       CachHelper.getData(key: 'userMode') == 'customer'
-          ? baseUrl + '/publicNotifications/customers/$id'
-          : baseUrl + '/publicNotifications/sellers/$id';
+          ? baseUrl + '/privateNotifications/customers/$id'
+          : baseUrl + '/privateNotifications/sellers/$id';
 
-  static String getSellerNotification(int id) =>
+  static String getSellerNotification(String id) =>
       baseUrl + '/publicNotifications/sellers/$id';
 
-  static String getCustomerNotification(int id) =>
+  static String getCustomerNotification(String id) =>
       baseUrl + '/publicNotifications/customers/$id';
   // Seller
   // //get
@@ -34,7 +34,7 @@ class EndPoints {
   static String getSellerByName(String name) =>
       allSellers + '?filter[user.name]=$name';
 
-  static String getSellerByID(int id) => allSellers + '/$id';
+  static String getSellerByID(String id) => allSellers + '/$id';
 
   static String getSellerContactInfosByName(String name) =>
       allSellers + '?filter[user.name]=$name&include=contact_infos';
@@ -46,7 +46,8 @@ class EndPoints {
   static String getSellerPostsByName(String name) =>
       allSellers + '?filter[user.name]=$name&include=posts';
 
-  static String getSellerPostsByID(int id) => allSellers + '/$id?include=posts';
+  static String getSellerPostsByID(String id) =>
+      allSellers + '/$id?include=posts';
 
   static final String getSortedSellersByNames = allSellers + '?sort=user.name';
 
@@ -58,10 +59,10 @@ class EndPoints {
       allSellers + '?sort=updated_at';
 
   //  //delete *** عم يرجعلي غير مصرح
-  static String deleteSellerByID(int id) => allSellers + '/$id';
+  static String deleteSellerByID(String id) => allSellers + '/$id';
 
   //  //update *** عم يرجعلي غير مصرح
-  static String updateSellerByID(int id) => allSellers + '/$id';
+  static String updateSellerByID(String id) => allSellers + '/$id';
 
   //customer
   //  //get
@@ -69,25 +70,25 @@ class EndPoints {
 
   static final String getAllCustomers = customers;
 
-  static String getcustomerByID(int id) => customers + '/$id';
+  static String getcustomerByID(String id) => customers + '/$id';
 
   // بجبلي البائعين يلي متابعن الزبون
-  static String getFollowedSellersByCustomerByID(int id) =>
+  static String getFollowedSellersByCustomerByID(String id) =>
       customers + '/$id?include=sellers.user';
 
   // بجبلي الفئات يلي متابعن الزبون
-  static String getFollowedCategoriesByCustomerByID(int id) =>
+  static String getFollowedCategoriesByCustomerByID(String id) =>
       customers + '/$id?include=categories';
 
   // بورجيني البوستات المحفوظة تبع الزبون
   //Working
-  static String getFollowedPostsOfCustomerByCustomerID(int id) =>
+  static String getFollowedPostsOfCustomerByCustomerID(String id) =>
       customers + '/$id?include=posts';
 
-  // static String addCategoryToUserFavorite(int id) =>
+  // static String addCategoryToUserFavorite(String id) =>
   //     customers + '/$id/categories';
 
-  // static String removeCategoryFromUserFavorite(int id, int categoryId) =>
+  // static String removeCategoryFromUserFavorite(String id, String categoryId) =>
   //     customers + '/$id/categories/$categoryId/';
 
   /*
@@ -121,28 +122,28 @@ class EndPoints {
   // POST//متابعة فئة
   //وبدك تعطيه بالبودي
   //  "category_id":"1"
-  static String addCategoryToCustomerFavList(int id) =>
+  static String addCategoryToCustomerFavList(String id) =>
       customers + '/$id/categories';
 
   // DELETE//إلغاء متابعة فئة
   // مابتمرقلو شي ابدا
   static String removeCategoryFromCustomerFavList({
-    @required int customerId,
-    @required int categoryId,
+    @required String customerId,
+    @required String categoryId,
   }) =>
       customers + '/$customerId/categories/$categoryId';
 
   // POST//متابعة بائع
   //وبدك تعطيه بالبودي
   //  "seller_id":"1"
-  static String addSellerToCustomerFavList(int id) =>
+  static String addSellerToCustomerFavList(String id) =>
       customers + '/$id/sellers';
 
   // DELETE//إلغاء متابعة فئة
   // مابتمرقلو شي ابدا
   static String removeSellerFromCustomerFavList({
-    @required int customerId,
-    @required int sellerId,
+    @required String customerId,
+    @required String sellerId,
   }) =>
       customers + '/$customerId/sellers/$sellerId';
 
@@ -150,14 +151,14 @@ class EndPoints {
   //وبدك تعطيه بالبودي
   //  "post_id":"1"
   // ////Working
-  static String addPostToCustomerFavList({int customerId}) =>
+  static String addPostToCustomerFavList({String customerId}) =>
       customers + '/$customerId/posts';
 
   // DELETE//إلغاء متابعة فئة
   // مابتمرقلو شي ابدا
   static String removePostFromCustomerFavList({
-    @required int customerId,
-    @required int postId,
+    @required String customerId,
+    @required String postId,
   }) =>
       customers + '/$customerId/posts/$postId';
 
@@ -169,15 +170,15 @@ class EndPoints {
 
   static final String customerLogout = baseUrl + '/auth/facebook/logout';
 
-  // static String saveFcmToken(int id) => baseUrl + '/auth/saveFcm/$id';
+  // static String saveFcmToken(String id) => baseUrl + '/auth/saveFcm/$id';
 
-  // static String saveSellerFcmToken(int id) =>
+  // static String saveSellerFcmToken(String id) =>
   //     baseUrl + '/auth/saveFcm/customers/$id';
 
-  // static String saveCustomerFcmToken(int id) =>
+  // static String saveCustomerFcmToken(String id) =>
   //     baseUrl + '/auth/saveFcm/sellers/$id';
 
-  static String saveFcmToken(int id) =>
+  static String saveFcmToken(String id) =>
       CachHelper.getData(key: 'userMode') == 'customer'
           ? baseUrl + '/auth/saveFcm/customers/$id'
           : baseUrl + '/auth/saveFcm/sellers/$id';
@@ -186,10 +187,10 @@ class EndPoints {
   //update customer *** عم يرجعلي غير مصرح
   //بدك تمرقلو
   // name gender city_id profile_image phone ومو شرط كلن
-  static String updateCustomer(int id) => customers + '/$id';
+  static String updateCustomer(String id) => customers + '/$id';
 
   //delete customer *** عم يرجعلي غير مصرح
-  static String deleteCustomer(int id) => customers + '/$id';
+  static String deleteCustomer(String id) => customers + '/$id';
 
   ////////////////////////////////////////////////////////////////// users Done
 
@@ -201,35 +202,35 @@ class EndPoints {
   static final String getAllPostsWithSeller = posts + '?include=seller';
 
   /////// Working
-  static String getSinglePostById(int id) => posts + '/$id';
+  static String getSinglePostById(String id) => posts + '/$id';
 
   ////// DONEEEEEEEEE
   static String getPostsByTitle(String name) => posts + '?filter[title]=$name';
 
 //ترجعلي بوستات السيلر الفلاني
-  static String getPostsBySellerID(int id, int pageNumber, int pageSize) =>
+  static String getPostsBySellerID(String id, int pageNumber, int pageSize) =>
       posts +
       '?page[number]=$pageNumber&page[size]=$pageSize&filter[seller_id]=$id';
 
   // جبلي كل البوستات مع التقييمات تبعاتن data =[]
-  static String getPostReviewsBySellerID(int id) =>
+  static String getPostReviewsBySellerID(String id) =>
       posts + '?filter[seller_id]=$id&include=reviews';
 
   // جبلي كل البوستات مع المنتجات data =[]
-  static String getPostProductsBySellerID(int id) =>
+  static String getPostProductsBySellerID(String id) =>
       posts + '?filter[seller_id]=$id&include=products';
 
   // جبلي كل البوستات مع الفئات تبعاتنdata =[]
-  static String getPostCategoriesBySellerID(int id) =>
+  static String getPostCategoriesBySellerID(String id) =>
       posts + '?filter[seller_id]=$id&include=categories';
 
   // data =[]
-  static String getPostSellesBySellerID(int id) =>
+  static String getPostSellesBySellerID(String id) =>
       posts + '?filter[seller_id]=$id&include=seller';
 
   //  جبلي كل البوستات مع السيلرات يلي نشرتن ///Working On ...
   static String getPostRequestBySellerID(
-          int id, int pageNumber, int pageSize) =>
+          String id, int pageNumber, int pageSize) =>
       baseUrl +
       '/post_requests?page[number]=$pageNumber&page[size]=$pageSize&filter[seller_id]=$id';
 
@@ -241,24 +242,24 @@ class EndPoints {
 
   // '?page[number]=$pageNumber&include=categories&page[size]=$pageSize';
 
-  static String addPostRequest(int id) => baseUrl + '/post_requests';
+  static String addPostRequest(String id) => baseUrl + '/post_requests';
 
   static final String getAllPostsWithAllThemSellers = posts + '?include=seller';
   static final String test = 'http://dal.chi-team.com/api/posts?include=seller';
 
-  static String getPostByID(int id) => posts + '/$id';
+  static String getPostByID(String id) => posts + '/$id';
 
   // POST//إضافة بوست الى فئة
   //وبدك تعطيه بالبودي
   //  "category_id":"1"
-  static String addPostToCategoryList(int postId) =>
+  static String addPostToCategoryList(String postId) =>
       posts + '/$postId/categories';
 
   // DELETE//إزالة بوست من فئة
   // مابتمرقلو شي ابدا
   static String removePostFromCategoryList({
-    @required int categoryId,
-    @required int postId,
+    @required String categoryId,
+    @required String postId,
   }) =>
       posts + '/$postId/$categoryId';
 
@@ -269,10 +270,10 @@ class EndPoints {
   //  Update
   //وبتمرقلو
   //title body seller_id priceDetails products[0][title] products[0][descreption] products[0][priceDetails] products[0][image]
-  static String updatePost(int postID) => posts + '/$postID';
+  static String updatePost(String postID) => posts + '/$postID';
 
   //DELETE
-  static String deletePost(int postID) => posts + '/$postID';
+  static String deletePost(String postID) => posts + '/$postID';
 
   ////////////////////////////////////////////////////////////////// posts Done
 
@@ -286,16 +287,17 @@ class EndPoints {
   static String getCategoryByName(String name) =>
       categorys + '?filter[title]=$name';
 
-  static String getCategoryByID(int catID) => categorys + '/$catID';
+  static String getCategoryByID(String catID) => categorys + '/$catID';
 
-  // static String getPostsByCategoryId(int catId) =>
+  // static String getPostsByCategoryId(String catId) =>
   //     categorys + '/$catId?include=posts';
 
-  static String getPostsByCategoryId(int catId, int pageNumber, int pageSize) =>
+  static String getPostsByCategoryId(
+          String catId, int pageNumber, int pageSize) =>
       posts + '/category/$catId?page[number]=$pageNumber&page[size]=$pageSize';
 
   static String getPostsByCategoryIdAndCityID(
-          int categoryId, int cityId, int pageNumber, int pageSize) =>
+          String categoryId, String cityId, int pageNumber, int pageSize) =>
       posts +
       '/category/$categoryId/city/$cityId?page[number]=$pageNumber&page[size]=$pageSize';
 
@@ -312,14 +314,14 @@ class EndPoints {
   static final String reviews = baseUrl + '/reviews';
 
   // جبلي تقييمات بوست حسب رقمو
-  static String getAllReviewsOfSinglePostByID(int postID) =>
+  static String getAllReviewsOfSinglePostByID(String postID) =>
       reviews + '?filter[post_id]=$postID';
 
   // جبلي تقييمات هاد الزبون
-  static String getAllReviewsDoneByCustomerFromHisID(int postID) =>
+  static String getAllReviewsDoneByCustomerFromHisID(String postID) =>
       reviews + '?filter[customer_id]=$postID';
 
-  static String getOneReviewByID(int revID) => reviews + '/$revID';
+  static String getOneReviewByID(String revID) => reviews + '/$revID';
 
   //POST
   //المفروض وقت اعمل تقييم لبوست مرقلو رقم البوست وملاحظات عالبوست
@@ -333,9 +335,9 @@ class EndPoints {
 
   //POST
   //Form Data : rate notes post_id customer_id
-  static String updateReviewByID(int revID) => reviews + '/$revID';
+  static String updateReviewByID(String revID) => reviews + '/$revID';
 
-  static String deleteReviewByID(int revID) => reviews + '/$revID';
+  static String deleteReviewByID(String revID) => reviews + '/$revID';
 
   ////////////////////////////////////////////////////////////////// categorys Done
 
@@ -347,15 +349,15 @@ class EndPoints {
       adds + '?page[size]=$pageSize&page[number]=$pageNumber';
 
   // جبلي الاعلانات حسب الاهمية المختارة
-  static String getAddsByImportantID(int addID) =>
+  static String getAddsByImportantID(String addID) =>
       adds + '?filter[important]=$addID';
 
   // جبلي اعلان عن طريق رقمو
-  static String getAddByID(int addID) => adds + '/$addID';
+  static String getAddByID(String addID) => adds + '/$addID';
 
   //POST
   // تعيين اعلان ك مهم عن طريق رقمو
-  static String makeOneAddImportantByItsID(int addID) =>
+  static String makeOneAddImportantByItsID(String addID) =>
       adds + '/$addID/important';
 
   ////////////////////////////////////////////////////////////////// Adds Done
@@ -363,7 +365,7 @@ class EndPoints {
   //  contact_infos
   static final String contactInfos = baseUrl + '/contact_infos';
 
-  static String visitContactInfo(int sellerId) =>
+  static String visitContactInfo(String sellerId) =>
       contactInfos + '/$sellerId/visit';
 
   // static String addNewContactInfo() =>
@@ -373,20 +375,21 @@ class EndPoints {
   // جبلي كل معلومات التواصل
   static final String getAllContactInfos = contactInfos;
 
-  static String getSellerContactInfo(int id) => contactInfos + "/$id/byseller";
+  static String getSellerContactInfo(String id) =>
+      contactInfos + "/$id/byseller";
 
   // جبلي كل معلومات تواصل هادالبائع
-  static String getAllContactInfoOfSellerByID(int sellerId) =>
+  static String getAllContactInfoOfSellerByID(String sellerId) =>
       contactInfos + '?filter[seller_id]=$sellerId';
 
   /// ؟؟؟؟؟؟
-  static String getAllContactInfoOfSellerByTypeID(int sellerId) =>
+  static String getAllContactInfoOfSellerByTypeID(String sellerId) =>
       contactInfos + '?filter[type]=$sellerId';
 
   // شو بستفيد اذا بمرقلو contact_info ك رقم هون شو برجعلي ؟؟؟
   static String getContactInfosOfSellerBySellerID({
-    @required int sellerId,
-    @required int contactinfoID,
+    @required String sellerId,
+    @required String contactinfoID,
   }) =>
       contactInfos + '/$contactinfoID?filter[seller_id]=$sellerId';
 
@@ -407,11 +410,11 @@ class EndPoints {
   //   "seller_id":"1",
   //   "__methode":"put"
   // }
-  static String updateSingleContactInfoByItsID(int contactInfosID) =>
+  static String updateSingleContactInfoByItsID(String contactInfosID) =>
       contactInfos + '/$contactInfosID';
 
   //DELETE
-  static String deleteSingleContactInfoByItsID(int contactInfosID) =>
+  static String deleteSingleContactInfoByItsID(String contactInfosID) =>
       contactInfos + '/$contactInfosID';
 
 ////////////////////////////////////////////////////////////////// contact_infos Done

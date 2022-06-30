@@ -114,7 +114,7 @@ class PostModel {
     this.priceDetails,
     this.avgRate,
     this.sellerId,
-    this.postRequestId,
+    // this.postRequestId,
     this.createdAt,
     this.updatedAt,
     this.categories,
@@ -124,14 +124,14 @@ class PostModel {
     this.isSaved,
   });
 
-  int id;
+  String id;
   String title;
   dynamic deletedAt;
   String body;
   String priceDetails;
   String avgRate;
-  int sellerId;
-  int postRequestId;
+  String sellerId;
+  // String postRequestId;
   String createdAt;
   String updatedAt;
   bool isSaved;
@@ -147,8 +147,8 @@ class PostModel {
         body: json["body"],
         priceDetails: json["priceDetails"],
         avgRate: json["avgRate"].toString(),
-        sellerId: int.parse(json["seller_id"]),
-        postRequestId: int.parse(json["post_request_id"]),
+        sellerId: json["seller_id"],
+        // postRequestId: int.parse(json["post_request_id"]),
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
         postImages: List<dynamic>.from(json["post_images"].map((x) => x)),
@@ -168,7 +168,7 @@ class PostModel {
         "priceDetails": priceDetails,
         "avgRate": avgRate,
         "seller_id": sellerId,
-        "post_request_id": postRequestId,
+        // "post_request_id": postRequestId,
         "created_at": createdAt,
         "updated_at": updatedAt,
         "post_images": List<dynamic>.from(postImages.map((x) => x)),
@@ -189,11 +189,11 @@ class Seller {
     this.user,
   });
 
-  int id;
+  String id;
   String profileImage;
   String bio;
   dynamic deletedAt;
-  int userId;
+  String userId;
   String createdAt;
   String updatedAt;
   User user;
@@ -204,7 +204,7 @@ class Seller {
             'profile_image'], //profileImageValues.map[json["profile_image"]],
         bio: json["bio"],
         deletedAt: json["deleted_at"],
-        userId: int.parse(json["user_id"]),
+        userId: json["user_id"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
         user: User.fromJson(json["user"]),

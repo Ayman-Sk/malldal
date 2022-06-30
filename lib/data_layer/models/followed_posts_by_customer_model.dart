@@ -16,14 +16,14 @@ user: {name: غفغغغغغغغغغغغ, gender: male, phone: 1472583690}, posts
 class FollowedPostsByCustomerModel {
   FollowedPostsByCustomerModel({
     this.status,
-    this.code,
+    // this.code,
     this.message,
     this.messageAr,
     this.data,
   });
 
   String status;
-  String code;
+  // String code;
   String message;
   String messageAr;
   List<Datum> data; // [0]
@@ -31,7 +31,7 @@ class FollowedPostsByCustomerModel {
   factory FollowedPostsByCustomerModel.fromJson(Map<String, dynamic> json) {
     var temp = FollowedPostsByCustomerModel(
       status: json["status"],
-      code: json["code"],
+      // code: json["code"],
       message: json["message"],
       messageAr: json["messageAr"],
       data:
@@ -43,7 +43,7 @@ class FollowedPostsByCustomerModel {
 
   Map<String, dynamic> toJson() => {
         "status": status,
-        "code": code,
+        // "code": code,
         "message": message,
         "messageAr": messageAr,
         "data": List<dynamic>.from(data.map((x) => x.toJson())),
@@ -66,7 +66,7 @@ class Datum {
     this.categories = const [],
   });
 
-  int id;
+  String id;
   String profileImage;
   String cityId;
   String userId;

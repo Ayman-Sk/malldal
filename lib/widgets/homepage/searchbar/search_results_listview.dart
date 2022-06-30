@@ -76,7 +76,7 @@ class _SearchResultsListViewState extends State<SearchResultsListView> {
         sellerFollower = await userProvider
             .getFollowedSellersByCustomerID(userProvider.userId);
         var followedPosts = followedRes.data[0].posts;
-        List<int> ids = [];
+        List<String> ids = [];
         followedPosts.forEach((element) {
           ids.add(element['id']);
         });

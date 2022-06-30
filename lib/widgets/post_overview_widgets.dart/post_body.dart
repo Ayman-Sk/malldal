@@ -15,7 +15,7 @@ class PostBodyWidget extends StatefulWidget {
   final String bio;
   final String phoneNumber;
   final List<String> postImagePaths;
-  final int ownerId;
+  final String ownerId;
   PostBodyWidget({
     @required this.title,
     @required this.body,
@@ -49,7 +49,7 @@ class _PostBodyWidgetState extends State<PostBodyWidget> {
       setState(() {
         accountType.accounts.forEach(
           (element) =>
-              displayedAccounts.add(_buildsellerAccountWidget(element)),
+              displayedAccounts.add(_buildSellerAccountWidget(element)),
         );
       });
       print(accountType);
@@ -180,7 +180,9 @@ class _PostBodyWidgetState extends State<PostBodyWidget> {
     return showDialog(
       context: context,
       builder: (_) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 240, horizontal: 32),
+        padding: EdgeInsets.symmetric(
+            vertical: MediaQuery.of(context).size.height / 5,
+            horizontal: MediaQuery.of(context).size.width / 10),
         child: Dialog(
           backgroundColor: Colors.transparent,
           insetPadding: const EdgeInsets.all(10),
@@ -211,12 +213,11 @@ class _PostBodyWidgetState extends State<PostBodyWidget> {
                   Column(
                     children: displayedAccounts,
                   ),
-
                   // ListView.separated(
                   //   shrinkWrap: true,
                   //   itemCount: accountType.accounts.length,
                   //   itemBuilder: (context, index) =>
-                  //       _buildsellerAccountWidget(accountType.accounts[index]),
+                  //       _buildSellerAccountWidget(accountType.accounts[index]),
                   //   separatorBuilder: (context, _) => Divider(),
                   // ),
                 ],
@@ -265,9 +266,9 @@ class _PostBodyWidgetState extends State<PostBodyWidget> {
     );
   }
 
-  Widget _buildsellerAccountWidget(Account account) {
+  Widget _buildSellerAccountWidget(Account account) {
     return ListTile(
-      leading: types[account.contactInfoTypeId],
+      leading: types[int.parse(account.contactInfoTypeId)],
       title: Text(account.info),
     );
   }

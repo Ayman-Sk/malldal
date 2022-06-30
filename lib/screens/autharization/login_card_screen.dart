@@ -2,8 +2,7 @@
 
 import 'package:dal/data_layer/models/facebook_user.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:intl/intl.dart';
+
 import 'package:provider/provider.dart';
 // import 'package:url_launcher/url_launcher.dart';
 // import 'package:intl/intl.dart';
@@ -62,49 +61,49 @@ class _LoginCardScreenState extends State<LoginCardScreen>
         .login(number);
   }
 
-  Future<bool> _facebookSubmit(
-    String facebookId,
-    String name,
-    String email,
-    String profileImage,
-    String customerSessionExpirationDate,
-  ) async {
-    setState(() {
-      loading = true;
-    });
-    // if (!_formkey.currentState.validate()) {
-    //   setState(() {
-    //     loading = false;
-    //   });
-    //   return Future.value(false);
-    // }
-    // data['facebook_id'] = facebookId;
-    // data['name'] = name;
-    // data['email'] = email;
-    // data['profile_image'] = profileImage;
-    // data['customer_session_expiration_date'] =
-    //     this.customerSessionExpirationDate;
-    Map<String, String> facebookData = {
-      'facebook_id': facebookId,
-      'name': name,
-      'email': email,
-      'profile_image': profileImage,
-      'customer_session_expiration_date': customerSessionExpirationDate
-    };
-    // _formkey.currentState.save();
-    return await Provider.of<UserProvider>(context, listen: false)
-        .facebookLogin(facebookData);
-  }
+  // Future<bool> _facebookSubmit(
+  //   String facebookId,
+  //   String name,
+  //   String email,
+  //   String profileImage,
+  //   String customerSessionExpirationDate,
+  // ) async {
+  //   setState(() {
+  //     loading = true;
+  //   });
+  //   // if (!_formkey.currentState.validate()) {
+  //   //   setState(() {
+  //   //     loading = false;
+  //   //   });
+  //   //   return Future.value(false);
+  //   // }
+  //   // data['facebook_id'] = facebookId;
+  //   // data['name'] = name;
+  //   // data['email'] = email;
+  //   // data['profile_image'] = profileImage;
+  //   // data['customer_session_expiration_date'] =
+  //   //     this.customerSessionExpirationDate;
+  //   Map<String, String> facebookData = {
+  //     'facebook_id': facebookId,
+  //     'name': name,
+  //     'email': email,
+  //     'profile_image': profileImage,
+  //     'customer_session_expiration_date': customerSessionExpirationDate
+  //   };
+  //   // _formkey.currentState.save();
+  //   return await Provider.of<UserProvider>(context, listen: false)
+  //       .facebookLogin(facebookData);
+  // }
 
   @override
   Widget build(BuildContext context) {
     // final devicesize = MediaQuery.of(context).size;
-    DateFormat
-        // dateFormat =
-        // DateFormat(
-        //     "yyyy-MM-dd HH:mm:ss");
-        dateFormat = DateFormat("yyyy-MM-dd");
-    AccessToken accessToken;
+    // DateFormat
+    // dateFormat =
+    // DateFormat(
+    //     "yyyy-MM-dd HH:mm:ss");
+    //     dateFormat = DateFormat("yyyy-MM-dd");
+    // AccessToken accessToken;
 
     final phoneTextFielde = TextFormField(
       controller: _phonecontroller,
@@ -501,22 +500,22 @@ class _LoginCardScreenState extends State<LoginCardScreen>
                                       //     ),
                                       //   ),
                                       // ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 0, bottom: 8),
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            Navigator.of(context).pushNamed(
-                                              CustomerSignupScreens.routeName,
-                                            );
-                                          },
-                                          child: Text(
-                                            AppLocalizations.of(context).signup,
-                                            style: TextStyle(
-                                                color: AppColors.primary),
-                                          ),
-                                        ),
-                                      ),
+                                      // Padding(
+                                      //   padding: const EdgeInsets.only(
+                                      //       top: 0, bottom: 8),
+                                      //   child: GestureDetector(
+                                      //     onTap: () {
+                                      //       Navigator.of(context).pushNamed(
+                                      //         CustomerSignupScreens.routeName,
+                                      //       );
+                                      //     },
+                                      //     child: Text(
+                                      //       AppLocalizations.of(context).signup,
+                                      //       style: TextStyle(
+                                      //           color: AppColors.primary),
+                                      //     ),
+                                      //   ),
+                                      // ),
                                       Padding(
                                         padding: const EdgeInsets.only(
                                             top: 4, bottom: 16),

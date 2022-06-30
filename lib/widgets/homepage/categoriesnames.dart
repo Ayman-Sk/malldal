@@ -58,7 +58,7 @@ class CategoriesTapsWidget extends StatelessWidget {
                     ),
                     onTap: () {
                       print(item.id);
-                      postsProvider.setIndexOfCategory(-1);
+                      postsProvider.setIndexOfCategory('-1');
                     },
                   ),
                 );

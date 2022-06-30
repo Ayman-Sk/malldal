@@ -4,10 +4,10 @@ import 'package:flutter/cupertino.dart';
 
 abstract class ReviewRepository {
   Future<bool> addReviewToSinglePost({
-    @required int rate,
+    @required String rate,
     @required String notes,
-    @required int postId,
-    @required int customerId,
+    @required String postId,
+    @required String customerId,
   });
 }
 
@@ -16,10 +16,10 @@ class ReviewRepositoryImp extends ReviewRepository {
 
   @override
   Future<bool> addReviewToSinglePost({
-    @required int rate,
+    @required String rate,
     @required String notes,
-    @required int postId,
-    @required int customerId,
+    @required String postId,
+    @required String customerId,
   }) async {
     bool res = await revAPI.addReviewToPost(
       rate: rate,

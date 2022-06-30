@@ -1,6 +1,5 @@
 import 'package:dal/network/local_host.dart';
 import 'package:dal/screens/add_post_screen.dart';
-import 'package:dal/screens/autharization/login_card_screen.dart';
 import 'package:dal/screens/customer_seller_follower.dart';
 import 'package:dal/screens/introduction_screen.dart';
 import 'package:dal/screens/main_taps/user_profile_screen.dart';

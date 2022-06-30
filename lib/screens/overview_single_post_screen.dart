@@ -4,7 +4,7 @@ import 'package:dal/widgets/post_overview_widgets.dart/main_post_widget.dart';
 import 'package:flutter/material.dart';
 
 class OverviewSinglePostScreen extends StatefulWidget {
-  final int postId;
+  final String postId;
   final String postTitle;
   final String postbody;
   final String priceDetails;

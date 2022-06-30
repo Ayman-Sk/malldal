@@ -140,7 +140,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  void addCityFunction(List<int> listOfItems) {
+  void addCityFunction(List<String> listOfItems) {
     listOfItems = listOfItems;
     print('Cities');
   }

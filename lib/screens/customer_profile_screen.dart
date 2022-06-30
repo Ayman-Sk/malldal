@@ -6,7 +6,6 @@ import 'package:dal/screens/autharization/login_card_screen.dart';
 import 'package:dal/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'edit_customer_profile.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomerProfileScreen extends StatefulWidget {
@@ -23,7 +22,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
     var customerProvider = Provider.of<UserProvider>(context);
     customerProvider.getUserToApp();
 
-    int id = CachHelper.getData(key: 'userId');
+    String id = CachHelper.getData(key: 'userId');
     String userMode = customerProvider.userMode;
 
     double coverHeight = MediaQuery.of(context).size.height / 4;

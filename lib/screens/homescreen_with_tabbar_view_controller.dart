@@ -72,7 +72,7 @@ class _MainTabBarViewControllerState extends State<MainTabBarViewController>
   ];
 
   Future<bool> addFcmToken({
-    @required int userId,
+    @required String userId,
     @required String firebaseoken,
   }) async {
     Dio _dio = Dio();

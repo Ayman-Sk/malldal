@@ -8,7 +8,7 @@ class AllPostsWithCategories with ChangeNotifier {
   PostsWithSellerModel _allPosts = PostsWithSellerModel();
   List<PostModel> _displayedPosts = [];
   List<String> _categoriesList = [];
-  int _displayPostsIndex = -1;
+  String _displayPostsIndex = '-1';
 
   // List<String> _categoryFilter = [];
   // List<String> _cityFilter = [];
@@ -25,8 +25,6 @@ class AllPostsWithCategories with ChangeNotifier {
     notifyListeners();
   }
 
-
-
   void addCategories(List<String> categories) {
     this._categoriesList.addAll(categories);
     notifyListeners();
@@ -41,7 +39,7 @@ class AllPostsWithCategories with ChangeNotifier {
     return _allPosts;
   }
 
-  void setIndexOfCategory(int index) {
+  void setIndexOfCategory(String index) {
     this._displayPostsIndex = index;
     notifyListeners();
   }
@@ -159,7 +157,7 @@ class AllPostsWithCategories with ChangeNotifier {
     notifyListeners();
   }
 
-  int get getDiplayedPostsIndex => this._displayPostsIndex;
+  String get getDiplayedPostsIndex => this._displayPostsIndex;
 
   String get getCategoryFilter => this._categoryFilter;
 
@@ -167,14 +165,14 @@ class AllPostsWithCategories with ChangeNotifier {
 
   List<String> get getCategories => this._categoriesList;
 
-
   // List<String> get getCategoryFilter => this._categoryFilter;
   // List<String> get getCityFilter => this._cityFilter;
 
   List<PostModel> getDisplayedPosts() {
     if (_allPosts.data != null) {
-      if (_categoryFilter.isEmpty && _cityFilter.isEmpty) this._displayPostsIndex = -1;
-      if (this._displayPostsIndex == -1) return _allPosts.data.data;
+      if (_categoryFilter.isEmpty && _cityFilter.isEmpty)
+        this._displayPostsIndex = '-1';
+      if (this._displayPostsIndex == '-1') return _allPosts.data.data;
       _displayedPosts = [];
       _allPosts.data.data.forEach((element) {
         print(_displayPostsIndex.toString());

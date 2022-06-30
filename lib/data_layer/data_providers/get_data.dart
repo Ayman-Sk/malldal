@@ -22,8 +22,8 @@ class GetData {
 
   GetData({this.context, this.postPageSize, this.categoriesPageSize});
 
-  int userId = CachHelper.getData(key: 'userId') == null
-      ? -1
+  String userId = CachHelper.getData(key: 'userId') == null
+      ? '-1'
       : CachHelper.getData(key: 'userId');
 
   Future<bool> getCategoriesData() async {
@@ -65,7 +65,7 @@ class GetData {
       );
       print('\nget Followed Categories Response : ${response.data}\n');
       if (response.data['data'] != null) {
-        int postId = response.data['data'][0]['id'];
+        String postId = response.data['data'][0]['id'];
         print('\nuser Id : $postId\n');
         response.data['data'][0]['categories'].forEach((element) {
           userProvider.addCategoryToFavorite(element['id'].toString());
@@ -95,7 +95,7 @@ class GetData {
     userProvider.getUserToApp();
 
     bool isSeller = CachHelper.getData(key: 'userMode') == 'seller';
-    bool isAnonymous = userId == -1;
+    bool isAnonymous = userId == '-1';
     print(isSeller);
     print(isAnonymous);
     var addsData =
@@ -115,24 +115,28 @@ class GetData {
     });
 
     if (!isAnonymous && !isSeller) {
-      print('weeee areeee innnnnnn');
-      followedRes = await postsRepositoryImp
-          .getFollowedPostsOfCustomerByCustomerID(id: userId);
-      sellerFollower =
-          await userProvider.getFollowedSellersByCustomerID(userId);
-      var followedPosts = followedRes.data[0].posts;
-      List<int> ids = [];
-      print('ffollowww');
-      print(followedPosts);
-      followedPosts.forEach((element) {
-        ids.add(element['id']);
-      });
-      userProvider.setSavedPosts(ids);
-      ids = [];
-      sellerFollower['data'][0]['sellers'].forEach((element) {
-        ids.add(element['id']);
-      });
-      userProvider.setFollowers(ids);
+      try {
+        print('weeee areeee innnnnnn');
+        followedRes = await postsRepositoryImp
+            .getFollowedPostsOfCustomerByCustomerID(id: userId);
+        sellerFollower =
+            await userProvider.getFollowedSellersByCustomerID(userId);
+        var followedPosts = followedRes.data[0].posts;
+        List<String> ids = [];
+        print('ffollowww');
+        print(followedPosts);
+        followedPosts.forEach((element) {
+          ids.add(element['id']);
+        });
+        userProvider.setSavedPosts(ids);
+        ids = [];
+        sellerFollower['data'][0]['sellers'].forEach((element) {
+          ids.add(element['id']);
+        });
+        userProvider.setFollowers(ids);
+      } catch (error) {
+        print('Error in get followed post of customer by customer Id');
+      }
     }
     if (allPostsData == null) {
       return false;
@@ -143,14 +147,14 @@ class GetData {
   }
 
   Future<Map<String, dynamic>> getFollowedSellersByCustomerID(
-      int userId) async {
+      String userId) async {
     try {
       dynamic response = await DioHelper.getFollowedSeller(
         url: EndPoints.getFollowedSellersByCustomerByID(userId),
       );
       print('\nget Followed Response : ${response.data}\n');
       if (response.data['data'] != null) {
-        int postId = response.data['data'][0]['id'];
+        String postId = response.data['data'][0]['id'];
         print('\nuser Id : $postId\n');
         // CachHelper.saveData(key: 'userId', value: userId);
         return response.data;

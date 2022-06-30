@@ -116,7 +116,7 @@ class CategoryModel {
     this.updatedAt,
   });
 
-  int id;
+  String id;
   dynamic deletedAt;
   String title;
   DateTime createdAt;

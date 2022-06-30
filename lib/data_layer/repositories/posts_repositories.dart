@@ -5,14 +5,14 @@ import 'package:flutter/cupertino.dart';
 
 abstract class PostsRepository {
   Future<PostsWithSellerModel> getAllPosts();
-  Future<PostsWithSellerModel> getSinglePostById({@required int id});
+  Future<PostsWithSellerModel> getSinglePostById({@required String id});
   Future<PostsWithSellerModel> getPostsByTitle();
   Future<FollowedPostsByCustomerModel> getFollowedPostsOfCustomerByCustomerID({
-    @required int id,
+    @required String id,
   });
   Future<bool> addPostTofollowedPostsOfCustomer({
-    @required int cutomerId,
-    @required int postId,
+    @required String cutomerId,
+    @required String postId,
   });
 }
 
@@ -45,7 +45,7 @@ class PostsRepositoryImp extends PostsRepository {
   }
 
   Future<dynamic> getAllPostsByCategoryId(
-      int id, int pageNumber, int pageSize) async {
+      String id, int pageNumber, int pageSize) async {
     // PostsWithSellerModel allposts = PostsWithSellerModel();
     final rowPosts =
         await postAPI.getRowPostsByCategoryId(id, pageNumber, pageSize);
@@ -55,14 +55,14 @@ class PostsRepositoryImp extends PostsRepository {
   }
 
   Future<dynamic> getAllpostsByCategoryIdAndCityId(
-      int categoryId, int cityId, int pageNumber, int pageSize) async {
+      String categoryId, String cityId, int pageNumber, int pageSize) async {
     final rowPosts = await postAPI.getRowPostsByCategoryIdAndCityId(
         categoryId, cityId, pageNumber, pageSize);
     return rowPosts;
   }
 
   @override
-  Future<PostsWithSellerModel> getSinglePostById({@required int id}) async {
+  Future<PostsWithSellerModel> getSinglePostById({@required String id}) async {
     PostsWithSellerModel singlePost = PostsWithSellerModel();
     final rowSinglePost = await postAPI.getSingleRowPostByID(postId: id);
     var _rowSinglePost = PostsWithSellerModel.fromJson(rowSinglePost, false);
@@ -82,7 +82,7 @@ class PostsRepositoryImp extends PostsRepository {
 
   @override
   Future<FollowedPostsByCustomerModel> getFollowedPostsOfCustomerByCustomerID(
-      {@required int id}) async {
+      {@required String id}) async {
     FollowedPostsByCustomerModel followedPosts = FollowedPostsByCustomerModel();
     final rowFollowedPosts =
         await postAPI.getRowFollowedPostsOfCustomerByCustomerID(id: id);
@@ -95,8 +95,8 @@ class PostsRepositoryImp extends PostsRepository {
   //addPostTofollowedPostsOfCustomer
   @override
   Future<bool> addPostTofollowedPostsOfCustomer({
-    @required int cutomerId,
-    @required int postId,
+    @required String cutomerId,
+    @required String postId,
     @required String token,
   }) async {
     print('addddddddddddd');
@@ -115,8 +115,8 @@ class PostsRepositoryImp extends PostsRepository {
   }
 
   Future<bool> removePostFromFollowedPostsOfCustomer({
-    @required int cutomerId,
-    @required int postId,
+    @required String cutomerId,
+    @required String postId,
     @required String token,
   }) async {
     bool res = await postAPI.removePostFromfollowedPostsOfCustomer(

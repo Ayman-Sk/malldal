@@ -53,7 +53,7 @@ class _CategoryPostsScreenState extends State<CategoryPostsScreen> {
     }
     print('willll get');
     var data = await postsRepositoryImp.getAllPostsByCategoryId(
-        id, currentPage, pageSize);
+        id.toString(), currentPage, pageSize);
     print('gettted');
     if (data['code'] == 200) {
       if (refreshed) {

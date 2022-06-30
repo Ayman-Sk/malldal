@@ -22,8 +22,8 @@ class CustomerApis {
   // }
 
   Future<bool> addSellerTofollowedUserOfCustomer({
-    @required int customerId,
-    @required int sellerId,
+    @required String customerId,
+    @required String sellerId,
     @required String token,
   }) async {
     final response = await _dio.post(
@@ -57,8 +57,8 @@ class CustomerApis {
   }
 
   Future<bool> removeSellerTofollowedUserOfCustomer({
-    @required int customerId,
-    @required int sellerId,
+    @required String customerId,
+    @required String sellerId,
     @required String token,
   }) async {
     final response = await _dio.delete(

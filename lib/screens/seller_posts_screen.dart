@@ -1,10 +1,8 @@
-import 'package:dal/business_logic_layer/user_provider.dart';
 import 'package:dal/theme/app_colors.dart';
 import 'package:dal/widgets/center_title_widget.dart';
 import 'package:dal/widgets/myDrawer.dart';
 import 'package:dal/widgets/Post/post_item.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -29,7 +27,7 @@ class _SellerPostScreenState extends State<SellerPostScreen> {
   RefreshController _refreshController =
       RefreshController(initialRefresh: true);
 
-  Future<bool> getSellerPosts(bool isRefresh, bool isRequest, int id,
+  Future<bool> getSellerPosts(bool isRefresh, bool isRequest, String id,
       int pageNumber, int pageSize) async {
     print('pages');
     print(pageSize);
