@@ -580,7 +580,7 @@ class UserProvider with ChangeNotifier {
       print('\nResponse : ${response.data}');
       String token = response.data['token'];
       CachHelper.saveData(key: 'token', value: token);
-      String userMode = response.data['user'][0].keys.elementAt(3);
+      String userMode = 'seller'; //response.data['user'][0].keys.elementAt(3);
 
       CachHelper.saveData(
           key: 'userId', value: response.data['user'][0][userMode]['id']);
@@ -589,7 +589,7 @@ class UserProvider with ChangeNotifier {
 
       print('mooooooooooooooooode');
       print(userMode);
-      print(response.data['user'][0][userMode]['city_id']);
+      // print(response.data['user'][0][userMode]['city_id']);
       print('iddddddddddddddddddddddddddd');
       print(response.data['user'][0][userMode]['bio']);
       print(response.data['user'][0][userMode]['id']);
@@ -597,10 +597,11 @@ class UserProvider with ChangeNotifier {
         idOfUser: response.data['user'][0][userMode]['id'],
         userName: response.data['user'][0]['name'],
         gender: response.data['user'][0]['gender'],
-        cityId: response.data['user'][0][userMode]['city_id'],
-        cityName: userMode == 'customer'
-            ? response.data['user'][0][userMode]['city']['cityName']
-            : '',
+        cityId: '0', //response.data['user'][0][userMode]['city_id'],
+        cityName: '',
+        // userMode == 'customer'
+        //     ? response.data['user'][0][userMode]['city']['cityName']
+        //     : '',
         biography: response.data['user'][0][userMode]['bio'],
         profileImage: response.data['user'][0][userMode]['profile_image'],
         phoneNumber: response.data['user'][0]['phone'],

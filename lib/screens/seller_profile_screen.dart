@@ -120,7 +120,7 @@ class _SellerProfileScreenState extends State<SellerProfileScreen> {
                   icon: sellerProvider.gender == 'male'
                       ? Icons.male
                       : Icons.female,
-                  title: AppLocalizations.of(context).male, //"الجنس",
+                  title: AppLocalizations.of(context).gender, //"الجنس",
                   subTitle: sellerProvider.gender == 'male'
                       ? AppLocalizations.of(context).male
                       : //'ذكر' :

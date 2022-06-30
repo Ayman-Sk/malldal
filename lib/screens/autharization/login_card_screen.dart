@@ -309,198 +309,198 @@ class _LoginCardScreenState extends State<LoginCardScreen>
                                                 },
                                               ),
                                             ),
-                                      SingleChildScrollView(
-                                        child: Container(
-                                          child: ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                              primary: AppColors.primary,
-                                            ),
-                                            onPressed: () async {
-                                              FacebookAuth.instance.login(
-                                                  permissions: [
-                                                    'email',
-                                                    'public_profile',
-                                                    // "user_birthday",
-                                                    // "user_gender",
-                                                    // "user_link",
-                                                    // "user_photos",
-                                                    // 'pages_user_gender'
-                                                  ],
-                                                  loginBehavior: LoginBehavior
-                                                      .dialogOnly).then(
-                                                  (value) async {
-                                                // LoginResult()
+                                      // SingleChildScrollView(
+                                      //   child: Container(
+                                      //     child: ElevatedButton(
+                                      //       style: ElevatedButton.styleFrom(
+                                      //         primary: AppColors.primary,
+                                      //       ),
+                                      //       onPressed: () async {
+                                      //         FacebookAuth.instance.login(
+                                      //             permissions: [
+                                      //               'email',
+                                      //               'public_profile',
+                                      //               // "user_birthday",
+                                      //               // "user_gender",
+                                      //               // "user_link",
+                                      //               // "user_photos",
+                                      //               // 'pages_user_gender'
+                                      //             ],
+                                      //             loginBehavior: LoginBehavior
+                                      //                 .dialogOnly).then(
+                                      //             (value) async {
+                                      //           // LoginResult()
 
-                                                print('facebook result');
-                                                print(value.message);
-                                                print(value.runtimeType);
+                                      //           print('facebook result');
+                                      //           print(value.message);
+                                      //           print(value.runtimeType);
 
-                                                if (value.status ==
-                                                    LoginStatus.success) {
-                                                  // you are logged
+                                      //           if (value.status ==
+                                      //               LoginStatus.success) {
+                                      //             // you are logged
 
-                                                  accessToken =
-                                                      value.accessToken;
+                                      //             accessToken =
+                                      //                 value.accessToken;
 
-                                                  print(dateFormat.format(
-                                                      accessToken.expires));
-                                                  facebookUser
-                                                      .setCustomerSessionExpirationDate(
-                                                          dateFormat.format(
-                                                              accessToken
-                                                                  .expires));
+                                      //             print(dateFormat.format(
+                                      //                 accessToken.expires));
+                                      //             facebookUser
+                                      //                 .setCustomerSessionExpirationDate(
+                                      //                     dateFormat.format(
+                                      //                         accessToken
+                                      //                             .expires));
 
-                                                  // Name email id , image ,yyyy-MM-dd ,
-                                                  print('access Token ');
-                                                  print(accessToken.token);
-                                                  print('expires');
-                                                  print(accessToken.expires);
-                                                  print(dateFormat.format(
-                                                      accessToken
-                                                          .expires)); //Converting DateTime object to String
+                                      //             // Name email id , image ,yyyy-MM-dd ,
+                                      //             print('access Token ');
+                                      //             print(accessToken.token);
+                                      //             print('expires');
+                                      //             print(accessToken.expires);
+                                      //             print(dateFormat.format(
+                                      //                 accessToken
+                                      //                     .expires)); //Converting DateTime object to String
 
-                                                  print(
-                                                      accessToken.runtimeType);
-                                                } else {
-                                                  print(value);
-                                                  print(value.status);
-                                                  print(value.message);
-                                                }
-                                                FacebookAuth.instance
-                                                    .getUserData()
-                                                    .then(
-                                                  (userData) {
-                                                    setState(
-                                                      () {
-                                                        // _isLoggedIn =
-                                                        //     true;
-                                                        _usrObj = userData;
-                                                        facebookUser
-                                                            .setFacebookId(
-                                                                userData['id']);
-                                                        facebookUser.setName(
-                                                            userData['name']);
-                                                        facebookUser.setEamil(
-                                                            userData['email']);
-                                                        facebookUser
-                                                            .setProfileImage(
-                                                                userData['picture']
-                                                                        ['data']
-                                                                    ['url']);
+                                      //             print(
+                                      //                 accessToken.runtimeType);
+                                      //           } else {
+                                      //             print(value);
+                                      //             print(value.status);
+                                      //             print(value.message);
+                                      //           }
+                                      //           FacebookAuth.instance
+                                      //               .getUserData()
+                                      //               .then(
+                                      //             (userData) {
+                                      //               setState(
+                                      //                 () {
+                                      //                   // _isLoggedIn =
+                                      //                   //     true;
+                                      //                   _usrObj = userData;
+                                      //                   facebookUser
+                                      //                       .setFacebookId(
+                                      //                           userData['id']);
+                                      //                   facebookUser.setName(
+                                      //                       userData['name']);
+                                      //                   facebookUser.setEamil(
+                                      //                       userData['email']);
+                                      //                   facebookUser
+                                      //                       .setProfileImage(
+                                      //                           userData['picture']
+                                      //                                   ['data']
+                                      //                               ['url']);
 
-                                                        // facebookUser = FacebookUser(
-                                                        //     facebookId:
-                                                        //         userData[
-                                                        //             'id'],
-                                                        //     name: userData[
-                                                        //         'name'],
-                                                        //     email: userData[
-                                                        //         'email'],
-                                                        //     profileImage:
-                                                        //         userData['picture']['data']
-                                                        //             [
-                                                        //             'url']);
+                                      //                   // facebookUser = FacebookUser(
+                                      //                   //     facebookId:
+                                      //                   //         userData[
+                                      //                   //             'id'],
+                                      //                   //     name: userData[
+                                      //                   //         'name'],
+                                      //                   //     email: userData[
+                                      //                   //         'email'],
+                                      //                   //     profileImage:
+                                      //                   //         userData['picture']['data']
+                                      //                   //             [
+                                      //                   //             'url']);
 
-                                                        print(
-                                                            'facebook usr data');
-                                                        print(userData);
-                                                        FacebookAuth.instance
-                                                            .getUserData(
-                                                                fields:
-                                                                    'gender')
-                                                            .then(
-                                                          (value) async {
-                                                            print('ge');
-                                                            print(value
-                                                                .toString());
-                                                            print('sss');
-                                                            print(value
-                                                                .runtimeType);
-                                                            print('gender');
+                                      //                   print(
+                                      //                       'facebook usr data');
+                                      //                   print(userData);
+                                      //                   FacebookAuth.instance
+                                      //                       .getUserData(
+                                      //                           fields:
+                                      //                               'gender')
+                                      //                       .then(
+                                      //                     (value) async {
+                                      //                       print('ge');
+                                      //                       print(value
+                                      //                           .toString());
+                                      //                       print('sss');
+                                      //                       print(value
+                                      //                           .runtimeType);
+                                      //                       print('gender');
 
-                                                            print(facebookUser
-                                                                .toJson()
-                                                                .runtimeType);
+                                      //                       print(facebookUser
+                                      //                           .toJson()
+                                      //                           .runtimeType);
 
-                                                            var res =
-                                                                await _facebookSubmit(
-                                                              userData['id'],
-                                                              userData['name'],
-                                                              userData['email'],
-                                                              userData['picture']
-                                                                      ['data']
-                                                                  ['url'],
-                                                              dateFormat.format(
-                                                                  accessToken
-                                                                      .expires),
-                                                            );
-                                                            if (res) {
-                                                              Utils.showToast(
-                                                                message: AppLocalizations.of(
-                                                                        context)
-                                                                    .logedin,
-                                                                // 'أنت الان مسجل في التطبيق',
-                                                                backgroundColor:
-                                                                    AppColors
-                                                                        .primary,
-                                                                textColor: Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .bodyText1
-                                                                    .color,
-                                                              );
-                                                              // var myUser = Provider.of<CustomerProvider>(context,listen: false).user;
-                                                              //   CachHelper.saveData(
-                                                              //         key: 'user', value: myUser,);
+                                      //                       var res =
+                                      //                           await _facebookSubmit(
+                                      //                         userData['id'],
+                                      //                         userData['name'],
+                                      //                         userData['email'],
+                                      //                         userData['picture']
+                                      //                                 ['data']
+                                      //                             ['url'],
+                                      //                         dateFormat.format(
+                                      //                             accessToken
+                                      //                                 .expires),
+                                      //                       );
+                                      //                       if (res) {
+                                      //                         Utils.showToast(
+                                      //                           message: AppLocalizations.of(
+                                      //                                   context)
+                                      //                               .logedin,
+                                      //                           // 'أنت الان مسجل في التطبيق',
+                                      //                           backgroundColor:
+                                      //                               AppColors
+                                      //                                   .primary,
+                                      //                           textColor: Theme.of(
+                                      //                                   context)
+                                      //                               .textTheme
+                                      //                               .bodyText1
+                                      //                               .color,
+                                      //                         );
+                                      //                         // var myUser = Provider.of<CustomerProvider>(context,listen: false).user;
+                                      //                         //   CachHelper.saveData(
+                                      //                         //         key: 'user', value: myUser,);
 
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pushReplacementNamed(
-                                                                // OtpScreen.routeName
-                                                                MainTabBarViewController
-                                                                    .routeName,
-                                                              );
+                                      //                         Navigator.of(
+                                      //                                 context)
+                                      //                             .pushReplacementNamed(
+                                      //                           // OtpScreen.routeName
+                                      //                           MainTabBarViewController
+                                      //                               .routeName,
+                                      //                         );
 
-                                                              // if (_authMode == AuthMode.Login) {
+                                      //                         // if (_authMode == AuthMode.Login) {
 
-                                                              //   Navigator.of(context)
-                                                              //       .pushReplacementNamed(
-                                                              //           HomePageScreen.routeName);
-                                                              // }
+                                      //                         //   Navigator.of(context)
+                                      //                         //       .pushReplacementNamed(
+                                      //                         //           HomePageScreen.routeName);
+                                      //                         // }
 
-                                                            } else {
-                                                              Utils.showToast(
-                                                                message: AppLocalizations.of(
-                                                                        context)
-                                                                    .loginRefused,
-                                                                // 'تعذرت عملية التسجيل',
-                                                                backgroundColor:
-                                                                    AppColors
-                                                                        .primary,
-                                                                textColor: Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .bodyText1
-                                                                    .color,
-                                                              );
-                                                              setState(() {
-                                                                loading = false;
-                                                              });
-                                                            }
-                                                          },
-                                                        );
-                                                      },
-                                                    );
-                                                  },
-                                                );
-                                              });
-                                            },
-                                            child: Text(
-                                                AppLocalizations.of(context)
-                                                    .loginWithFacebook),
-                                          ),
-                                        ),
-                                      ),
+                                      //                       } else {
+                                      //                         Utils.showToast(
+                                      //                           message: AppLocalizations.of(
+                                      //                                   context)
+                                      //                               .loginRefused,
+                                      //                           // 'تعذرت عملية التسجيل',
+                                      //                           backgroundColor:
+                                      //                               AppColors
+                                      //                                   .primary,
+                                      //                           textColor: Theme.of(
+                                      //                                   context)
+                                      //                               .textTheme
+                                      //                               .bodyText1
+                                      //                               .color,
+                                      //                         );
+                                      //                         setState(() {
+                                      //                           loading = false;
+                                      //                         });
+                                      //                       }
+                                      //                     },
+                                      //                   );
+                                      //                 },
+                                      //               );
+                                      //             },
+                                      //           );
+                                      //         });
+                                      //       },
+                                      //       child: Text(
+                                      //           AppLocalizations.of(context)
+                                      //               .loginWithFacebook),
+                                      //     ),
+                                      //   ),
+                                      // ),
                                       Padding(
                                         padding: const EdgeInsets.only(
                                             top: 0, bottom: 8),

@@ -23,7 +23,7 @@ class FollowedPostsByCustomerModel {
   });
 
   String status;
-  int code;
+  String code;
   String message;
   String messageAr;
   List<Datum> data; // [0]
