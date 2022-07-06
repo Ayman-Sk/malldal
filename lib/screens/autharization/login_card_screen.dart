@@ -98,10 +98,7 @@ class _LoginCardScreenState extends State<LoginCardScreen>
   @override
   Widget build(BuildContext context) {
     // final devicesize = MediaQuery.of(context).size;
-    // DateFormat
-    // dateFormat =
-    // DateFormat(
-    //     "yyyy-MM-dd HH:mm:ss");
+    // DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
     //     dateFormat = DateFormat("yyyy-MM-dd");
     // AccessToken accessToken;
 

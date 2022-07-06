@@ -110,6 +110,8 @@ class _PostItemState extends State<PostItem> {
                       price: widget.priceDetails,
                       sellerProfileImage: widget.owner.profileImage,
                       isEditable: widget.isEditable,
+                      images: widget.paths,
+                      postId: widget.postId,
                     ),
                   ),
                   Expanded(flex: 4, child: PostBody(imagesPath: widget.paths)),

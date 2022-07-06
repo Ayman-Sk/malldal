@@ -1,4 +1,7 @@
 import 'dart:io';
+import 'package:path/path.dart' as pathLib;
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:card_swiper/card_swiper.dart';
 import 'package:dio/dio.dart';
@@ -7,25 +10,29 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
+import '../business_logic_layer/user_provider.dart';
 import '../data_layer/data_providers/categories_apis.dart';
-import '../network/end_points.dart';
 import '../theme/app_colors.dart';
+import '../utils/utils.dart';
 import '../widgets/dropdown_model.dart';
 import '../widgets/multi_selected_drop_down.dart';
 
 class EditPostScreen extends StatefulWidget {
   static const routeName = 'EditPostScreen';
+  final String postId;
   final String productName;
   final String productDetails;
   final String productPrice;
-  // final List<> productCategories;
-  // final List<> productCities;
+  final List<String> imagesPaths;
 
   const EditPostScreen({
     this.productName,
     this.productDetails,
     this.productPrice,
+    this.postId,
+    this.imagesPaths,
     Key key,
   }) : super(key: key);
 
@@ -48,25 +55,32 @@ class _EditPostScreenState extends State<EditPostScreen> {
   List<String> citiesList = [];
   List<String> listOfCities = [];
   List<String> listOfCategories = [];
-  List<DropdownMenuItem<DropDownListModel>> _citiesdropDownMenueItems;
-  List<DropdownMenuItem<DropDownListModel>> _categorydropDownMenueItems;
+  // List<DropdownMenuItem<DropDownListModel>> _citiesdropDownMenueItems;
+  // List<DropdownMenuItem<DropDownListModel>> _categorydropDownMenueItems;
   CategoriesAPIs catAPI = CategoriesAPIs();
   List<File> files = [];
   List<String> paths = [];
-  Dio _dio = Dio();
+  // Dio _dio = Dio();
 
   @override
   void initState() {
     titleController = TextEditingController(text: widget.productName);
     bodyController = TextEditingController(text: widget.productDetails);
     priceController = TextEditingController(text: widget.productPrice);
-    getCategories();
-    getCities();
+    paths = widget.imagesPaths;
+    // paths = editAllNetworkImagePaths(widget.imagesPaths);
+    paths.length == 0 ? imageselected = false : imageselected = true;
+
+    setState(() {});
+    // getCategories();
+    // getCities();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    print('legth');
+    print(paths.length);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -104,20 +118,20 @@ class _EditPostScreenState extends State<EditPostScreen> {
                       .wrongNumber, //'الرقم غير صحيح',
                   editTextController: priceController,
                   isNumber: true),
-              buildDropDownList(
-                  title: AppLocalizations.of(context)
-                      .chooseProductCategory, //'فئة المنتج',
-                  listOfItems: categoryList,
-                  func: getCategories,
-                  items: _categorydropDownMenueItems,
-                  isCities: false),
-              buildDropDownList(
-                  title: AppLocalizations.of(context)
-                      .chooseProductCities, //'المدينة:',
-                  listOfItems: citiesList,
-                  func: getCities,
-                  items: _citiesdropDownMenueItems,
-                  isCities: true),
+              // buildDropDownList(
+              //     title: AppLocalizations.of(context)
+              //         .chooseProductCategory, //'فئة المنتج',
+              //     listOfItems: categoryList,
+              //     func: getCategories,
+              //     items: _categorydropDownMenueItems,
+              //     isCities: false),
+              // buildDropDownList(
+              //     title: AppLocalizations.of(context)
+              //         .chooseProductCities, //'المدينة:',
+              //     listOfItems: citiesList,
+              //     func: getCities,
+              //     items: _citiesdropDownMenueItems,
+              //     isCities: true),
               //gender
 
               ///
@@ -145,6 +159,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                         indicatorLayout: PageIndicatorLayout.COLOR,
                         autoplay: false,
                         itemBuilder: (context, index) {
+                          print(paths[0]);
                           if (paths.length != 0) {
                             final path = paths[index];
                             return Stack(
@@ -158,22 +173,22 @@ class _EditPostScreenState extends State<EditPostScreen> {
                                   ),
                                 ),
                                 Positioned(
-                                    top: 10,
-                                    right: 15,
-                                    child: IconButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            paths.remove(path);
-                                          });
-                                        },
-                                        icon: Icon(
-                                          Icons.delete,
-                                          size: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              10,
-                                          color: AppColors.primary,
-                                        )))
+                                  top: 10,
+                                  right: 15,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        paths.remove(path);
+                                      });
+                                    },
+                                    icon: Icon(
+                                      Icons.delete,
+                                      size: MediaQuery.of(context).size.width /
+                                          10,
+                                      color: AppColors.primary,
+                                    ),
+                                  ),
+                                ),
                               ],
                             );
                           } else {
@@ -322,19 +337,49 @@ class _EditPostScreenState extends State<EditPostScreen> {
                             ),
                           )
                         : Text(
-                            AppLocalizations.of(context).add,
+                            AppLocalizations.of(context).edit,
                             // 'إضافة',
                           ),
                   ),
                   onPressed: () async {
                     if (!_formkey.currentState.validate()) {
                       setState(() {
-                        loading = false;
+                        loading = true;
                       });
                       return Future.value(false);
                     }
                     _formkey.currentState.save();
-                    // bool res;
+                    bool res;
+                    res = await _submit(
+                      title: titleController.text,
+                      body: bodyController.text,
+                      priceDetails: priceController.text,
+                      sellerId:
+                          Provider.of<UserProvider>(context, listen: false)
+                              .userId,
+                      postId: widget.postId,
+                      imagesPath: paths,
+                    );
+                    if (res) {
+                      Utils.showToast(
+                        message: AppLocalizations.of(context).productAdded,
+                        backgroundColor: AppColors.primary,
+                        textColor: Theme.of(context).textTheme.bodyText1.color,
+                      );
+                      // Navigator.of(context).pushReplacementNamed(
+                      //   SellerAccountScreen.routeName,
+                      // );
+                      Navigator.of(context).pop();
+                    } else {
+                      Utils.showToast(
+                        message: AppLocalizations.of(context).error,
+                        backgroundColor: AppColors.primary,
+                        textColor: Theme.of(context).textTheme.bodyText1.color,
+                      );
+                      setState(() {
+                        loading = false;
+                      });
+                    }
                   },
                 ),
               ),
@@ -343,6 +388,88 @@ class _EditPostScreenState extends State<EditPostScreen> {
         ),
       ),
     );
+  }
+
+  Future<bool> _submit({
+    String title,
+    String body,
+    String priceDetails,
+    String sellerId,
+    String postId,
+    List<String> imagesPath,
+  }
+      //{String name, String email} في حال بدي
+      ) async {
+    // if (!imageselected) {
+    //   Utils.showToast(
+    //     message: 'لم تختر صورة بعد',
+    //     backgroundColor: AppColors.primary,
+    //     textColor: AppColors.background,
+    //   );
+    // }
+    //  else
+    {
+      setState(() {
+        loading = true;
+      });
+
+      Map<String, dynamic> data = {
+        'title': title,
+        'body': body,
+        'priceDetails': priceDetails,
+        'seller_id': sellerId,
+        'images': imagesPath,
+        // 'categories': categories,
+        // "cities[0]": "1",
+        // "cities[1]": "2",
+        // 'cities': c
+        // 'cities[0]': cities[1].toString()
+      };
+      // for (int i = 0; i < cities.length; i++) {
+      //   data['cities[$i]'] = (int.parse(cities[i]) + 1).toString();
+      // }
+      // for (int i = 0; i < categories.length; i++) {
+      //   data['categories[$i]'] = (int.parse(categories[i]) + 1).toString();
+      // }
+      print("Sent create Product Data");
+      print(data);
+
+      return await Provider.of<UserProvider>(context, listen: false)
+          .editPostRequest(
+        data,
+        postId,
+      );
+    }
+  }
+
+  List<String> editAllNetworkImagePaths(List<String> paths) {
+    List<String> truePaths = [];
+    paths.forEach((element) async {
+      print(element);
+      String path = await getTruePaths(element);
+      truePaths.add(path);
+    });
+    print('all');
+    print(paths.length);
+    print(truePaths);
+    return truePaths;
+  }
+
+  Future<String> getTruePaths(String path) async {
+    print('sub');
+    print(widget.imagesPaths);
+    print(path.substring(0, 4));
+    if (path.substring(0, 4) == 'http') {
+      String fileName = path.split('/').last;
+      var s = await http.get(Uri.parse(path));
+      Directory documentDirectory = await getApplicationDocumentsDirectory();
+      File file = new File(pathLib.join(documentDirectory.path, fileName));
+      file.writeAsBytes(s.bodyBytes);
+      print('true');
+      print(documentDirectory.path + fileName);
+      return documentDirectory.path + fileName;
+    }
+    return path;
   }
 
   void addCityFunction(List<String> listOfItems) {
@@ -457,59 +584,59 @@ class _EditPostScreenState extends State<EditPostScreen> {
     );
   }
 
-  Future<void> getCategories(
-      //{String name, String email} في حال بدي
-      ) async {
-    final response = await _dio.get(EndPoints.getAllCategories(1, 30));
-    // if (response == null) {
-    //   setState(() {
-    //     loading = true;
-    //   });
-    // }
-    if (response.statusCode == 200) {
-      setState(() {
-        List categories = response.data['data']['data'];
-        categories.forEach((element) {
-          categoryList.add(element['title']);
-        });
-        _categorydropDownMenueItems =
-            DropDownListModel.buildDropDownMenuItemFromData(
-                response.data, false);
-        // _selectedcategory = _categorydropDownMenueItems[0].value;
-      });
-    } else {
-      setState(() {
-        _categorydropDownMenueItems = null;
-      });
-    }
-  }
+  // Future<void> getCategories(
+  //     //{String name, String email} في حال بدي
+  //     ) async {
+  //   final response = await _dio.get(EndPoints.getAllCategories(1, 30));
+  //   // if (response == null) {
+  //   //   setState(() {
+  //   //     loading = true;
+  //   //   });
+  //   // }
+  //   if (response.statusCode == 200) {
+  //     setState(() {
+  //       List categories = response.data['data']['data'];
+  //       categories.forEach((element) {
+  //         categoryList.add(element['title']);
+  //       });
+  //       _categorydropDownMenueItems =
+  //           DropDownListModel.buildDropDownMenuItemFromData(
+  //               response.data, false);
+  //       // _selectedcategory = _categorydropDownMenueItems[0].value;
+  //     });
+  //   } else {
+  //     setState(() {
+  //       _categorydropDownMenueItems = null;
+  //     });
+  //   }
+  // }
 
-  Future<void> getCities(
-      //{String name, String email} في حال بدي
-      ) async {
-    final response = await _dio.get(EndPoints.getAllCities);
+  // Future<void> getCities(
+  //     //{String name, String email} في حال بدي
+  //     ) async {
+  //   final response = await _dio.get(EndPoints.getAllCities);
 
-    // if (response == null) {
-    //   setState(() {
-    //     loading = true;
-    //   });
-    // }
-    if (response.statusCode == 200) {
-      setState(() {
-        List cities = response.data['data']['data'];
-        cities.forEach((element) {
-          citiesList.add(element['cityName']);
-        });
-        _citiesdropDownMenueItems =
-            DropDownListModel.buildDropDownMenuItemFromData(
-                response.data, true);
-        // _selectedcity = _citiesdropDownMenueItems[0].value;
-      });
-    } else {
-      setState(() {
-        _citiesdropDownMenueItems = null;
-        print(_citiesdropDownMenueItems);
-      });
-    }
-  }
+  //   // if (response == null) {
+  //   //   setState(() {
+  //   //     loading = true;
+  //   //   });
+  //   // }
+  //   if (response.statusCode == 200) {
+  //     setState(() {
+  //       List cities = response.data['data']['data'];
+  //       cities.forEach((element) {
+  //         citiesList.add(element['cityName']);
+  //       });
+  //       _citiesdropDownMenueItems =
+  //           DropDownListModel.buildDropDownMenuItemFromData(
+  //               response.data, true);
+  //       // _selectedcity = _citiesdropDownMenueItems[0].value;
+  //     });
+  //   } else {
+  //     setState(() {
+  //       _citiesdropDownMenueItems = null;
+  //       print(_citiesdropDownMenueItems);
+  //     });
+  //   }
+  // }
 }

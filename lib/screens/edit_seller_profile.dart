@@ -1,4 +1,9 @@
 import 'dart:io';
+import 'package:dal/screens/seller_profile_screen.dart';
+import 'package:path/path.dart' as pathLib;
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:dal/business_logic_layer/seller_provider.dart';
 import 'package:dal/widgets/dropdown_model.dart';
 import 'package:dal/business_logic_layer/user_provider.dart';
@@ -14,6 +19,9 @@ import '../widgets/repeater/text_field_repeater.dart';
 
 class EditSellerProfileScreen extends StatefulWidget {
   static const routeName = 'EditSellerProfileScreen';
+  final String path;
+
+  const EditSellerProfileScreen({Key key, this.path}) : super(key: key);
 
   @override
   _EditSellerProfileScreenState createState() =>
@@ -44,6 +52,7 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
   bool imageselected;
   bool loading = false;
   bool pickImage = false;
+  String profileImagePath;
 
   Future<bool> _submit(
       String name,
@@ -72,7 +81,14 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
       print(phoneNumber);
 
       // imagePath =
-      //     '/data/user/0/com.example.dal/cache/file_picker/IMG_20220204_193454.jpg';
+      //     '/data/data/com.example.dal/cache/file_picker/IMG_20220603_183254_181.jpg';
+      Map<String, dynamic> data = {
+        'name': name,
+        'gender': gender,
+        'bio': bio,
+        'profile_image': imagePath,
+        'phone': phoneNumber,
+      };
       bool res = await Provider.of<UserProvider>(context, listen: false)
           .updateSellerInfo(
         name,
@@ -80,10 +96,12 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
         bio,
         imagePath,
         phoneNumber,
+        data,
       );
-      bool res2 = await Provider.of<UserProvider>(context, listen: false)
-          .updateSellerContactinfo(accountsData);
-      return res && res2;
+      // bool res2 = await Provider.of<UserProvider>(context, listen: false)
+      //     .updateSellerContactinfo(accountsData);
+      // return res && res2;
+      return res;
     }
     return false;
   }
@@ -113,7 +131,7 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
     _selectedgender = userInfo.gender == 'male'
         ? _genderdropDownMenueItems[0].value
         : _genderdropDownMenueItems[1].value;
-    file = File(Provider.of<UserProvider>(context, listen: false).profileImage);
+    file = File(widget.path);
 
     super.initState();
   }
@@ -402,12 +420,7 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
                             maxRadius: 125,
                             backgroundColor:
                                 Theme.of(context).colorScheme.background,
-                            backgroundImage: !pickImage
-                                ? NetworkImage(
-                                    'http://malldal.com/dal/' +
-                                        provider.profileImage,
-                                  )
-                                : FileImage(file),
+                            backgroundImage: FileImage(file),
                             // child: ImageCache(),
                           ),
                         ),
@@ -609,19 +622,21 @@ class _EditSellerProfileScreenState extends State<EditSellerProfileScreen> {
   }
 
   Future selectImage(BuildContext context) async {
-    var provider = Provider.of<SellerProvider>(context, listen: false);
+    // var provider = Provider.of<SellerProvider>(context, listen: false);
     final result = await FilePicker.platform.pickFiles(
       allowMultiple: false,
     );
     if (result == null) return;
     final path = result.files.single.path;
-    provider.setImageOfSeller(path);
+    // provider.setImageOfSeller(path);
     print('bllllllla');
     print(Provider.of<SellerProvider>(context, listen: false)
         .getImagePathOfSeller);
     setState(() {
-      provider.setImageOfSeller(path);
+      // provider.setImageOfSeller(path);
       file = File(path);
+      print('pathhhhhh');
+      print(path);
       imageselected = true;
       pickImage = true;
     });

@@ -176,10 +176,7 @@ class _SellerPostScreenState extends State<SellerPostScreen> {
                       averageRate: item.avgRate,
                       owner: item.seller,
                       paths: paths,
-                      isEditable:
-                          //  arguments['isRequest']
-                          //  ?
-                          false,
+                      isEditable: arguments['isRequest'] ? true : false,
                       // : true,
                       isRequest: arguments['isRequest'],
                     );

@@ -661,13 +661,14 @@ class _AddPostScreenState extends State<AddPostScreen> {
   }
 
   Future selectImage(BuildContext context) async {
-    var customerProvider = Provider.of<UserProvider>(context, listen: false);
+    // var customerProvider = Provider.of<UserProvider>(context, listen: false);
     final result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
     );
     if (result == null) return;
     final path = result.files.single.path;
-    customerProvider.setProfileImage(path);
+    // customerProvider.setProfileImage(path);
+    print(path);
     print(path);
     setState(() {
       file = File(path);

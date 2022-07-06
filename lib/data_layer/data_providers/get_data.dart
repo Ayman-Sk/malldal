@@ -27,20 +27,26 @@ class GetData {
       : CachHelper.getData(key: 'userId');
 
   Future<bool> getCategoriesData() async {
-    CategoriesRepositoryImp _catRepo = CategoriesRepositoryImp();
-    final postsProvider =
-        Provider.of<AllPostsWithCategories>(context, listen: false);
-    final categories = await _catRepo.getAllCategories(
-        refreshed: true, pageNumber: 1, pageSize: categoriesPageSize);
-    print('alallllllll categoriessss');
-    print(categories.data.categories);
-    if (categories != null) {
-      List<String> categoriesList = [];
-      categories.data.categories.forEach((element) {
-        categoriesList.add(element.title);
-      });
-      postsProvider.addCategories(categoriesList);
-      return true;
+    try {
+      CategoriesRepositoryImp _catRepo = CategoriesRepositoryImp();
+      final postsProvider =
+          Provider.of<AllPostsWithCategories>(context, listen: false);
+      final categories = await _catRepo.getAllCategories(
+          refreshed: true, pageNumber: 1, pageSize: categoriesPageSize);
+      print('alallllllll categoriessss');
+      print(categories.data.categories);
+      if (categories != null) {
+        List<String> categoriesList = [];
+        categories.data.categories.forEach((element) {
+          categoriesList.add(element.title);
+        });
+        postsProvider.addCategories(categoriesList);
+        return true;
+      }
+    } catch (e) {
+      print('error in get Categories');
+      print(e);
+      return false;
     }
 
     // getFollowedCategoriesByCustomerID().then((value) {

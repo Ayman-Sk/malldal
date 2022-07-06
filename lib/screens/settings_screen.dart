@@ -28,7 +28,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          centerTitle: true,
+          // centerTitle: true,
           title: Text(
             AppLocalizations.of(context).setting,
             // 'أعدادات التطبيق',

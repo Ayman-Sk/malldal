@@ -1,4 +1,8 @@
 import 'dart:io';
+import 'package:path/path.dart' as pathLib;
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:dal/business_logic_layer/user_provider.dart';
 import 'package:dal/network/local_host.dart';
 import 'package:dal/screens/edit_seller_profile.dart';
@@ -43,6 +47,7 @@ class _SellerProfileScreenState extends State<SellerProfileScreen> {
     String userMode = sellerProvider.userMode;
     print('UUUUUUUUUUUUUUUUUUUU');
     print("USERMODEEE:" + userMode);
+    print('object' + sellerProvider.profileImage);
     double coverHeight = MediaQuery.of(context).size.height / 4;
     double imageHeight = MediaQuery.of(context).size.height / 8;
     return SafeArea(
@@ -64,8 +69,17 @@ class _SellerProfileScreenState extends State<SellerProfileScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     ElevatedButton.icon(
-                      onPressed: () => Navigator.of(context)
-                          .pushNamed(EditSellerProfileScreen.routeName),
+                      onPressed: () async {
+                        String path = 'http://malldal.com/dal/' +
+                            sellerProvider.profileImage;
+                        path = await editAllNetworkImagePaths(path);
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                EditSellerProfileScreen(path: path)));
+
+                        // Navigator.of(context)
+                        //     .pushNamed(EditSellerProfileScreen.routeName);
+                      },
                       icon: Icon(Icons.edit),
                       label: Text(
                         AppLocalizations.of(context).edit,
@@ -148,6 +162,34 @@ class _SellerProfileScreenState extends State<SellerProfileScreen> {
       ),
     );
   }
+}
+
+Future<String> editAllNetworkImagePaths(String path) async {
+  String truePaths = await getTruePaths(path);
+  print(path);
+  print('all');
+  print(truePaths);
+  return truePaths;
+}
+
+Future<String> getTruePaths(String path) async {
+  print('sub');
+  print(path);
+  // print(widget.imagesPaths);
+  print(path.substring(0, 4));
+  if (path.substring(0, 4) == 'http') {
+    String fileName = path.split('/').last;
+    var s = await http.get(Uri.parse(path));
+    Directory documentDirectory = await getApplicationDocumentsDirectory();
+    File file = new File(pathLib.join(documentDirectory.path, fileName));
+    file.writeAsBytes(s.bodyBytes);
+    print('true');
+    print(path);
+    print(fileName);
+    print(documentDirectory.path + fileName);
+    return documentDirectory.path + '/' + fileName;
+  }
+  return path;
 }
 
 Widget buildTop(double coverHeight, imageHeight, String profileImagePath,

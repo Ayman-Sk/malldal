@@ -106,6 +106,70 @@ class DioHelper {
     }
   }
 
+  static Future<dynamic> editPostRequest({
+    @required String url,
+    // Map<String, dynamic> query,
+    // queryParameters: query,
+    @required Map<String, dynamic> data,
+    bool isFormData = true,
+    String lang = 'ar',
+  }) async {
+    String accessToken = CachHelper.getData(key: 'token').toString();
+    dio.options.headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': "Bearer " + accessToken,
+    };
+    // String accessToken = CachHelper.getData(key: 'token');
+    // dio.options.headers["Authorization"] = "Bearer " + accessToken;
+    // FormData formData = FormData.fromMap(data);
+    print('ppppppppppppppppppppppppppps');
+    print(data['images']);
+    FormData bodyFormData = FormData.fromMap(data);
+    if (data['images'] != null) {
+      // List<dynamic> imagePaths = [];
+      for (int i = 0; i < data['images'].length; i++) {
+        bodyFormData.files.addAll([
+          MapEntry(
+            "images[$i]",
+            await MultipartFile.fromFile(data['images'][i]),
+          ),
+          // MapEntry(
+          //   "images[$i]",
+          //   await MultipartFile.fromFile(data['images'][1]),
+          // ),
+          // MapEntry(
+          //     "images+[$i]", await MultipartFile.fromFile(data['images'][i])),
+        ]);
+      }
+      // String fileName = data['profile_image'].split('/').last;
+      // data['images'] = await MultipartFile.fromFile(
+      //   data['images'],
+      //   filename: fileName,
+      // );
+      print(data['images']);
+    }
+
+    // FormData bodyFormData = FormData.fromMap(data);
+    Response response = isFormData
+        ? await dio.post(url, data: bodyFormData)
+        : await dio.post(url, data: data);
+
+    // if (response.data['data'] == null) {
+    //   print('RES:$response');
+    //   print('status code is ${response.statusCode}');
+    //   return false;
+    // } else
+    if (response.data['code'] == '401') {
+      await refreshToken();
+      await addPostRequest(url: url, data: data);
+    } else {
+      print('RES:$response');
+      print('status code is ${response.statusCode}');
+      return response;
+    }
+  }
+
   static Future<dynamic> addPostRequest({
     @required String url,
     // Map<String, dynamic> query,
@@ -403,6 +467,13 @@ class DioHelper {
     print(data['profile_image']);
     print('\\\\\\\\\\\\\\\\\\\\\data:');
     print(data);
+    FormData bodyFormData = FormData.fromMap(data);
+    bodyFormData.files.add(
+      MapEntry(
+        "profile_image",
+        await MultipartFile.fromFile(data['profile_image']),
+      ),
+    );
     if (data['profile_image'] != null) {
       String fileName = data['profile_image'].split('/').last;
       print(fileName);
@@ -414,11 +485,10 @@ class DioHelper {
       print(data['profile_image']);
     }
 
-    FormData bodyFormData = FormData.fromMap(data);
-    Response response = isFormData
-        ? await dio.post(url, data: bodyFormData)
-        : await dio.post(url, data: data);
-
+    // Response response = isFormData
+    // ? await dio.post(url, data: bodyFormData)
+    Response response = await dio.post(url, data: bodyFormData);
+    print('seller update');
     if (response.data['data'] == null) {
       print('RES:$response');
       print('status code is ${response.statusCode}');
@@ -429,7 +499,7 @@ class DioHelper {
     } else {
       print('RES:$response');
       print('status code is ${response.statusCode}');
-      return response;
+      return response.data;
     }
   }
 

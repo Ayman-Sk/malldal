@@ -244,6 +244,9 @@ class EndPoints {
 
   static String addPostRequest(String id) => baseUrl + '/post_requests';
 
+  static String editPostRequest(String id) =>
+      baseUrl + '/post_requests/$id/update';
+
   static final String getAllPostsWithAllThemSellers = posts + '?include=seller';
   static final String test = 'http://dal.chi-team.com/api/posts?include=seller';
 
