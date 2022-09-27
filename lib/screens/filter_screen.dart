@@ -129,7 +129,7 @@ class _FilterScreenState extends State<FilterScreen> {
                     color: Theme.of(context).colorScheme.background,
                     child: Image.network(
                       'http://malldal.com/dal/' + path,
-                      fit: BoxFit.fill,
+                      fit: BoxFit.fitHeight,
                     ),
                   );
                 }
@@ -194,9 +194,7 @@ class _FilterScreenState extends State<FilterScreen> {
         controller: _refreshController,
         enablePullDown: true,
         enablePullUp: true,
-        header: WaterDropMaterialHeader(
-          backgroundColor: AppColors.primary,
-        ),
+        header: MaterialClassicHeader(color: AppColors.primary),
         // footer: CustomFooter(
         //   builder: (BuildContext context, LoadStatus mode) {
         //     Widget body;

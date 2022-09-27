@@ -104,7 +104,7 @@ class _SellerPostScreenState extends State<SellerPostScreen> {
           controller: _refreshController,
           enablePullDown: true,
           enablePullUp: true,
-          header: WaterDropMaterialHeader(backgroundColor: AppColors.primary),
+          header: MaterialClassicHeader(color: AppColors.primary),
           footer: const ClassicFooter(loadStyle: LoadStyle.ShowWhenLoading),
           onRefresh: () async {
             setState(() {

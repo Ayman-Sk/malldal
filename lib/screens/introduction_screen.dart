@@ -26,158 +26,154 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.primary,
-        body: SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Center(
-                        child: Text(
-                          AppLocalizations.of(context).letStart,
-                          // "هيا بنا نبدأ",
-                          style: TextStyle(
-                            fontSize: 30,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
+        body: Container(
+          height: MediaQuery.of(context).size.height,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Center(
+                      child: Text(
+                        AppLocalizations.of(context).letStart,
+                        // "هيا بنا نبدأ",
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height / 6),
+                  ),
+                  SizedBox(height: MediaQuery.of(context).size.height / 6),
 
-                    Expanded(
-                      flex: 3,
-                      child: Center(
-                        child: Container(
-                          width: 300,
-                          height: 300,
-                          child: Image.asset("img/gs-01.png"),
+                  Expanded(
+                    flex: 3,
+                    child: Center(
+                      child: Container(
+                        width: 300,
+                        height: 300,
+                        child: Image.asset("img/gs-01.png"),
+                      ),
+                    ),
+                  ),
+                  /////
+                  Expanded(
+                    flex: 4,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: MediaQuery.of(context).size.width / 40,
+                      ),
+                      child: Text(
+                        AppLocalizations.of(context).introTitle,
+                        // "خطوات بسيطة تفصلك عن رؤية اخر المنتجات المنزلية الصنع او عرض منتجاتك الشخصية كل ذلك عبر تطبيق دال .",
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                          // fontWeight: FontWeight.w200,
+                          height: 2,
                         ),
                       ),
                     ),
-                    /////
-                    Expanded(
-                      flex: 4,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: MediaQuery.of(context).size.width / 40,
-                        ),
-                        child: Text(
-                          AppLocalizations.of(context).introTitle,
-                          // "خطوات بسيطة تفصلك عن رؤية اخر المنتجات المنزلية الصنع او عرض منتجاتك الشخصية كل ذلك عبر تطبيق دال .",
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                            // fontWeight: FontWeight.w200,
-                            height: 2,
-                          ),
-                        ),
-                      ),
-                    ),
+                  ),
 
-                    Expanded(
-                      flex: 3,
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              height: MediaQuery.of(context).size.height / 20,
-                              child: loading
-                                  ? CircularProgressIndicator(
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                          Colors.white),
-                                    )
-                                  : SizedBox(),
+                  Expanded(
+                    flex: 3,
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: MediaQuery.of(context).size.height / 28,
+                            child: loading
+                                ? CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white),
+                                  )
+                                : SizedBox(),
+                          ),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    child: _buildLoginButton(
+                                      AppLocalizations.of(context)
+                                          .loginAsSeller,
+                                      LoginCardScreen.routeName,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    child: _buildFacebookLoginButton(
+                                      AppLocalizations.of(context)
+                                          .loginAsCustomer,
+                                    ),
+                                  ),
+                                ),
+                              ]),
+                          SizedBox(
+                              height: MediaQuery.of(context).size.height / 50),
+                          Center(
+                            child: GestureDetector(
+                              onTap: () {
+                                userProvider.setUserMode('');
+                                Navigator.of(context).pushReplacementNamed(
+                                  MainTabBarViewController.routeName,
+                                );
+                              },
+                              child: Text(
+                                AppLocalizations.of(context).guest,
+                                // "تصفح بدون حساب",
+                                style: TextStyle(
+                                  // color: AppColors.background,
+                                  // fontWeight: FontWeight.w200,
+                                  fontSize: 15,
+                                ),
+                              ),
                             ),
-                            Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Center(
+                        child: TextButton(
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Directionality(
+                              textDirection: TextDirection.ltr,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                      child: _buildLoginButton(
-                                        AppLocalizations.of(context)
-                                            .loginAsSeller,
-                                        LoginCardScreen.routeName,
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                      child: _buildFacebookLoginButton(
-                                        AppLocalizations.of(context)
-                                            .loginAsCustomer,
-                                      ),
-                                    ),
-                                  ),
-                                ]),
-                            SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height / 50),
-                            Center(
-                              child: GestureDetector(
-                                onTap: () {
-                                  userProvider.setUserMode('');
-                                  Navigator.of(context).pushReplacementNamed(
-                                    MainTabBarViewController.routeName,
-                                  );
-                                },
-                                child: Text(
-                                  AppLocalizations.of(context).guest,
-                                  // "تصفح بدون حساب",
-                                  style: TextStyle(
-                                    // color: AppColors.background,
-                                    // fontWeight: FontWeight.w200,
-                                    fontSize: 15,
-                                  ),
-                                ),
+                                  Text('Powerd by ',
+                                      style: TextStyle(color: Colors.black)),
+                                  Text("CHI",
+                                      style:
+                                          TextStyle(color: Color(0XFFF05F23)))
+                                ],
                               ),
                             ),
-                          ],
+                          ),
+                          onPressed: () => _launchURL(),
                         ),
                       ),
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Center(
-                          child: TextButton(
-                            child: Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Directionality(
-                                textDirection: TextDirection.ltr,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text('Powerd by ',
-                                        style: TextStyle(color: Colors.black)),
-                                    Text("CHI",
-                                        style:
-                                            TextStyle(color: Color(0XFFF05F23)))
-                                  ],
-                                ),
-                              ),
-                            ),
-                            onPressed: _launchURL,
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
+                    ],
+                  )
+                ],
               ),
             ),
           ),
@@ -222,7 +218,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                 dateFormat.format(accessToken.expires));
 
             // Name email id , image ,yyyy-MM-dd ,
-            print('access Token ');
+            print('access Token ${accessToken.token}');
             print(accessToken.token);
             print('expires');
             print(accessToken.expires);
@@ -330,12 +326,15 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
         height: 50,
         color: Colors.white,
         child: FittedBox(
-          child: Text(
-            label,
-            style: TextStyle(
-                color: AppColors.primary,
-                fontWeight: FontWeight.bold,
-                fontSize: 15),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              label,
+              style: TextStyle(
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15),
+            ),
           ),
         ),
       ),
@@ -352,18 +351,6 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
     setState(() {
       loading = true;
     });
-    // if (!_formkey.currentState.validate()) {
-    //   setState(() {
-    //     loading = false;
-    //   });
-    //   return Future.value(false);
-    // }
-    // data['facebook_id'] = facebookId;
-    // data['name'] = name;
-    // data['email'] = email;
-    // data['profile_image'] = profileImage;
-    // data['customer_session_expiration_date'] =
-    //     this.customerSessionExpirationDate;
     Map<String, String> facebookData = {
       'facebook_id': facebookId,
       'name': name,
@@ -387,12 +374,15 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
         height: 50,
         color: Colors.white,
         child: FittedBox(
-          child: Text(
-            label,
-            style: TextStyle(
-                color: AppColors.primary,
-                fontWeight: FontWeight.bold,
-                fontSize: 15),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              label,
+              style: TextStyle(
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15),
+            ),
           ),
         ),
       ),
@@ -400,7 +390,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
   }
 
   _launchURL() async {
-    const url = 'https://www.facebook.com/chi.team.dev';
+    const url = 'https://chi-team.com/';
     if (await canLaunch(url)) {
       await launch(url);
     } else {

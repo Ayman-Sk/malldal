@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../theme/app_colors.dart';
+
 class Tester extends StatefulWidget {
   const Tester({Key key}) : super(key: key);
 
@@ -39,7 +41,7 @@ class _TesterState extends State<Tester> {
         semanticChildCount: 1,
         enablePullDown: true,
         enablePullUp: true,
-        header: WaterDropHeader(),
+        header: MaterialClassicHeader(color: AppColors.primary),
         // footer: CustomFooter(
         //   builder: (BuildContext context, LoadStatus mode) {
         //     Widget body;

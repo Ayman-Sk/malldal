@@ -304,12 +304,14 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             final path = paths[index];
                             return Stack(
                               children: [
-                                Container(
-                                  height:
-                                      MediaQuery.of(context).size.height / 2,
-                                  child: Image.file(
-                                    File(path),
-                                    fit: BoxFit.fill,
+                                Center(
+                                  child: Container(
+                                    height:
+                                        MediaQuery.of(context).size.height / 2,
+                                    child: Image.file(
+                                      File(path),
+                                      fit: BoxFit.fill,
+                                    ),
                                   ),
                                 ),
                                 Positioned(

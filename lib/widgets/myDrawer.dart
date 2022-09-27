@@ -128,7 +128,7 @@ class _MyDrawerState extends State<MyDrawer> {
   }
 
   _launchURL() async {
-    const url = 'https://www.facebook.com/chi.team.dev';
+    const url = 'https://chi-team.com/';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -150,17 +150,28 @@ class _MyDrawerState extends State<MyDrawer> {
             actions: <Widget>[
               TextButton(
                 onPressed: () async {
-                  await _facebookLogout().then((res) async {
-                    if (res) {
-                      CachHelper.removeData(key: 'token');
-                      CachHelper.removeData(key: 'user');
-                      CachHelper.removeData(key: 'userId');
-                      CachHelper.removeData(key: 'posts');
-                      await _deleteCacheDir();
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pushReplacementNamed(route);
-                    }
-                  });
+                  // if (CachHelper.getData(key: 'userId') == null) {
+                  CachHelper.removeData(key: 'token');
+                  CachHelper.removeData(key: 'user');
+                  CachHelper.removeData(key: 'userId');
+                  CachHelper.removeData(key: 'posts');
+                  await _deleteCacheDir();
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pushReplacementNamed(route);
+                  // }
+                  // else {
+                  //   await _facebookLogout().then((res) async {
+                  //     if (res) {
+                  //       CachHelper.removeData(key: 'token');
+                  //       CachHelper.removeData(key: 'user');
+                  //       CachHelper.removeData(key: 'userId');
+                  //       CachHelper.removeData(key: 'posts');
+                  //       await _deleteCacheDir();
+                  //       Navigator.of(context).pop();
+                  //       Navigator.of(context).pushReplacementNamed(route);
+                  //     }
+                  //   });
+                  // }
 
                   // Navigator.of(context).pop();
                 },

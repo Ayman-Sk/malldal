@@ -93,9 +93,7 @@ class _CategoryPostsScreenState extends State<CategoryPostsScreen> {
         controller: _refreshController,
         enablePullDown: true,
         enablePullUp: true,
-        header: WaterDropMaterialHeader(
-          backgroundColor: AppColors.primary,
-        ),
+        header: MaterialClassicHeader(color: AppColors.primary),
         onRefresh: () async {
           final result = await getPostData(refreshed: true);
           if (result) {
@@ -131,7 +129,7 @@ class _CategoryPostsScreenState extends State<CategoryPostsScreen> {
                   color: Theme.of(context).colorScheme.background,
                   child: Image.network(
                     'http://malldal.com/dal/' + path,
-                    fit: BoxFit.fill,
+                    fit: BoxFit.fitHeight,
                   ),
                 );
               }

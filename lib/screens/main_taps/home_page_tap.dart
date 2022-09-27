@@ -15,7 +15,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_search_bar/flutter_search_bar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import '../../data_layer/models/notification.dart';
+import '../../data_layer/models/notification_data.dart';
 import '../../network/end_points.dart';
 import '../../widgets/Post/post_item.dart';
 import '../../widgets/dropdown_model.dart';
@@ -44,6 +44,7 @@ class _HomePageTapState extends State<HomePageTap> {
   int cityFilter = -1;
   List<String> categoryList = [];
   List<String> citiesList = [];
+  // NotificationData notificationData = NotificationData();
   NotificationData notificationData = NotificationData();
   Dio _dio = Dio();
   List<DropdownMenuItem<DropDownListModel>> _citiesdropDownMenueItems;
@@ -51,7 +52,7 @@ class _HomePageTapState extends State<HomePageTap> {
   List<DropdownMenuItem<DropDownListModel>> _categorydropDownMenueItems;
 
   @override
-  void initState() {
+  initState() {
     getCategories();
     getCities();
     getAllNotification();
@@ -139,7 +140,7 @@ class _HomePageTapState extends State<HomePageTap> {
     }
   }
 
-  Future<bool> getAllNotification() async {
+  Future<Map<String, dynamic>> getAllNotification() async {
     _dio = Dio();
 
     final token = CachHelper.getData(key: 'token');
@@ -148,16 +149,18 @@ class _HomePageTapState extends State<HomePageTap> {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer' + token,
     };
-    final response = await _dio
-        .get(EndPoints.getNotification(CachHelper.getData(key: 'userId')));
-    if (response.data['code'] == 200) {
+    // final response = await _dio
+    //     .get(EndPoints.getNotification(CachHelper.getData(key: 'userId')));
+    final response = await _dio.get(EndPoints.getAllNotification);
+    print('notiiiiiiii${response.data}');
+    if (response.statusCode == 200) {
       print('coooode');
       print(response.data['code']);
-      setState(() {
-        notificationData = NotificationData.fromJson(response.data);
-      });
+      // setState(() {
+      //   notificationData = NotificationData.fromJson(response.data);
+      // });
       // return response.data;
-      return true;
+      return response.data;
 
       // setState(() {
 
@@ -172,7 +175,7 @@ class _HomePageTapState extends State<HomePageTap> {
       print('coooode uuut o');
       print(response.data['code'].runtimeType);
     }
-    return false;
+    return {"data": []};
   }
 
   Future<void> refreshToken() async {
@@ -215,71 +218,92 @@ class _HomePageTapState extends State<HomePageTap> {
                         borderRadius: BorderRadius.circular(15),
                         color: Theme.of(context).cardColor,
                       ),
-                      child:
-                          //  FutureBuilder(
-                          //     future: getAllNotification(),
-                          //     builder: (context, snapshot) {
-                          //       if (!snapshot.hasData) {
-                          //         Center(
-                          //           child: CircularProgressIndicator(
-                          //               color: AppColors.primary),
-                          //         );
-                          //       } else if (snapshot.hasError) {
-                          //         print('ThisData From SSSSSSSSS');
-                          //         print(snapshot.data);
-                          //         return CenterTitleWidget(
-                          //           title: AppLocalizations.of(context).error,
-                          //           iconData: Icons.error,
-                          //         );
-                          // }
-                          // else {
-                          // NotificationData allNotifications =
-                          //     NotificationData.fromJson(snapshot.data);
-                          // print(allNotifications.pageData);
-                          // return
-                          notificationData.pageData.data.isEmpty
-                              ? Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(Icons.emoji_flags_outlined),
-                                      Text(AppLocalizations.of(context)
-                                          .emptyNotification)
-                                    ],
-                                  ),
-                                )
-                              : ListView.separated(
-                                  shrinkWrap: true,
-                                  itemCount:
-                                      notificationData.pageData.data.length,
-                                  separatorBuilder: (context, _) => Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 25.0),
-                                    child: Divider(thickness: 1),
-                                  ),
-                                  itemBuilder: (context, index) {
-                                    var item =
-                                        notificationData.pageData.data[index];
-                                    return ListTile(
-                                      leading: CircleAvatar(
-                                        backgroundColor: Theme.of(context)
-                                            .colorScheme
-                                            .background,
-                                        child: Image.asset('img/logo.png',
-                                            fit: BoxFit.fill),
-                                      ),
-                                      title: Text(item.title),
-                                      subtitle: Text(item.body),
-                                      trailing:
-                                          Text(item.createdAt.substring(0, 10)),
-                                    );
-                                  },
-                                )
-                      //   }
-                      //   return Container();
-                      // }),
-
-                      );
+                      child: FutureBuilder(
+                          future: getAllNotification(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return Center(
+                                child: CircularProgressIndicator(
+                                    color: AppColors.primary),
+                              );
+                            } else if (snapshot.hasError) {
+                              print('ThisData From SSSSSSSSS');
+                              print(snapshot.data);
+                              return CenterTitleWidget(
+                                title: AppLocalizations.of(context).error,
+                                iconData: Icons.error,
+                              );
+                            } else {
+                              NotificationData allNotifications =
+                                  NotificationData.fromJson(snapshot.data);
+                              print(allNotifications.data);
+                              return ListView.separated(
+                                shrinkWrap: true,
+                                itemCount: allNotifications.data.length,
+                                separatorBuilder: (context, _) => Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 25.0),
+                                  child: Divider(thickness: 1),
+                                ),
+                                itemBuilder: (context, index) {
+                                  var item = allNotifications.data[index];
+                                  return ListTile(
+                                    leading: CircleAvatar(
+                                      backgroundColor: Theme.of(context)
+                                          .colorScheme
+                                          .background,
+                                      child: Image.asset('img/logo.png',
+                                          fit: BoxFit.fill),
+                                    ),
+                                    title: Text(item.title),
+                                    subtitle: Text(item.body),
+                                    trailing:
+                                        Text(item.createdAt.substring(0, 10)),
+                                  );
+                                },
+                              );
+                            }
+                          }
+                          // notificationData.data.isEmpty
+                          //     ? Center(
+                          //         child: Column(
+                          //           mainAxisAlignment: MainAxisAlignment.center,
+                          //           children: [
+                          //             Icon(Icons.emoji_flags_outlined),
+                          //             Text(AppLocalizations.of(context)
+                          //                 .emptyNotification)
+                          //           ],
+                          //         ),
+                          //       )
+                          //     : ListView.separated(
+                          //         shrinkWrap: true,
+                          //         itemCount: notificationData.data.length,
+                          //         separatorBuilder: (context, _) => Padding(
+                          //           padding: const EdgeInsets.symmetric(
+                          //               horizontal: 25.0),
+                          //           child: Divider(thickness: 1),
+                          //         ),
+                          //         itemBuilder: (context, index) {
+                          //           var item = notificationData.data[index];
+                          //           return ListTile(
+                          //             leading: CircleAvatar(
+                          //               backgroundColor: Theme.of(context)
+                          //                   .colorScheme
+                          //                   .background,
+                          //               child: Image.asset('img/logo.png',
+                          //                   fit: BoxFit.fill),
+                          //             ),
+                          //             title: Text(item.title),
+                          //             subtitle: Text(item.body),
+                          //             trailing:
+                          //                 Text(item.createdAt.substring(0, 10)),
+                          //           );
+                          //         },
+                          //       )
+                          //   }
+                          //   return Container();
+                          // }),
+                          ));
                 })),
               );
             }));
@@ -767,7 +791,7 @@ class _HomePageTapState extends State<HomePageTap> {
                     // },
 
                     'http://malldal.com/dal/' + path,
-                    fit: BoxFit.fill,
+                    fit: BoxFit.fitHeight,
                     errorBuilder: (BuildContext context, Object exception,
                         StackTrace stackTrace) {
                       return Container(
@@ -891,9 +915,9 @@ class _HomePageTapState extends State<HomePageTap> {
         controller: _refreshController,
         enablePullDown: true,
         enablePullUp: true,
-        header: WaterDropMaterialHeader(
-          backgroundColor: AppColors.primary,
-        ),
+        header: MaterialClassicHeader(color: AppColors.primary),
+
+        // header: MaterialClassicHeader(color: AppColors.primary),
 
         onRefresh: () async {
           setState(() {
@@ -993,14 +1017,16 @@ class _HomePageTapState extends State<HomePageTap> {
                           print("adddssssss Pathhhhhhh");
                           print(path);
                           print(userProvider.getAdds);
-                          return Container(
-                            padding: const EdgeInsets.all(8),
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height / 3,
-                            color: Theme.of(context).colorScheme.background,
-                            child: Image.network(
-                              'http://malldal.com/dal/' + path,
-                              fit: BoxFit.fill,
+                          return Center(
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height / 2,
+                              color: Theme.of(context).colorScheme.background,
+                              child: Image.network(
+                                'http://malldal.com/dal/' + path,
+                                fit: BoxFit.fitHeight,
+                              ),
                             ),
                           );
                         }

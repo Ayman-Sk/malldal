@@ -9,6 +9,8 @@ class EndPoints {
   static final String refreshToken = baseUrl + '/auth/refresh';
   //Notification
 
+  static String get getAllNotification => baseUrl + '/notifications';
+
   static String getNotification(String id) =>
       CachHelper.getData(key: 'userMode') == 'customer'
           ? baseUrl + '/privateNotifications/customers/$id'

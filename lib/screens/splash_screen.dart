@@ -54,15 +54,20 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('splashhhhhhhhh');
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          Expanded(flex: 1, child: Container()),
-          Expanded(flex: 1, child: VideoPlayer(controller)),
-          Expanded(flex: 1, child: Container())
-        ],
+      body: Center(
+        child: AspectRatio(aspectRatio: 16 / 9, child: VideoPlayer(controller)),
       ),
+      // body: Column(
+      //   children: [
+      //     // VideoPlayer(controller)
+      //     Expanded(flex: 1, child: Container()),
+      //     Expanded(flex: 1, child: VideoPlayer(controller)),
+      //     Expanded(flex: 1, child: Container())
+      //   ],
+      // ),
     );
   }
 }

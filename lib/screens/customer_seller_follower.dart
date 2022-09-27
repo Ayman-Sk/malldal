@@ -67,9 +67,7 @@ class _CustomerSellerFollowerState extends State<CustomerSellerFollower> {
         controller: _refreshController,
         enablePullDown: true,
         enablePullUp: true,
-        header: WaterDropMaterialHeader(
-          backgroundColor: AppColors.primary,
-        ),
+        header: MaterialClassicHeader(color: AppColors.primary),
         onRefresh: () async {
           var widget = await getFollowerData(refreshed: true);
           if (widget != null) {

@@ -88,7 +88,7 @@ class _FollowedPostsTapState extends State<FollowedPostsTap> {
                           color: Theme.of(context).colorScheme.background,
                           child: Image.network(
                             'http://malldal.com/dal/' + path,
-                            fit: BoxFit.fill,
+                            fit: BoxFit.fitHeight,
                           ),
                         );
                       }
